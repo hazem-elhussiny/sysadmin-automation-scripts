@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خارطة الطريق التقنية التفاعلية — حازم الحسيني</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --radius-xl: 28px;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --font-display: 'Cairo', sans-serif;
+    --font-body: 'IBM Plex Sans Arabic', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html[data-theme="night"] {
+    --bg: #060913;
+    --panel: rgba(18, 25, 41, 0.75);
+    --panel-solid: #0d1322;
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --line: rgba(255, 255, 255, 0.08);
+    --text: #f0f4fc;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.35);
+    --purple: #c084fc;
+    --emerald: #34d399;
+    --rose: #fb7185;
+    --amber: #fbbf24;
+    --cyan: #22d3ee;
+    --orange: #fb923c;
+    --pink: #e879f9;
+    --term-bg: #050811;
+    --term-text: #38bdf8;
+    --shadow-d: rgba(0, 0, 0, 0.6);
+  }
+
+  html[data-theme="day"] {
+    --bg: #eef2f6;
+    --panel: rgba(255, 255, 255, 0.85);
+    --panel-solid: #ffffff;
+    --panel-border: rgba(15, 23, 42, 0.12);
+    --line: rgba(15, 23, 42, 0.08);
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #0284c7;
+    --accent-glow: rgba(2, 132, 199, 0.25);
+    --purple: #9333ea;
+    --emerald: #059669;
+    --rose: #e11d48;
+    --amber: #d97706;
+    --cyan: #0891b2;
+    --orange: #ea580c;
+    --pink: #c084fc;
+    --term-bg: #0f172a;
+    --term-text: #38bdf8;
+    --shadow-d: rgba(148, 163, 184, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  #webCanvas { position: fixed; inset: 0; z-index: 1; pointer-events: auto; }
+
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 3; pointer-events: none; }
+  .wrap * { pointer-events: auto; }
+  code, .mono { font-family: var(--font-mono); }
+
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(6, 9, 19, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .back-link {
+    font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted);
+    display: flex; align-items: center; gap: 8px; font-weight: 600;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .back-link:hover { color: var(--accent); transform: translateX(4px); }
+
+  .toggle {
+    width: 56px; height: 30px; border-radius: 99px; cursor: pointer;
+    background: var(--panel-solid); border: 1px solid var(--panel-border);
+    position: relative; padding: 3px; transition: all 0.3s ease;
+  }
+  .toggle .knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 10px var(--accent-glow);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  html[data-theme="day"] .toggle .knob { transform: translateX(-26px); }
+
+  .hero { padding: 48px 0 20px; text-align: center; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent);
+    letter-spacing: 1px; display: inline-flex; align-items: center; gap: 8px;
+    background: var(--panel-solid); border: 1px solid var(--panel-border);
+    padding: 8px 18px; border-radius: 99px; margin-bottom: 16px;
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+  .eyebrow .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 10px var(--accent); animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+
+  .hero h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 12px; line-height: 1.2; }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { color: var(--muted); font-size: 0.95rem; max-width: 65ch; margin: 0 auto; }
+
+  .hint-badge {
+    margin: 20px auto 4px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent);
+    background: rgba(56, 189, 248, 0.1); border: 1px dashed var(--accent);
+    padding: 6px 16px; border-radius: 8px;
+  }
+
+  .path-row { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 22px 0 6px; }
+  .path-node {
+    font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700;
+    padding: 8px 15px; border-radius: 99px; background: var(--panel-solid);
+    border: 1px solid var(--panel-border); cursor: pointer;
+    transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+  }
+  .path-node:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+  main { padding: 20px 0 80px; display: flex; flex-direction: column; gap: 28px; perspective: 1000px; }
+
+  .hud {
+    background: var(--panel);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 50px var(--shadow-d);
+  }
+
+  .track {
+    padding: 28px; position: relative; overflow: hidden;
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .track.reveal { opacity: 1; transform: translateY(0); }
+  .track::before {
+    content: ''; position: absolute; top: 0; right: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--tcolor), transparent); opacity: 0.8;
+  }
+
+  .track-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+  .track-icon {
+    width: 52px; height: 52px; border-radius: var(--radius-lg); flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+    background: var(--panel-solid); border: 1px solid var(--panel-border);
+    transition: transform 0.3s ease;
+  }
+  .track:hover .track-icon { transform: scale(1.08) rotate(-4deg); }
+  .track-titles h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; margin-bottom: 2px; }
+  .track-titles .sub { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+  .track-badge {
+    margin-inline-start: auto; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 800;
+    padding: 4px 12px; border-radius: 99px; color: #fff; background: var(--tcolor);
+    box-shadow: 0 0 12px var(--tcolor);
+  }
+
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+
+  .topic-card {
+    background: var(--panel-solid); border: 1px solid var(--panel-border);
+    padding: 16px 20px; border-radius: var(--radius-lg); cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .topic-card:hover { transform: translateY(-3px) scale(1.02); border-color: var(--tcolor); box-shadow: 0 10px 25px rgba(0,0,0,0.35); }
+  .topic-info { display: flex; align-items: center; gap: 12px; }
+  .topic-num {
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-family: var(--font-mono); font-weight: 800;
+    font-size: 0.82rem; color: #fff; background: var(--tcolor); flex: none;
+  }
+  .topic-title { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .topic-title .en { display: block; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+  .click-icon { font-size: 1.1rem; color: var(--muted); transition: transform 0.2s ease, color 0.2s ease; }
+  .topic-card:hover .click-icon { color: var(--tcolor); transform: translateX(-4px); }
+
+  .fw-container { background: var(--panel-solid); border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 22px; }
+  .fw-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .fw-status { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .btn-sim {
+    font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
+    padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+    background: var(--rose); color: #fff; box-shadow: 0 0 12px rgba(251, 113, 133, 0.4);
+    transition: all 0.2s ease;
+  }
+  .btn-sim:hover { transform: scale(1.05); }
+  .btn-sim:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .fw-visual { display: flex; align-items: center; gap: 16px; position: relative; padding: 20px 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); }
+  .fw-node { text-align: center; font-family: var(--font-mono); font-size: 0.75rem; width: 90px; flex: none; }
+  .fw-node span { font-size: 28px; display: block; margin-bottom: 4px; }
+  .fw-lane { position: relative; flex: 1; height: 40px; overflow: hidden; display: flex; align-items: center; }
+  .fw-lane::before { content: ''; position: absolute; inset: 0; top: 50%; height: 2px; background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 16px); }
+  .fw-shield {
+    position: absolute; right: 50%; transform: translateX(50%); z-index: 5;
+    width: 48px; height: 48px; border-radius: 50%; background: var(--panel-solid);
+    border: 2px solid var(--rose); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; box-shadow: 0 0 20px rgba(251, 113, 133, 0.5); transition: box-shadow .3s ease;
+  }
+  .fw-shield.under-attack { animation: shieldPulse .5s ease-in-out infinite; box-shadow: 0 0 30px rgba(251,113,133,.9); }
+  @keyframes shieldPulse{ 0%,100%{ transform:translateX(50%) scale(1); } 50%{ transform:translateX(50%) scale(1.08); } }
+  .fw-packet { position: absolute; right: 0; width: 12px; height: 12px; border-radius: 50%; transition: right 1.2s linear, opacity 0.3s ease; }
+  .fw-packet.allow { background: var(--emerald); box-shadow: 0 0 10px var(--emerald); }
+  .fw-packet.block { background: var(--rose); box-shadow: 0 0 10px var(--rose); }
+
+  .drawer-overlay {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed; top: 0; bottom: 0; left: 0; width: 100%; max-width: 520px;
+    background: var(--panel-solid); border-inline-end: 1px solid var(--panel-border);
+    z-index: 101; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; flex-direction: column; box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+  }
+  .drawer.active { transform: translateX(0); }
+
+  .drawer-header { padding: 24px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .drawer-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; color: #fff; margin-bottom: 8px; }
+  .drawer-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; line-height: 1.3; }
+  .drawer-subtitle { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .drawer-close {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--panel-border);
+    background: var(--panel); color: var(--text); font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex: none;
+  }
+  .drawer-close:hover { background: var(--rose); color: #fff; border-color: var(--rose); }
+
+  .drawer-body { padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px; }
+  .drawer-section { background: var(--panel); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--line); }
+  .drawer-section-title { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+  .drawer-text { font-size: 0.92rem; color: var(--text); line-height: 1.7; }
+  .drawer-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .drawer-list li { font-size: 0.88rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .drawer-list li::before { content: '▹'; color: var(--accent); font-family: var(--font-mono); }
+
+  .terminal-box {
+    background: var(--term-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md);
+    padding: 16px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--term-text);
+    position: relative; overflow-x: auto; direction: ltr; text-align: left;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  }
+  .terminal-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .terminal-dots { display: flex; gap: 6px; }
+  .dot-red { width: 10px; height: 10px; border-radius: 50%; background: #ff5f56; }
+  .dot-yellow { width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e; }
+  .dot-green { width: 10px; height: 10px; border-radius: 50%; background: #27c93f; }
+  .terminal-box pre { white-space: pre-wrap; word-break: break-word; }
+
+  .copy-btn {
+    font-family: var(--font-mono); font-size: 0.7rem; padding: 4px 10px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .copy-btn:hover { background: var(--accent); color: #000; }
+  .copy-btn.copied { background: var(--emerald); color: #000; }
+
+  footer { text-align: center; padding: 20px 0 60px; }
+  .home-btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px;
+    border-radius: 99px; font-family: var(--font-mono); font-weight: 700; font-size: 0.88rem;
+    background: var(--panel-solid); color: var(--accent); border: 1px solid var(--panel-border);
+    transition: all 0.3s ease;
+  }
+  .home-btn:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 20px var(--accent-glow); }
+
+  @media (max-width: 640px) { .drawer { max-width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<canvas id="webCanvas"></canvas>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="back-link" href="hazem_elhusseiny.html">→ العودة للرئيسية</a>
+    <div class="toggle" id="themeToggle" role="button" tabindex="0" aria-label="تبديل الثيم">
+      <div class="knob"></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span> INTERACTIVE_KNOWLEDGE_GRAPH // CLI_SHELL</div>
+    <h1>خارطة الطريق التقنية <span>التفاعلية الكاملة</span></h1>
+    <p>انقر على أي عقدة في الشبكة لعرض النبذة والمهارات — أو افتح أوامر التهيئة الجاهزة (Cisco / Linux / PowerShell / Huawei) داخل نافذة جانبية تفاعلية.</p>
+
+    <div class="hint-badge">💡 انقر على أي كارت بالأسفل لفتح النافذة الجانبية — وحرّك الماوس فوق الخلفية لتفعيل الشبكة العنكبوتية</div>
+
+    <div class="path-row">
+      <span class="path-node" data-track="cli" style="color: var(--pink);">💻 CLI Shell</span>
+      <span class="path-node" data-track="ccna" style="color: var(--purple);">📡 CCNA</span>
+      <span class="path-node" data-track="ccnp" style="color: var(--accent);">🌐 CCNP</span>
+      <span class="path-node" data-track="mcsa" style="color: var(--emerald);">🖥️ MCSA</span>
+      <span class="path-node" data-track="security" style="color: var(--rose);">🛡️ Security</span>
+      <span class="path-node" data-track="linux" style="color: var(--amber);">🐧 Linux</span>
+      <span class="path-node" data-track="cloud" style="color: var(--cyan);">☁️ Cloud</span>
+      <span class="path-node" data-track="automation" style="color: var(--orange);">🤖 Automation</span>
+      <span class="path-node" data-track="wireless" style="color: #c026d3;">📶 Wireless</span>
+    </div>
+  </section>
+
+  <main>
+
+    <div id="cli" class="hud track" style="--tcolor: var(--pink);">
+      <div class="track-head">
+        <div class="track-icon">💻</div>
+        <div class="track-titles">
+          <h2>أوامر التشغيل والتهيئة الشبكية</h2>
+          <span class="sub">CLI Command Center — Cisco, Linux, PowerShell &amp; Huawei</span>
+        </div>
+        <span class="track-badge">Level 00 — Essential</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="cmd-cisco-router"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">تهيئة راوتر سيسكو <span class="en">Cisco Router Config CLI</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="cmd-cisco-switch"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">تهيئة سويتش سيسكو <span class="en">Cisco Switch &amp; VLANs CLI</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="cmd-linux-term"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">أوامر تيرمنال لينكس <span class="en">Linux Terminal (Bash)</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="cmd-powershell"><div class="topic-info"><div class="topic-num">4</div><div class="topic-title">أوامر باورشيل <span class="en">Windows PowerShell CLI</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="cmd-huawei"><div class="topic-info"><div class="topic-num">5</div><div class="topic-title">أوامر هواوي <span class="en">Huawei VRP Commands</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="ccna" class="hud track" style="--tcolor: var(--purple);">
+      <div class="track-head">
+        <div class="track-icon">📡</div>
+        <div class="track-titles"><h2>أساسيات الشبكات والربط</h2><span class="sub">CCNA — Cisco Certified Network Associate</span></div>
+        <span class="track-badge">Level 01</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="ccna-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">أسس الشبكات <span class="en">Network Fundamentals</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccna-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">الوصول للشبكة <span class="en">Network Access &amp; VLANs</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccna-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">التوجيه <span class="en">IP Connectivity</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccna-4"><div class="topic-info"><div class="topic-num">4</div><div class="topic-title">خدمات الـ IP <span class="en">IP Services</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccna-5"><div class="topic-info"><div class="topic-num">5</div><div class="topic-title">أساسيات الأمن <span class="en">Security Fundamentals</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccna-6"><div class="topic-info"><div class="topic-num">6</div><div class="topic-title">الأتمتة والبرمجة <span class="en">Automation Basics</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="ccnp" class="hud track" style="--tcolor: var(--accent);">
+      <div class="track-head">
+        <div class="track-icon">🌐</div>
+        <div class="track-titles"><h2>التوجيه المتقدم والأنظمة الموزعة</h2><span class="sub">CCNP — Cisco Certified Network Professional</span></div>
+        <span class="track-badge">Level 02</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="ccnp-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">التوجيه المتقدم <span class="en">Advanced BGP Routing</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccnp-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">الشبكات البرمجية <span class="en">SD-WAN Architecture</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccnp-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">التوافرية العالية <span class="en">High Availability</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="ccnp-4"><div class="topic-info"><div class="topic-num">4</div><div class="topic-title">تصحيح الأخطاء <span class="en">Troubleshooting</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="mcsa" class="hud track" style="--tcolor: var(--emerald);">
+      <div class="track-head">
+        <div class="track-icon">🖥️</div>
+        <div class="track-titles"><h2>إدارة السيرفرات وبيئة مايكروسوفت</h2><span class="sub">MCSA — Windows Server &amp; System Admin</span></div>
+        <span class="track-badge">Level 03</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="mcsa-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">تثبيت السيرفرات <span class="en">Installation &amp; Storage</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="mcsa-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">الدليل النشط <span class="en">Active Directory</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="mcsa-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">خدمات الشبكة <span class="en">DNS &amp; DHCP</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="mcsa-4"><div class="topic-info"><div class="topic-num">4</div><div class="topic-title">الأنظمة الوهمية <span class="en">Hyper-V</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="security" class="hud track" style="--tcolor: var(--rose);">
+      <div class="track-head">
+        <div class="track-icon">🛡️</div>
+        <div class="track-titles"><h2>الأمن الشبكي والجدران النارية</h2><span class="sub">Network Security &amp; Cyber Defense</span></div>
+        <span class="track-badge">Level 04</span>
+      </div>
+
+      <div class="fw-container">
+        <div class="fw-controls">
+          <div class="fw-status">حالة المحاكاة: <span id="fwStatusText" style="color: var(--emerald);">نشط (تصفية حركة المرور)</span></div>
+          <button class="btn-sim" id="fwAttackBtn" type="button">محاكاة هجوم شبكي ⚡</button>
+        </div>
+        <div class="fw-visual">
+          <div class="fw-node"><span>🌐</span>External</div>
+          <div class="fw-lane" id="fwLane"><div class="fw-shield">🛡️</div></div>
+          <div class="fw-node"><span>🏠</span>Internal</div>
+        </div>
+      </div>
+
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="sec-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">الجدران النارية <span class="en">Next-Gen Firewalls</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="sec-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">أمان المنافذ <span class="en">Port Security</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="sec-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">الربط المشفّر <span class="en">IPsec / SSL VPN</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="linux" class="hud track" style="--tcolor: var(--amber);">
+      <div class="track-head">
+        <div class="track-icon">🐧</div>
+        <div class="track-titles"><h2>أنظمة لينكس وإدارة السيرفرات</h2><span class="sub">Linux Systems &amp; Enterprise Admin (RHCSA)</span></div>
+        <span class="track-badge">Level 05</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="linux-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">الأوامر والملفات <span class="en">CLI &amp; File System</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="linux-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">شبكات لينكس <span class="en">Networking &amp; Firewalld</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="linux-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">الخدمات الأساسية <span class="en">Systemd &amp; DNS</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="cloud" class="hud track" style="--tcolor: var(--cyan);">
+      <div class="track-head">
+        <div class="track-icon">☁️</div>
+        <div class="track-titles"><h2>شبكات السحاب والبنية التحتية</h2><span class="sub">Cloud Networking (AWS VPC &amp; Azure VNet)</span></div>
+        <span class="track-badge">Level 06</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="cloud-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">الشبكات الافتراضية <span class="en">VPC &amp; Subnetting</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="cloud-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">موازنة الأحمال <span class="en">Load Balancers</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="cloud-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">الربط الهجين <span class="en">Hybrid Cloud</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="automation" class="hud track" style="--tcolor: var(--orange);">
+      <div class="track-head">
+        <div class="track-icon">🤖</div>
+        <div class="track-titles"><h2>أتمتة الشبكات والبرمجة</h2><span class="sub">Network Automation &amp; DevNet</span></div>
+        <span class="track-badge">Level 07</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="auto-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">بايثون للشبكات <span class="en">Python (Netmiko)</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="auto-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">أدوات التهيئة <span class="en">Ansible</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="auto-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">الواجهات البرمجية <span class="en">REST APIs</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+    <div id="wireless" class="hud track" style="--tcolor: #c026d3;">
+      <div class="track-head">
+        <div class="track-icon">📶</div>
+        <div class="track-titles"><h2>الشبكات اللاسلكية والمراقبة</h2><span class="sub">Wireless Enterprise &amp; Monitoring</span></div>
+        <span class="track-badge">Level 08</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card js-topic" data-key="wifi-1"><div class="topic-info"><div class="topic-num">1</div><div class="topic-title">الواي فاي للمؤسسات <span class="en">Enterprise Wi-Fi &amp; WLC</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="wifi-2"><div class="topic-info"><div class="topic-num">2</div><div class="topic-title">أنظمة المراقبة <span class="en">Monitoring</span></div></div><span class="click-icon">←</span></div>
+        <div class="topic-card js-topic" data-key="wifi-3"><div class="topic-info"><div class="topic-num">3</div><div class="topic-title">تحليل حزم البيانات <span class="en">Wireshark</span></div></div><span class="click-icon">←</span></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <a class="home-btn" href="hazem_elhusseiny.html">← العودة للصفحة الرئيسية</a>
+  </footer>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<div class="drawer" id="sideDrawer">
+  <div class="drawer-header">
+    <div>
+      <span class="drawer-badge" id="dBadge" style="background: var(--accent);">CONCEPT</span>
+      <h3 class="drawer-title" id="dTitle">عنوان التكنولوجيا</h3>
+      <span class="drawer-subtitle" id="dSubtitle">English Title</span>
+    </div>
+    <button class="drawer-close" id="drawerCloseBtn" type="button">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <div class="drawer-section-title">نبذة مختصرة</div>
+      <p class="drawer-text" id="dOverview">شرح تفصيلي وموجز يظهر هنا بشكل ديناميكي...</p>
+    </div>
+
+    <div class="drawer-section" id="dSkillsSection">
+      <div class="drawer-section-title">المحاور الرئيسية والمهارات</div>
+      <ul class="drawer-list" id="dSkills"></ul>
+    </div>
+
+    <div class="drawer-section" id="dTerminalSection">
+      <div class="drawer-section-title">نافذة الأوامر الشائعة (Interactive Console)</div>
+      <div class="terminal-box">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+          <button class="copy-btn" id="copyTerminalBtn" type="button">نسخ الأوامر 📋</button>
+        </div>
+        <pre><code id="dTerminalCode">// Terminal Output Here</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const nextTheme = root.getAttribute('data-theme') === 'night' ? 'day' : 'night';
+    root.setAttribute('data-theme', nextTheme);
+  });
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const topicData = {
+    'cmd-cisco-router': { title:"أوامر تهيئة راوتر سيسكو", subtitle:"Cisco Router Basic & Routing Config", badge:"Cisco IOS", color:"var(--pink)",
+      overview:"مجموعة الأوامر الأساسية لتهيئة راوترات Cisco بدءاً من إعطاء اسم الجهاز، وضع كلمة سر، تهيئة الواجهات الشبكية، وتفعيل OSPF.",
+      code: `! 1. Enter Configuration Mode
+enable
+configure terminal
+hostname Core-Router-01
+
+! 2. Secure Access
+enable secret Admin@Pass123
+line vty 0 4
+ transport input ssh
+ login local
+exit
+
+! 3. Configure Interfaces
+interface GigabitEthernet0/0/0
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+exit
+
+! 4. Dynamic Routing (OSPF)
+router ospf 1
+ network 192.168.1.0 0.0.0.255 area 0
+exit
+
+! 5. Save Configuration
+do write memory` },
+    'cmd-cisco-switch': { title:"أوامر تهيئة سويتش سيسكو", subtitle:"Cisco Switch & VLANs CLI", badge:"Cisco IOS", color:"var(--pink)",
+      overview:"أوامر تقسيم الشبكات الافتراضية (VLANs)، إعداد منافذ Trunk للربط بين السويتشات، وتفعيل Port-Security لمنع التسلل.",
+      code: `! 1. Create VLANs
+configure terminal
+vlan 10
+ name HR_Department
+vlan 20
+ name IT_Department
+exit
+
+! 2. Assign Access Port
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+exit
+
+! 3. Configure Trunk Port
+interface GigabitEthernet0/24
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+exit
+
+! 4. Enable Port Security
+interface GigabitEthernet0/1
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict` },
+    'cmd-linux-term': { title:"أوامر تيرمنال لينكس للشبكات", subtitle:"Linux Terminal (Bash Networking)", badge:"Linux CLI", color:"var(--pink)",
+      overview:"أهم الأوامر اليومية لمهندس الأنظمة والشبكات لفحص الاتصالات، تتبع المسارات، إدارة الخدمات، وتحديد الصلاحيات.",
+      code: `# 1. Network Diagnostics & IPs
+ip a                          # Show IP Addresses
+ping -c 4 8.8.8.8              # Test Connectivity
+traceroute google.com          # Trace Hop Route
+netstat -tulnp                 # View Active Ports & Listening Services
+
+# 2. Remote Access & File Operations
+ssh admin@192.168.1.50         # Remote SSH Connection
+chmod 755 script.sh             # Set File Permissions
+chown root:root /etc/hosts      # Change File Owner
+
+# 3. System Services
+systemctl status firewalld       # Check Firewall Status
+systemctl restart nginx          # Restart Web Server` },
+    'cmd-powershell': { title:"أوامر باورشيل ويندوز", subtitle:"Windows PowerShell Network Cmdlets", badge:"PowerShell", color:"var(--pink)",
+      overview:"أوامر باورشيل الحديثة لفحص وإدارة الشبكة، اختبار المنافذ، واستعراض عناوين IP والأنظمة في بيئات Windows Server.",
+      code: `# 1. Network Configuration
+Get-NetIPAddress -InterfaceAlias "Ethernet"
+Set-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.1.100 -PrefixLength 24
+
+# 2. Diagnostic & Port Testing
+Test-NetConnection -ComputerName 192.168.1.1 -Port 80
+Get-NetTCPConnection -State Listen
+
+# 3. DNS & Routing
+Resolve-DnsName google.com
+Get-NetRoute -AddressFamily IPv4
+
+# 4. Service Management
+Get-Service -Name "Dhcp" | Restart-Service` },
+    'cmd-huawei': { title:"أوامر هواوي لشبكات المؤسسات", subtitle:"Huawei VRP Router & Switch Config", badge:"Huawei VRP", color:"var(--pink)",
+      overview:"أوامر نظام VRP الخاص بأجهزة Huawei الراوتر والسويتش والمقابلة لأوامر سيسكو.",
+      code: `; 1. Enter System View
+<Huawei> system-view
+[Huawei] sysname Core-HW-Switch
+
+; 2. VLAN Setup
+[Core-HW-Switch] vlan batch 10 20
+[Core-HW-Switch] interface GigabitEthernet 0/0/1
+[Core-HW-Switch-GigabitEthernet0/0/1] port link-type access
+[Core-HW-Switch-GigabitEthernet0/0/1] port default vlan 10
+[Core-HW-Switch-GigabitEthernet0/0/1] quit
+
+; 3. IP Interface Setup
+[Core-HW-Switch] interface GigabitEthernet 0/0/2
+[Core-HW-Switch-GigabitEthernet0/0/2] ip address 10.0.0.1 255.255.255.0
+
+; 4. Save Configuration
+[Core-HW-Switch] save` },
+
+    'ccna-1':{ title:'أسس الشبكات', subtitle:'Network Fundamentals', badge:'CCNA - Level 01', color:'#7c3aed',
+      overview:'اللبنة الأولى في عالم الشبكات — فهم النموذج المرجعي OSI وبروتوكولات TCP/IP، وكيفية تجهيز الكابلات والعناوين الفيزيائية (MAC) والعناوين المنطقية (IP).',
+      skills:['فهم الطبقات السبع للشبكة (OSI Model)','حساب وتقسيم العناوين Subnetting لـ IPv4/IPv6','الفرق بين أجهزة Hub وSwitch وRouter'] },
+    'ccna-2':{ title:'الوصول للشبكة والتقسيم', subtitle:'Network Access & VLANs', badge:'CCNA - Level 01', color:'#7c3aed',
+      overview:'كيفية التحكم في حركة البيانات على مستوى السويتشات، لعزل الأقسام المختلفة وتحسين الأداء والأمان داخل المؤسسة.',
+      skills:['إعداد وتحديد الشبكات الافتراضية VLANs','تكوين خطوط الربط الرئيسية Trunking (802.1Q)','تطبيق بروتوكول Spanning Tree لمنع الدوائر المغلقة'] },
+    'ccna-3':{ title:'التوجيه الديناميكي', subtitle:'IP Routing & OSPF', badge:'CCNA - Level 01', color:'#7c3aed',
+      overview:'برمجة أجهزة الراوتر لتوجيه حزم البيانات عبر أفضل وأسرع مسار متاح بين الشبكات الجغرافية المتباعدة.',
+      skills:['إعداد بروتوكول OSPF single-area وmulti-area','فهم جدول التوجيه Routing Table','التعامل مع المسارات الثابتة Static Routing'] },
+    'ccna-4':{ title:'خدمات الشبكة الأساسية', subtitle:'IP Services (DHCP/NAT)', badge:'CCNA - Level 01', color:'#7c3aed',
+      overview:'الخدمات اليومية المشغّلة للشبكات، والتي تضمن توزيع العناوين تلقائياً وتمكين الأجهزة من تصفح الإنترنت العام.',
+      skills:['تجهيز خوادم وموجهات DHCP','إعداد تحويل العناوين NAT/PAT لتوفير عناوين IPv4','مراقبة الوقت والتزامن عبر NTP'] },
+    'ccna-5':{ title:'أساسيات الأمن', subtitle:'Security Fundamentals', badge:'CCNA - Level 01', color:'#7c3aed',
+      overview:'الخطوط الدفاعية الأولى على مستوى الأجهزة الطرفية والسويتشات، قبل الدخول في عالم الحماية المتقدم.',
+      skills:['حماية الأجهزة بكلمات مرور مشفّرة','تطبيق Port Security على منافذ السويتش','إعداد ACLs بسيطة للتحكم في الوصول'] },
+    'ccna-6':{ title:'الأتمتة والبرمجة', subtitle:'Automation Basics', badge:'CCNA - Level 01', color:'#7c3aed',
+      overview:'مقدمة لعالم إدارة الشبكات برمجياً، وهو الأساس الذي يُبنى عليه مسار الأتمتة المتقدم لاحقاً.',
+      skills:['الفرق بين الإدارة التقليدية CLI والإدارة البرمجية','مقدمة عن هياكل بيانات JSON/XML','فهم مبدأ عمل الواجهات البرمجية APIs'] },
+
+    'ccnp-1':{ title:'التوجيه المتقدم للمؤسسات', subtitle:'Advanced BGP Routing', badge:'CCNP - Level 02', color:'#0891b2',
+      overview:'إدارة الشبكات العملاقة التابعة لشركات الاتصالات ومزودي الخدمة ISP باستخدام العصب الرئيسي للإنترنت بروتوكول BGP.',
+      skills:['إعداد eBGP وiBGP بين الشبكات المستقلة','تطبيق سياسات التوجيه Route Maps & Filtering','الربط متعدد المسارات Multihoming'] },
+    'ccnp-2':{ title:'الشبكات المعرّفة برمجياً', subtitle:'SD-WAN Architecture', badge:'CCNP - Level 02', color:'#0891b2',
+      overview:'الاتجاه الحديث لفصل مستوى التحكم عن مستوى البيانات، مما يتيح إدارة آلاف أجهزة الفروع من لوحة تحكم واحدة موحّدة.',
+      skills:['معمارية SD-WAN (Controller / Edge)','تحسين استهلاك المسارات حسب جودة الاتصال','التوزيع الآلي للإعدادات Zero Touch Provisioning'] },
+    'ccnp-3':{ title:'التوافرية العالية', subtitle:'High Availability', badge:'CCNP - Level 02', color:'#0891b2',
+      overview:'تصميم أنظمة عدم الانقطاع للخدمات الحساسة، بحيث لو تعطل أي راوتر أو كابل، يتم التحويل للمسار البديل بأقل من ثانية.',
+      skills:['بروتوكولات التكرار HSRP / VRRP','تجميع اللينكات EtherChannel / LACP','تصميم شبكات بدون نقاط فشل فردية'] },
+    'ccnp-4':{ title:'تصحيح الأخطاء المتقدم', subtitle:'Troubleshooting', badge:'CCNP - Level 02', color:'#0891b2',
+      overview:'امتلاك منهجية منظّمة لتتبع أعطال الشبكات المعقدة وحلّها بسرعة قبل ما تؤثر على العمل.',
+      skills:['استخدام أدوات Ping/Traceroute/Debug باحتراف','تحليل جداول التوجيه والـ ARP لتحديد نقطة العطل','توثيق الحلول لتفادي تكرار نفس المشكلة'] },
+
+    'mcsa-1':{ title:'تثبيت وإعداد السيرفرات', subtitle:'Installation & Storage', badge:'MCSA - Level 03', color:'#059669',
+      overview:'الخطوة الأولى لأي بيئة مايكروسوفت: تجهيز نظام التشغيل واختيار بنية التخزين المناسبة لضمان استقرار البيانات.',
+      skills:['تنصيب Windows Server (Core / Desktop Experience)','إدارة وحدات التخزين ومساحات Storage Spaces','التخطيط لاستراتيجية النسخ الاحتياطي'] },
+    'mcsa-2':{ title:'الدليل النشط وهويات المستخدمين', subtitle:'Active Directory Domain Services', badge:'MCSA - Level 03', color:'#059669',
+      overview:'العمود الفقري لإدارة بيئة مايكروسوفت في الشركات، للتحكم في حسابات الموظفين وأجهزتهم وصلاحيات الوصول للملفات.',
+      skills:['إنشاء وإدارة Domain Controllers','تطبيق سياسات المجموعات Group Policy Objects','تأمين الهويات والمصادقة عبر Kerberos'] },
+    'mcsa-3':{ title:'خدمات الشبكة للسيرفر', subtitle:'DNS & DHCP Services', badge:'MCSA - Level 03', color:'#059669',
+      overview:'إدارة خدمتي تحويل الأسماء وتوزيع العناوين من منظور نظام التشغيل، وهو أمر مختلف عن إعدادها على الراوتر.',
+      skills:['إعداد Zones الأمامية والعكسية في DNS','تجهيز نطاقات Scopes في خادم DHCP','مراقبة وتجديد عقود الإيجار Lease'] },
+    'mcsa-4':{ title:'الأنظمة والبيئات الافتراضية', subtitle:'Hyper-V Virtualization', badge:'MCSA - Level 03', color:'#059669',
+      overview:'تشغيل سيرفرات افتراضية متعددة على سيرفر فيزيائي واحد للاستغلال الأمثل لموارد العتاد وتقليل التكاليف.',
+      skills:['إدارة الموارد الافتراضية vCPU وRAM Allocation','إعداد السويتشات الافتراضية Virtual Switches','أخذ النسخ الاحتياطية والـ Snapshots'] },
+
+    'sec-1':{ title:'الجدار الناري', subtitle:'Next-Gen Firewalls', badge:'Security - Level 04', color:'#e11d48',
+      overview:'خط الدفاع الأول لحماية الشبكة الداخلية من الهجمات والبرمجيات الخبيثة، بفحص الحزم حتى مستوى التطبيقات.',
+      skills:['كتابة قواعد الحظر والسماح Security Policies','فحص الثغرات التلقائي عبر IPS','إدارة أجهزة الحماية التجارية الشائعة'] },
+    'sec-2':{ title:'أمان المنافذ', subtitle:'Port Security', badge:'Security - Level 04', color:'#e11d48',
+      overview:'منع أي جهاز غير مصرّح به من الاتصال بالشبكة السلكية عن طريق ربط كل منفذ سويتش بعنوان MAC محدد.',
+      skills:['ربط المنافذ بعناوين MAC معتمدة','تحديد سلوك المنفذ عند اكتشاف خرق (Shutdown/Restrict)','مراقبة سجلات الأمان على السويتشات'] },
+    'sec-3':{ title:'الربط الشبكي المشفّر', subtitle:'IPsec / SSL VPN', badge:'Security - Level 04', color:'#e11d48',
+      overview:'بناء أنفاق تشفير آمنة عبر شبكة الإنترنت العامة لربط الفروع البعيدة أو تمكين الموظفين من العمل عن بُعد بسرية مطلقة.',
+      skills:['إعداد أنفاق Site-to-Site IPsec VPN','تأمين اتصالات المستخدمين Remote Access SSL VPN','تشفير البيانات بتقنيات AES-256'] },
+
+    'linux-1':{ title:'إدارة الأوامر والملفات', subtitle:'CLI & File System', badge:'Linux - Level 05', color:'#d97706',
+      overview:'الاحتراف في التعامل مع نظام تشغيل السيرفرات الأوسع انتشاراً في السحاب والشركات الكبرى عبر السطر البرمجي.',
+      skills:['التنقل وإدارة الملفات عبر Terminal باحتراف','ضبط صلاحيات الملفات Permissions وOwnership','إدارة المستخدمين والمجموعات'] },
+    'linux-2':{ title:'شبكات لينكس', subtitle:'Linux Networking & Firewalld', badge:'Linux - Level 05', color:'#d97706',
+      overview:'ضبط الجانب الشبكي لسيرفر لينكس وتأمينه، وإعداد الوصول الآمن عن بُعد.',
+      skills:['ضبط العناوين الشبكية وملفات الإعداد','إعداد خوادم SSH وتأمين الدخول','تأمين النظام عبر iptables وFirewalld'] },
+    'linux-3':{ title:'الخدمات الأساسية', subtitle:'Systemd Services & DNS', badge:'Linux - Level 05', color:'#d97706',
+      overview:'تشغيل وإدارة الخدمات الأساسية اللي بتشغّل معظم تطبيقات الويب والبنية التحتية الحديثة.',
+      skills:['تشغيل وإدارة خدمات عبر Systemd','إعداد خوادم ويب Nginx / Apache','إدارة خوادم BIND DNS'] },
+
+    'cloud-1':{ title:'الشبكات الافتراضية', subtitle:'VPC & Subnetting', badge:'Cloud - Level 06', color:'#0e7490',
+      overview:'بناء شبكات افتراضية معزولة داخل مزوّد السحابة وتقسيمها لشبكات فرعية عامة وخاصة حسب الاستخدام.',
+      skills:['تصميم بنية VPC وتقسيم Subnets','إعداد جداول التوجيه السحابية Route Tables','التحكم في الوصول عبر Security Groups'] },
+    'cloud-2':{ title:'موازنة الأحمال', subtitle:'Load Balancers & Gateways', badge:'Cloud - Level 06', color:'#0e7490',
+      overview:'توزيع حركة المرور على عدة سيرفرات سحابية لضمان تحمّل الضغط العالي دون بطء أو توقف الخدمة.',
+      skills:['إعداد موازنات أحمال Layer 4 / Layer 7','فحص صحة السيرفرات Health Checks','بوابات الإنترنت والـ NAT Gateways'] },
+    'cloud-3':{ title:'الربط الهجين', subtitle:'Hybrid Cloud Connections', badge:'Cloud - Level 06', color:'#0e7490',
+      overview:'ربط السيرفرات المحلّية بالبنية السحابية مباشرة، للاستفادة من مزايا الطرفين في بيئة واحدة متكاملة.',
+      skills:['ربط مباشر عبر تقنيات Direct Connect','إعداد أنفاق VPN بين On-Premise والسحابة','مزامنة الهويات بين البيئتين'] },
+
+    'auto-1':{ title:'بايثون للشبكات', subtitle:'Python for Network Engineers', badge:'Automation - Level 07', color:'#ea580c',
+      overview:'استخدام البرمجة لتنفيذ مهام متكررة على عشرات أو مئات أجهزة الشبكة في ثوانٍ بدل ساعات من العمل اليدوي.',
+      skills:['استخدام مكتبات مثل Netmiko وParamiko','كتابة سكربتات لجمع الإعدادات وتحديثها','معالجة نتائج الأوامر وتحليلها تلقائياً'] },
+    'auto-2':{ title:'أدوات التهيئة', subtitle:'Ansible & Config Management', badge:'Automation - Level 07', color:'#ea580c',
+      overview:'توحيد الإعدادات على كل الأجهزة دفعة واحدة، وضمان إن كل الشبكة متزامنة بنفس المعايير دايماً.',
+      skills:['كتابة ملفات Playbooks بصيغة YAML','تطبيق نفس الإعدادات على عشرات الأجهزة دفعة واحدة','تتبع التغييرات ومراجعتها بسهولة'] },
+    'auto-3':{ title:'الواجهات البرمجية', subtitle:'REST APIs & NETCONF', badge:'Automation - Level 07', color:'#ea580c',
+      overview:'الربط المباشر بين البرامج وأجهزة الشبكة الحديثة لقراءة حالة الشبكة وتغيير الإعدادات برمجياً بدل الدخول اليدوي.',
+      skills:['التعامل مع REST APIs لأجهزة الشبكة الحديثة','فهم بروتوكول NETCONF/YANG','بناء تكاملات بسيطة بين الأنظمة'] },
+
+    'wifi-1':{ title:'الواي فاي للمؤسسات', subtitle:'Enterprise Wi-Fi & WLC', badge:'Wireless - Level 08', color:'#c026d3',
+      overview:'إدارة شبكة لاسلكية موسّعة عبر مبنى أو فروع متعددة من نقطة تحكم مركزية واحدة.',
+      skills:['إدارة أجهزة Access Points مركزياً عبر WLC','تخطيط التغطية اللاسلكية وتقليل التداخل','تأمين الشبكة اللاسلكية عبر WPA3/802.1X'] },
+    'wifi-2':{ title:'أنظمة المراقبة', subtitle:'Network Monitoring', badge:'Wireless - Level 08', color:'#c026d3',
+      overview:'مراقبة صحة الشبكة على مدار الساعة، والحصول على تنبيه فوري قبل ما تتحول أي مشكلة صغيرة لتوقف كامل للخدمة.',
+      skills:['مراقبة استهلاك السرعة وأداء الأجهزة','إعداد تنبيهات فورية عند تعطل سيرفر أو كابل','بناء لوحات متابعة Dashboards شاملة'] },
+    'wifi-3':{ title:'تحليل حزم البيانات', subtitle:'Wireshark & Packet Analysis', badge:'Wireless - Level 08', color:'#c026d3',
+      overview:'الغوص في تفاصيل حركة البيانات نفسها لحل مشاكل الأداء والاتصال وكشف أي سلوك مشبوه على الشبكة.',
+      skills:['التقاط وتحليل الحزم عبر Wireshark','تتبع أسباب بطء الاتصال على مستوى البروتوكول','كشف الأنماط غير الطبيعية والثغرات المحتملة'] }
+  };
+
+  (function(){
+    const overlay = document.getElementById('drawerOverlay');
+    const drawer = document.getElementById('sideDrawer');
+    const dBadge = document.getElementById('dBadge');
+    const dTitle = document.getElementById('dTitle');
+    const dSubtitle = document.getElementById('dSubtitle');
+    const dOverview = document.getElementById('dOverview');
+    const dSkills = document.getElementById('dSkills');
+    const dSkillsSection = document.getElementById('dSkillsSection');
+    const dTerminalSection = document.getElementById('dTerminalSection');
+    const dTerminalCode = document.getElementById('dTerminalCode');
+    const closeBtn = document.getElementById('drawerCloseBtn');
+    const copyBtn = document.getElementById('copyTerminalBtn');
+
+    function openDrawer(key){
+      const data = topicData[key];
+      if(!data) return;
+      dTitle.textContent = data.title;
+      dSubtitle.textContent = data.subtitle;
+      dOverview.textContent = data.overview;
+      dBadge.textContent = data.badge;
+      dBadge.style.background = data.color;
+
+      if(data.code){
+        dTerminalSection.style.display = '';
+        dSkillsSection.style.display = 'none';
+        dTerminalCode.textContent = data.code;
+      } else {
+        dSkillsSection.style.display = '';
+        dTerminalSection.style.display = 'none';
+        dSkills.innerHTML = '';
+        (data.skills || []).forEach(skill=>{
+          const li = document.createElement('li');
+          li.textContent = skill;
+          dSkills.appendChild(li);
+        });
+      }
+
+      overlay.classList.add('active');
+      drawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(){
+      overlay.classList.remove('active');
+      drawer.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.js-topic').forEach(card=>{
+      card.addEventListener('click', ()=>openDrawer(card.dataset.key));
+    });
+    overlay.addEventListener('click', closeDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeDrawer(); });
+
+    copyBtn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(dTerminalCode.textContent).then(()=>{
+        copyBtn.textContent = 'تم النسخ ✅';
+        copyBtn.classList.add('copied');
+        setTimeout(()=>{ copyBtn.textContent = 'نسخ الأوامر 📋'; copyBtn.classList.remove('copied'); }, 1600);
+      });
+    });
+  })();
+
+  document.querySelectorAll('.path-node[data-track]').forEach(node=>{
+    node.addEventListener('click', ()=>{
+      const target = document.getElementById(node.dataset.track);
+      if(target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  if(reduceMotion || !('IntersectionObserver' in window)){
+    document.querySelectorAll('.track').forEach(t=>t.classList.add('reveal'));
+  } else {
+    const revealIo = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){ entry.target.classList.add('reveal'); revealIo.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.track').forEach(t=>revealIo.observe(t));
+  }
+
+  (function(){
+    const lane = document.getElementById('fwLane');
+    if(!lane) return;
+    const shield = lane.querySelector('.fw-shield');
+    const statusText = document.getElementById('fwStatusText');
+    const attackBtn = document.getElementById('fwAttackBtn');
+    let attackMode = false;
+
+    function createPacket(){
+      const isAllowed = attackMode ? Math.random() < 0.2 : Math.random() < 0.75;
+      const packet = document.createElement('div');
+      packet.className = `fw-packet ${isAllowed ? 'allow' : 'block'}`;
+      lane.appendChild(packet);
+      requestAnimationFrame(()=>{ packet.style.right = isAllowed ? '100%' : '50%'; });
+      setTimeout(()=>{
+        packet.style.opacity = '0';
+        setTimeout(()=>packet.remove(), 300);
+      }, isAllowed ? 1200 : 600);
+    }
+    if(reduceMotion){ createPacket(); } else { setInterval(createPacket, 400); }
+
+    attackBtn.addEventListener('click', ()=>{
+      if(attackMode) return;
+      attackMode = true;
+      attackBtn.disabled = true;
+      if(shield) shield.classList.add('under-attack');
+      statusText.textContent = 'تحذير: جاري صد هجوم شبكي مكثف!';
+      statusText.style.color = 'var(--rose)';
+      setTimeout(()=>{
+        attackMode = false;
+        if(shield) shield.classList.remove('under-attack');
+        statusText.textContent = 'نشط (تصفية حركة المرور)';
+        statusText.style.color = 'var(--emerald)';
+        attackBtn.disabled = false;
+      }, 5000);
+    });
+  })();
+
+  (function(){
+    const canvas = document.getElementById('webCanvas');
+    if(!canvas || reduceMotion) return;
+    const ctx = canvas.getContext('2d');
+    let width, height, nodes = [];
+    const mouse = { x: null, y: null, radius: 150 };
+
+    window.addEventListener('mousemove', e=>{ mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseleave', ()=>{ mouse.x = null; mouse.y = null; });
+
+    function initNodes(){
+      nodes = [];
+      const nodeCount = Math.min(160, Math.floor((width * height) / 18000));
+      for(let i=0;i<nodeCount;i++){
+        nodes.push({
+          x: Math.random()*width, y: Math.random()*height,
+          vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8,
+          radius: Math.random()*2 + 1.5
+        });
+      }
+    }
+    function resizeCanvas(){
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initNodes();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function animateWeb(){
+      ctx.clearRect(0,0,width,height);
+      const isNight = root.getAttribute('data-theme') === 'night';
+      const strokeColor = isNight ? 'rgba(56, 189, 248,' : 'rgba(2, 132, 199,';
+
+      for(let i=0;i<nodes.length;i++){
+        const node = nodes[i];
+        node.x += node.vx; node.y += node.vy;
+        if(node.x < 0 || node.x > width) node.vx *= -1;
+        if(node.y < 0 || node.y > height) node.vy *= -1;
+
+        ctx.fillStyle = strokeColor + '0.5)';
+        ctx.beginPath(); ctx.arc(node.x, node.y, node.radius, 0, Math.PI*2); ctx.fill();
+
+        for(let j=i+1;j<nodes.length;j++){
+          const other = nodes[j];
+          const dx = node.x-other.x, dy = node.y-other.y;
+          const dist = Math.sqrt(dx*dx+dy*dy);
+          if(dist < 120){
+            ctx.strokeStyle = strokeColor + ((1-dist/120)*0.25) + ')';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath(); ctx.moveTo(node.x,node.y); ctx.lineTo(other.x,other.y); ctx.stroke();
+          }
+        }
+        if(mouse.x !== null){
+          const mdx = node.x-mouse.x, mdy = node.y-mouse.y;
+          const mdist = Math.sqrt(mdx*mdx+mdy*mdy);
+          if(mdist < mouse.radius){
+            ctx.strokeStyle = strokeColor + ((1-mdist/mouse.radius)*0.4) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(node.x,node.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateWeb);
+    }
+    animateWeb();
+  })();
+</script>
+</body>
+</html>
