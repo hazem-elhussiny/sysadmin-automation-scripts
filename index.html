@@ -18,6 +18,8 @@
     --bg:#0f1420; --panel:#161d2c; --panel-solid:#0a0e17; --panel-2:#1c2438;
     --line:rgba(255,255,255,0.06); --text:#e7ebf3; --text-on-dark:#e7ebf3; --muted:#8d96ab;
     --accent:#5eead4; --accent-dim:#1f6f63; --amber:#fbbf68; --amber-dim:#8a5c1f; --pink:#f0729a;
+    --cyan:#38bdf8; --purple:#c084fc; --rose:#fb7185; --emerald:#34d399; --orange:#fb923c;
+    --quantum:#a78bfa; --quantum-dim:#5b21b6;
     --shadow-l:rgba(255,255,255,.045); --shadow-d:rgba(0,0,0,.6);
     --glass-blur:0px; --scan-op:0;
   }
@@ -25,6 +27,8 @@
     --bg:#eef1f6; --panel:#f8fafc; --panel-solid:#1c2333; --panel-2:#242e44;
     --line:rgba(28,35,51,0.08); --text:#1e2532; --text-on-dark:#f2f5fa; --muted:#5c6579;
     --accent:#0d9488; --accent-dim:#a7e6dd; --amber:#b45f06; --amber-dim:#f3c98a; --pink:#be185d;
+    --cyan:#0284c7; --purple:#9333ea; --rose:#e11d48; --emerald:#059669; --orange:#c2410c;
+    --quantum:#7c3aed; --quantum-dim:#ddd6fe;
     --shadow-l:rgba(255,255,255,.95); --shadow-d:rgba(163,177,198,.5);
     --glass-blur:0px; --scan-op:0;
   }
@@ -40,13 +44,13 @@
   :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 24px; position:relative; z-index:3;}
   code, .mono{font-family:var(--font-mono);}
- 
-  /* ---------- AMBIENT BACKGROUND RAIN (site-wide, calm) ---------- */
+
+  /* ---------- INTERACTIVE WEB NETWORK BACKGROUND ---------- */
   #bgRain{
-    position:fixed; inset:0; z-index:1; pointer-events:none;
-    opacity:.5; transition:opacity .4s ease;
+    position:fixed; inset:0; z-index:1; width:100%; height:100%;
+    pointer-events:none; opacity:.55; transition:opacity .4s ease;
   }
- 
+
   /* ---------- MATRIX RAIN INTRO ---------- */
   #matrixIntro{
     position:fixed; inset:0; z-index:10000; overflow:hidden;
@@ -62,7 +66,7 @@
     border:1px solid rgba(74,222,128,0.3); padding:7px 14px; border-radius:99px; cursor:pointer;
     background:rgba(0,0,0,.4);
   }
- 
+
   /* ---------- HEX NETWORK INTRO ---------- */
   #hexIntro{
     position:fixed; inset:0; z-index:9999; overflow:hidden;
@@ -120,7 +124,7 @@
     font-family:var(--font-mono); font-size:.72rem; color:var(--muted);
     border:1px solid var(--line); padding:7px 14px; border-radius:99px; cursor:pointer;
   }
- 
+
   /* ---------- BOOT SEQUENCE ---------- */
   #bootIntro{
     position:fixed; inset:0; z-index:9999; overflow:hidden;
@@ -149,23 +153,32 @@
     font-family:var(--font-mono); font-size:.72rem; color:var(--muted);
     border:1px solid var(--line); padding:7px 14px; border-radius:99px; cursor:pointer;
   }
- 
+
   body.gated > header.nav, body.gated > main, body.gated > footer{ display:none; }
   header.nav, main, footer{ animation:siteIn .7s ease; }
   @keyframes siteIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
- 
+
   main{perspective:1500px;}
   .depth{transform-style:preserve-3d; transition:transform .25s cubic-bezier(.2,.8,.3,1), box-shadow .25s ease; will-change:transform;}
- 
+
   /* ---------- HUD CARD (neumorphic) ---------- */
   .hud{
     position:relative; background:var(--panel);
-    border:none; border-radius:var(--radius);
+    border:1px solid transparent; border-radius:var(--radius);
     box-shadow:
       9px 9px 18px var(--shadow-d),
       -9px -9px 18px var(--shadow-l);
+    transition:box-shadow .3s ease, border-color .3s ease;
   }
- 
+  .hud:hover{
+    border-color:color-mix(in srgb, var(--accent) 50%, transparent);
+    box-shadow:
+      9px 9px 18px var(--shadow-d),
+      -9px -9px 18px var(--shadow-l),
+      0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
+      0 0 28px color-mix(in srgb, var(--accent) 24%, transparent);
+  }
+
   /* ---------- TOP BAR ---------- */
   header.nav{
     position:sticky; top:0; z-index:50;
@@ -194,7 +207,7 @@
   }
   .nav-cta:hover{filter:brightness(1.15); transform:translateY(-1px);}
   @media (max-width:800px){ nav ul{display:none;} }
- 
+
   .toggle{
     position:relative; width:50px; height:26px; border-radius:99px; cursor:pointer;
     background:var(--bg); border:none; flex:none;
@@ -206,7 +219,7 @@
     transition:transform .3s ease;
   }
   html[data-theme="day"] .toggle .knob{transform:translateX(-24px);}
- 
+
   /* ---------- HERO ---------- */
   .hero{padding:56px 0 0; position:relative;}
   .status-line{font-family:var(--font-mono); font-size:.75rem; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:8px;}
@@ -225,14 +238,14 @@
   .btn-outline{background:var(--panel); color:var(--text); box-shadow:5px 5px 10px var(--shadow-d), -5px -5px 10px var(--shadow-l);}
   .btn-outline:hover{color:var(--accent);}
   .btn-outline:active{box-shadow:inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);}
- 
+
   /* ---------- DASHBOARD GRID ---------- */
   .dash{display:grid; grid-template-columns:1.3fr .7fr; gap:18px; padding:34px 0 60px;}
   @media (max-width:900px){ .dash{grid-template-columns:1fr;} }
   .panel{padding:22px;}
   .panel-title{font-family:var(--font-mono); font-size:.72rem; color:var(--accent); letter-spacing:1px; margin-bottom:16px; display:flex; align-items:center; gap:8px;}
   .panel-title::after{content:''; flex:1; height:1px; background:var(--line);}
- 
+
   /* live log feed */
   .feed{
     font-family:var(--font-mono); font-size:.8rem; height:220px; overflow:hidden;
@@ -243,20 +256,24 @@
   .feed-line{opacity:0; animation:feed-in .4s ease forwards; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text-on-dark); font-size:.76rem;}
   .feed-line b{color:var(--accent);}
   @keyframes feed-in{ to{opacity:1;} }
- 
+
   .mini-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px;}
   .mini-stat{
     text-align:center; padding:14px 6px; border-radius:14px; background:var(--panel);
+    border:1px solid transparent;
     box-shadow:4px 4px 8px var(--shadow-d), -4px -4px 8px var(--shadow-l);
-    transition:transform .2s ease;
+    transition:transform .2s ease, box-shadow .25s ease, border-color .25s ease;
   }
   .mini-stat:hover{transform:translateY(-3px);}
   .mini-stat .val{font-family:var(--font-mono); font-size:1.15rem; font-weight:700;}
   .mini-stat:nth-child(1) .val{color:var(--pink);}
   .mini-stat:nth-child(2) .val{color:var(--accent);}
   .mini-stat:nth-child(3) .val{color:var(--amber);}
+  .mini-stat:nth-child(1):hover{ border-color:color-mix(in srgb, var(--pink) 55%, transparent); box-shadow:4px 4px 8px var(--shadow-d), -4px -4px 8px var(--shadow-l), 0 0 20px color-mix(in srgb, var(--pink) 30%, transparent); }
+  .mini-stat:nth-child(2):hover{ border-color:color-mix(in srgb, var(--accent) 55%, transparent); box-shadow:4px 4px 8px var(--shadow-d), -4px -4px 8px var(--shadow-l), 0 0 20px color-mix(in srgb, var(--accent) 30%, transparent); }
+  .mini-stat:nth-child(3):hover{ border-color:color-mix(in srgb, var(--amber) 55%, transparent); box-shadow:4px 4px 8px var(--shadow-d), -4px -4px 8px var(--shadow-l), 0 0 20px color-mix(in srgb, var(--amber) 30%, transparent); }
   .mini-stat .lbl{font-size:.7rem; color:var(--muted); margin-top:4px;}
- 
+
   /* profile card */
   .avatar{
     width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -271,15 +288,16 @@
     box-shadow:inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l); transition:.2s;
   }
   .contact-list a:hover{color:var(--accent);}
- 
+
   section{padding:50px 0; border-top:1px solid var(--line);}
   .eyebrow{font-family:var(--font-mono); font-size:.72rem; color:var(--accent); letter-spacing:1px; margin-bottom:10px; display:flex; align-items:center; gap:10px;}
   .eyebrow::after{content:''; flex:1; height:1px; background:var(--line);}
   h2{font-family:var(--font-display); font-weight:800; font-size:clamp(1.35rem,3vw,1.8rem); margin-bottom:24px;}
- 
+
   /* timeline as commit log */
   .commits{padding:8px 0;}
-  .commit{display:grid; grid-template-columns:110px 1fr; gap:18px; padding:20px 22px; border-top:1px solid var(--line);}
+  .commit{display:grid; grid-template-columns:110px 1fr; gap:18px; padding:20px 22px; border-top:1px solid var(--line); border-radius:12px; transition:background .25s ease;}
+  .commit:hover{ background:color-mix(in srgb, var(--accent) 6%, transparent); }
   .commit:first-child{border-top:none;}
   .commit-date{font-family:var(--font-mono); font-size:.74rem; color:var(--accent);}
   .commit-date .tag{display:block; margin-top:6px; font-size:.66rem; color:var(--text-on-dark); background:var(--panel-solid); padding:3px 9px; border-radius:99px; width:fit-content; box-shadow:2px 2px 5px var(--shadow-d);}
@@ -290,7 +308,7 @@
   .commit ul li::before{content:'$'; position:absolute; right:0; color:var(--accent); font-family:var(--font-mono);}
   .commit ul li b{color:var(--text); font-weight:600;}
   @media (max-width:640px){ .commit{grid-template-columns:1fr; gap:6px;} }
- 
+
   /* skills as service status */
   .svc-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   @media (max-width:760px){ .svc-grid{grid-template-columns:1fr;} }
@@ -303,7 +321,7 @@
   .svc-row{transition:padding-right .2s ease;}
   .svc-row:hover{padding-right:6px;}
   .svc-row:hover span:first-child{color:var(--accent);}
- 
+
   /* cert badges */
   .cert-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
   @media (max-width:760px){ .cert-grid{grid-template-columns:1fr;} }
@@ -320,7 +338,7 @@
   .cert-card:hover .cert-badge{transform:scale(1.08);}
   .cert-text strong{display:block; font-size:.94rem; margin-bottom:3px;}
   .cert-text span{color:var(--muted); font-size:.8rem;}
- 
+
   .info-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
   @media (max-width:760px){ .info-grid{grid-template-columns:1fr;} }
   .info-card{padding:20px;}
@@ -328,26 +346,482 @@
   .info-card span{color:var(--muted); font-size:.82rem; display:block;}
   .info-card .row{margin-bottom:12px;}
   .info-card .row:last-child{margin-bottom:0;}
- 
+
   footer{padding:56px 0 40px;}
   .contact-box{padding:36px; text-align:center;}
   .contact-box h2{margin-bottom:8px;}
   .contact-box p{color:var(--muted); margin-bottom:22px;}
   .foot-note{text-align:center; color:var(--muted); font-family:var(--font-mono); font-size:.72rem; margin-top:26px;}
- 
+
+  /* ---------- FOOTER CTA CARD (theme-synced) ---------- */
+  .hero-card {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    direction: rtl;
+    font-family: var(--font-body), 'Segoe UI', Tahoma, sans-serif;
+    box-shadow: 9px 9px 18px var(--shadow-d), -9px -9px 18px var(--shadow-l);
+  }
+  .hero-title {
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+  }
+  .social-btn:hover { transform: translateY(-3px); }
+  .whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+  .whatsapp:hover { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6); }
+  .telegram {
+    background: linear-gradient(135deg, #2AABEE, #229ED9);
+    box-shadow: 0 4px 15px rgba(42, 171, 238, 0.4);
+  }
+  .telegram:hover { box-shadow: 0 8px 25px rgba(42, 171, 238, 0.6); }
+  .linkedin {
+    background: linear-gradient(135deg, #0A66C2, #004182);
+    box-shadow: 0 4px 15px rgba(10, 102, 194, 0.4);
+  }
+  .linkedin:hover { box-shadow: 0 8px 25px rgba(10, 102, 194, 0.6); }
+
+  /* shine sweep across social buttons on hover */
+  .social-btn{ position:relative; overflow:hidden; }
+  .social-btn::after{
+    content:''; position:absolute; top:0; left:-60%; width:35%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.45), transparent);
+    transform:skewX(-20deg);
+  }
+  .social-btn:hover::after{ animation:shineSweep .75s ease; }
+  @keyframes shineSweep{ from{ left:-60%; } to{ left:130%; } }
+
+  /* continuous ambient glow pulse per platform color */
+  @keyframes pulseWhatsapp{ 0%,100%{box-shadow:0 4px 15px rgba(37,211,102,.4);} 50%{box-shadow:0 4px 24px rgba(37,211,102,.75);} }
+  @keyframes pulseTelegram{ 0%,100%{box-shadow:0 4px 15px rgba(42,171,238,.4);} 50%{box-shadow:0 4px 24px rgba(42,171,238,.75);} }
+  @keyframes pulseLinkedin{ 0%,100%{box-shadow:0 4px 15px rgba(10,102,194,.4);} 50%{box-shadow:0 4px 24px rgba(10,102,194,.75);} }
+  .whatsapp{ animation:pulseWhatsapp 2.6s ease-in-out infinite; }
+  .telegram{ animation:pulseTelegram 2.6s ease-in-out infinite; animation-delay:.35s; }
+  .linkedin{ animation:pulseLinkedin 2.6s ease-in-out infinite; animation-delay:.7s; }
+
+  /* glow pulse for the main CTA buttons */
+  @keyframes softPulseAccent{
+    0%,100%{ box-shadow:5px 5px 10px var(--shadow-d), -5px -5px 10px var(--shadow-l); }
+    50%{ box-shadow:5px 5px 10px var(--shadow-d), -5px -5px 10px var(--shadow-l), 0 0 16px rgba(94,234,212,.45); }
+  }
+  .btn-primary, .nav-cta{ animation:softPulseAccent 2.8s ease-in-out infinite; }
+
+  /* ---------- NETWORK TOPOLOGY DIAGRAM ---------- */
+  .net-diagram{ width:100%; height:auto; display:block; margin:0 auto; }
+  .net-line{
+    fill:none; stroke:var(--accent); stroke-width:2; stroke-dasharray:6 10;
+    opacity:.5; stroke-linecap:round; animation:flowDash 1s linear infinite;
+  }
+  @keyframes flowDash{ to{ stroke-dashoffset:-160; } }
+  .packet{ fill:var(--accent); filter:drop-shadow(0 0 4px var(--accent)); }
+  .node-circle{
+    fill:var(--panel-solid); stroke:var(--accent); stroke-width:2;
+    filter:drop-shadow(0 0 6px rgba(94,234,212,.4));
+  }
+  .node-circle.small{ stroke:var(--accent); filter:drop-shadow(0 0 5px rgba(94,234,212,.4)); }
+  .ping{
+    fill:none; stroke:var(--accent); stroke-width:1.5; opacity:.6;
+    transform-box:fill-box; transform-origin:center; animation:pingRing 2.6s ease-out infinite;
+  }
+  @keyframes pingRing{ 0%{ transform:scale(.7); opacity:.55; } 100%{ transform:scale(1.7); opacity:0; } }
+  .node-icon{ text-anchor:middle; dominant-baseline:middle; font-size:20px; }
+  .node-label{ font-family:var(--font-mono); font-size:12px; fill:var(--muted); text-anchor:middle; }
+  .net-caption{ text-align:center; font-family:var(--font-mono); font-size:.74rem; color:var(--muted); padding:16px 0 4px; }
+
+  /* diagonal mesh lines: static, gently breathing, less busy than the animated perimeter */
+  .mesh-diag{
+    fill:none; stroke:var(--accent); stroke-width:1.4; opacity:.22;
+    animation:meshBreathe 3.6s ease-in-out infinite;
+  }
+  @keyframes meshBreathe{ 0%,100%{ opacity:.16; } 50%{ opacity:.38; } }
+
+  /* congestion coloring — edges shift from calm green to amber/red under load */
+  .net-line, .mesh-diag{ transition: stroke .5s ease, opacity .5s ease; }
+  .cong-mid{ stroke:var(--amber) !important; opacity:.75 !important; }
+  .cong-high{ stroke:var(--pink) !important; opacity:.95 !important; filter:drop-shadow(0 0 6px var(--pink)); }
+
+  /* firewall inspection flash */
+  #node-2.scanning .node-circle{ stroke:var(--amber); filter:drop-shadow(0 0 12px var(--amber)); }
+
+  /* ---------- CYBER NETWORK OVERSEER: hover / click / tooltip / featured events ---------- */
+  /* The scale-on-hover target is an isolated inner group (.node-visual) that contains ONLY
+     the static circle + icon — never the animating .ping ring. Mixing an animating child's
+     own transform into the same fill-box as the hover-scaled element is what caused the
+     rapid flicker/stutter (the browser recomputes an unstable bounding box/origin every
+     frame the ping ring is mid-animation while :hover is also toggling scale on it). */
+  .net-node{ cursor:pointer; }
+  .net-node .node-hit{
+    fill:transparent; stroke:none; pointer-events:all; /* generous, FIXED-size hit area — never scales, so the hover boundary can't chase the animating visual and flicker */
+  }
+  .node-visual{
+    transform-box:fill-box; transform-origin:center;
+    transition:transform 0.3s ease-in-out;
+    will-change:transform;
+  }
+  .net-node:hover .node-visual{ transform:scale(1.16); }
+  .net-node:hover .node-circle{ filter:drop-shadow(0 0 16px var(--accent)); stroke-width:2.6; }
+  .net-node:hover .node-icon{ filter:drop-shadow(0 0 4px rgba(255,255,255,.5)); }
+
+  .click-ripple{
+    fill:none; stroke:var(--accent); stroke-width:2; opacity:.75; pointer-events:none;
+    animation:rippleExpand .75s ease-out forwards;
+  }
+  @keyframes rippleExpand{ from{ r:10; opacity:.75; } to{ r:75; opacity:0; } }
+
+  .node-tooltip{
+    position:absolute; pointer-events:none; z-index:6; opacity:0;
+    transform:translate(-50%,-100%) translateY(-8px);
+    transition:opacity .16s ease, transform .16s ease;
+    background:rgba(10,14,23,0.55); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(94,234,212,.35); border-radius:10px; padding:9px 13px;
+    font-family:var(--font-mono); font-size:.68rem; color:var(--text); white-space:nowrap;
+    box-shadow:0 10px 24px rgba(0,0,0,.4);
+  }
+  .node-tooltip.show{ opacity:1; transform:translate(-50%,-100%) translateY(-14px); }
+  .node-tooltip .tt-id{ color:var(--accent); font-weight:800; font-size:.76rem; }
+  .node-tooltip .tt-row{ color:rgba(231,235,243,.65); margin-top:3px; }
+  .node-tooltip .tt-row b{ color:var(--text-on-dark); font-weight:600; }
+
+  /* featured, named traffic events — bigger & bolder than ambient background traffic */
+  .feature-dot{ pointer-events:none; }
+  .feature-dot.http{ fill:var(--accent); filter:drop-shadow(0 0 9px var(--accent)); }
+  .feature-dot.sync{ fill:var(--accent); filter:drop-shadow(0 0 9px var(--accent)); }
+  .feature-dot.motion{ fill:var(--pink); filter:drop-shadow(0 0 11px var(--pink)); }
+  .feature-tag{
+    font-family:var(--font-mono); font-weight:800; font-size:10.5px; text-anchor:middle;
+    pointer-events:none; paint-order:stroke; stroke:var(--panel-solid); stroke-width:3px;
+  }
+  .feature-tag.http{ fill:var(--accent); }
+  .feature-tag.sync{ fill:var(--accent); }
+  .feature-tag.motion{ fill:var(--pink); animation:motionFlash .5s ease-in-out infinite; }
+  @keyframes motionFlash{ 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+
+  .auth-badge{ opacity:0; transition:opacity .35s ease; pointer-events:none; }
+  .auth-badge.show{ opacity:1; }
+  .auth-badge rect{ fill:var(--panel-solid); stroke:var(--amber); stroke-width:1.2; filter:drop-shadow(0 0 9px var(--amber)); }
+  .auth-badge text{ fill:var(--amber); font-family:var(--font-mono); font-weight:800; font-size:10px; text-anchor:middle; dominant-baseline:middle; }
+
+  /* realistic data-flow messages: a glowing dot + tiny payload tag */
+  .msg-dot{ fill:var(--accent); filter:drop-shadow(0 0 6px var(--accent)); pointer-events:none; }
+  .msg-dot.ext{ fill:var(--amber); filter:drop-shadow(0 0 6px var(--amber)); }
+  .msg-trail{ fill:var(--accent); pointer-events:none; }
+  .msg-tag{
+    font-family:var(--font-mono); font-size:8.5px; font-weight:700;
+    fill:var(--text); text-anchor:middle; pointer-events:none;
+  }
+  .msg-tag .payload{ fill:var(--accent); }
+  .msg-tag .route{ fill:var(--muted); font-weight:500; }
+
+  /* ---------- OSI DATA JOURNEY (theme-aware rebuild) ---------- */
+  .osi-subtitle{ font-family:var(--font-mono); font-size:.78rem; color:var(--muted); margin:-14px 0 22px; }
+  .osi-wrap{ padding:34px 18px 30px; position:relative; }
+
+  .osi-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px 22px; align-items:start; position:relative; }
+  @media (max-width:760px){ .osi-grid{ grid-template-columns:1fr; } }
+
+  .osi-device-head{ display:flex; align-items:center; gap:12px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+  .osi-device-icon{
+    width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    background:var(--panel-solid); font-size:18px; flex:none;
+    box-shadow:3px 3px 7px var(--shadow-d), -3px -3px 7px var(--shadow-l);
+  }
+  .osi-device-head h3{ font-family:var(--font-display); font-weight:800; font-size:.98rem; margin-bottom:2px; }
+  .osi-device-head span{ font-family:var(--font-mono); font-size:.72rem; color:var(--quantum); }
+
+  .osi-stack{ display:flex; flex-direction:column; gap:6px; }
+  .osi-layer{
+    padding:10px 12px; border-radius:12px; background:var(--panel-solid); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    transition:background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .2s ease;
+  }
+  .osi-layer.active{
+    border-color:var(--quantum); background:rgba(167,139,250,.12);
+    box-shadow:0 0 15px rgba(167,139,250,.22), inset 0 0 10px rgba(167,139,250,.12);
+    transform:translateY(-1px);
+  }
+  .osi-layer-main{ display:flex; align-items:center; gap:10px; }
+  .osi-layer .osi-code{ font-family:var(--font-mono); font-weight:800; font-size:.76rem; color:var(--quantum); width:22px; flex:none; }
+  .osi-layer .osi-name{ font-size:.78rem; color:var(--text-on-dark); white-space:nowrap; }
+  .osi-layer .osi-pdu{ font-family:var(--font-mono); font-size:.65rem; color:rgba(231,235,243,.55); white-space:nowrap; }
+  .osi-layer.active .osi-pdu{ color:var(--quantum); }
+
+  /* the traveling energy orb + its attached header badges */
+  #orbContainer{
+    position:absolute; top:0; left:0; z-index:5; opacity:0; pointer-events:none;
+    transition:transform .45s cubic-bezier(.34,1.25,.64,1), opacity .3s ease;
+  }
+  #dataOrb{
+    position:relative; width:22px; height:22px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #fff, var(--quantum) 55%, #4c1d95 100%);
+    box-shadow:0 0 12px var(--quantum), 0 0 26px rgba(167,139,250,.6);
+  }
+  #dataOrb::before{
+    content:''; position:absolute; inset:-7px; border-radius:50%;
+    border:1px solid rgba(167,139,250,.5); animation:orbHalo 1.1s ease-out infinite;
+  }
+  @keyframes orbHalo{ 0%{ transform:scale(.6); opacity:.7; } 100%{ transform:scale(1.9); opacity:0; } }
+  #attachedBadges{
+    position:absolute; top:50%; right:calc(100% + 8px); transform:translateY(-50%);
+    display:flex; flex-direction:row-reverse; gap:4px; flex-wrap:wrap; max-width:180px; justify-content:flex-end;
+  }
+  .header-badge{
+    font-family:var(--font-mono); font-size:.6rem; font-weight:800; color:#fff;
+    padding:2px 6px; border-radius:5px; white-space:nowrap;
+    box-shadow:0 0 8px rgba(0,0,0,.3);
+    animation:badgeSnap .35s cubic-bezier(.175,.885,.32,1.275) forwards, badgeFlash .45s ease-out;
+  }
+  @keyframes badgeSnap{ 0%{ transform:scale(0) translateX(14px); opacity:0; } 100%{ transform:scale(1) translateX(0); opacity:1; } }
+  @keyframes badgeFlash{ 0%{ filter:brightness(1); } 35%{ filter:brightness(2.2); } 100%{ filter:brightness(1); } }
+
+  /* physical medium wire spanning both columns */
+  .osi-wire-row{ grid-column:1 / -1; position:relative; padding:12px 4px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .osi-wire-labels{ display:flex; align-items:center; justify-content:space-between; font-family:var(--font-mono); font-size:.68rem; color:var(--muted); padding:0 6px; }
+  .osi-wire-bits{ color:var(--quantum); font-weight:700; opacity:0; transition:opacity .2s ease; }
+  .osi-wire-pulse{
+    position:absolute; top:50%; height:3px; transform:translateY(-50%); width:0%; opacity:0;
+    background:linear-gradient(90deg, transparent, var(--quantum), #fff, var(--quantum), transparent);
+    box-shadow:0 0 12px var(--quantum); transition:width 1s ease, opacity .2s ease;
+  }
+
+  /* the "Send Data Packet" trigger */
+  .quantum-btn{
+    position:relative; display:flex; align-items:center; justify-content:center; margin:0 auto 6px;
+    padding:14px 32px; border:none; border-radius:99px; cursor:pointer; overflow:hidden;
+    font-family:var(--font-mono); font-weight:800; font-size:.88rem; color:#fff;
+    background:linear-gradient(120deg, #7c3aed, #4f46e5, #0d9488);
+    box-shadow:0 10px 28px rgba(124,58,237,.35);
+    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .quantum-btn:hover{ transform:translateY(-2px) scale(1.03); box-shadow:0 14px 34px rgba(124,58,237,.5); }
+  .quantum-btn:active{ transform:translateY(1px) scale(.99); }
+  .quantum-btn:disabled{ cursor:not-allowed; opacity:.6; transform:none; }
+  .quantum-btn-label{ position:relative; z-index:1; }
+
+  /* SYSTEM TERMINAL LOG console */
+  .osi-terminal{
+    margin-top:22px; background:var(--panel-solid); border:1px solid var(--line); border-radius:16px;
+    padding:16px 18px; box-shadow:5px 5px 10px var(--shadow-d), -5px -5px 10px var(--shadow-l);
+  }
+  .osi-terminal-head{ display:flex; align-items:center; justify-content:space-between; padding-bottom:10px; margin-bottom:10px; border-bottom:1px solid var(--line); }
+  .osi-terminal-dots{ display:flex; align-items:center; gap:6px; }
+  .osi-terminal-dots span{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .osi-terminal-dots span:nth-child(1){ background:#ef4444; }
+  .osi-terminal-dots span:nth-child(2){ background:#f59e0b; }
+  .osi-terminal-dots span:nth-child(3){ background:#22c55e; }
+  .osi-terminal-title{ font-family:var(--font-mono); font-size:.68rem; color:rgba(231,235,243,.6); font-weight:700; }
+  .osi-terminal-badge{ font-family:var(--font-mono); font-size:.64rem; font-weight:800; padding:3px 9px; border-radius:6px; background:var(--panel); color:var(--muted); transition:background .3s ease, color .3s ease, box-shadow .3s ease; }
+  .osi-terminal.delivered{ animation:deliveredFlash 1.3s ease-out; }
+  .osi-terminal.delivered .osi-terminal-badge{ background:rgba(52,211,153,.18); color:#34d399; box-shadow:0 0 10px rgba(52,211,153,.5); }
+  @keyframes deliveredFlash{
+    0%{ border-color:rgba(52,211,153,.9); box-shadow:0 0 0 rgba(52,211,153,0); }
+    15%{ border-color:rgba(52,211,153,.9); box-shadow:0 0 34px rgba(52,211,153,.45); }
+    100%{ border-color:var(--line); box-shadow:5px 5px 10px var(--shadow-d), -5px -5px 10px var(--shadow-l); }
+  }
+  .osi-terminal-log{ font-family:var(--font-mono); font-size:.82rem; color:var(--text-on-dark); min-height:24px; line-height:1.7; }
+  .osi-terminal-log .tag{ color:var(--quantum); font-weight:700; }
+  .osi-terminal-log.success{ color:#34d399; }
+  .osi-terminal-log.success .tag{ color:#34d399; }
+
+  /* decorative satellite dots + dotted lines, like a growing network fringe */
+  .sat-line{ fill:none; stroke:var(--muted); stroke-width:1; stroke-dasharray:2 6; opacity:.35; }
+  .sat-dot{ fill:var(--accent); opacity:.4; animation:satPulse 3s ease-in-out infinite; }
+  @keyframes satPulse{ 0%,100%{ opacity:.25; } 50%{ opacity:.6; } }
+
+  /* ---------- INTEGRATED ROADMAP: added without changing the portfolio ---------- */
+  .roadmap-merge{ margin-top:34px; }
+  .roadmap-merge .rm-heading{ display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:16px; }
+  .roadmap-merge .rm-heading h2{ margin-top:8px; }
+  .roadmap-merge .rm-intro{ color:var(--muted); max-width:78ch; margin-bottom:18px; }
+  .roadmap-merge .rm-panel{ padding:26px; }
+  .roadmap-merge .rm-group{ margin-bottom:26px; }
+  .roadmap-merge .rm-group:last-child{ margin-bottom:0; }
+  .roadmap-merge .rm-group-title{
+    display:flex; align-items:center; gap:10px; color:var(--accent);
+    font-family:var(--font-display); font-size:1.08rem; font-weight:800; margin-bottom:15px;
+  }
+  .roadmap-merge .rm-group-title::before{ content:''; width:4px; height:19px; border-radius:99px; background:var(--accent); }
+  .roadmap-merge .rm-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+  .roadmap-merge .rm-card{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    min-height:76px; padding:13px 15px; border:1px solid rgba(255,255,255,.08);
+    border-right:3px solid var(--rm-color); border-radius:14px; background:var(--panel-solid);
+    color:var(--text-on-dark); cursor:pointer; text-align:right;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .roadmap-merge .rm-card:hover{ transform:translateY(-4px); border-color:var(--rm-color); box-shadow:0 12px 28px rgba(0,0,0,.24); }
+  .roadmap-merge .rm-card-main{ display:flex; align-items:center; gap:11px; }
+  .roadmap-merge .rm-number{
+     width:35px; height:35px; flex:none; display:grid; place-items:center;
+     border-radius:10px; color:#fff; background:var(--rm-color); font-family:var(--font-mono);
+     font-size:.76rem; line-height:1; font-weight:800; text-shadow:0 1px 2px rgba(0,0,0,.35);
+     box-shadow:0 5px 12px color-mix(in srgb,var(--rm-color) 24%,transparent);
+  }
+  .roadmap-merge .rm-title{ font-size:.82rem; font-weight:800; color:var(--text-on-dark); }
+  .roadmap-merge .rm-en{ display:block; color:rgba(231,235,243,.55); font: .58rem var(--font-mono); direction:ltr; }
+  .roadmap-merge .rm-arrow{ color:var(--rm-color); font-size:1.1rem; transition:transform .2s ease; }
+  .roadmap-merge .rm-card:hover .rm-arrow{ transform:translateX(-5px); }
+
+  /* ---------- ROADMAP DETAIL: CENTERED TABBED MODAL (distinct from a side drawer) ---------- */
+  .rm2-overlay{
+    position:fixed; inset:0; z-index:200; background:rgba(6,9,15,.72);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    display:flex; align-items:center; justify-content:center; padding:22px;
+    opacity:0; pointer-events:none; transition:opacity .28s ease;
+  }
+  .rm2-overlay.active{ opacity:1; pointer-events:auto; }
+  .rm2-modal{
+    width:min(640px,100%); max-height:min(82vh,720px); overflow:hidden;
+    display:flex; flex-direction:column;
+    background:var(--panel-solid); border:1px solid var(--line); border-radius:22px;
+    box-shadow:0 30px 70px rgba(0,0,0,.55);
+    transform:scale(.92) translateY(10px); opacity:0;
+    transition:transform .32s cubic-bezier(.2,.9,.25,1.15), opacity .28s ease;
+  }
+  .rm2-overlay.active .rm2-modal{ transform:scale(1) translateY(0); opacity:1; }
+  .rm2-head{ display:flex; align-items:flex-start; gap:14px; padding:22px 22px 16px; border-bottom:1px solid var(--line); position:relative; }
+  .rm2-icon{
+    width:48px; height:48px; flex:none; border-radius:14px; display:grid; place-items:center;
+    color:#fff; font-family:var(--font-mono); font-weight:800; font-size:.85rem;
+    background:var(--rm2-color); box-shadow:0 8px 18px color-mix(in srgb,var(--rm2-color) 35%,transparent);
+  }
+  .rm2-head-text{ flex:1; min-width:0; }
+  .rm2-badge{ display:inline-block; margin-bottom:6px; padding:3px 10px; border-radius:99px; color:#fff; font:700 .62rem var(--font-mono); direction:ltr; background:var(--rm2-color); }
+  .rm2-title{ font-family:var(--font-display); font-weight:800; font-size:1.18rem; line-height:1.35; }
+  .rm2-sub{ display:block; margin-top:2px; color:var(--muted); font:.7rem var(--font-mono); direction:ltr; }
+  .rm2-close{
+    width:34px; height:34px; flex:none; border-radius:50%; border:1px solid var(--line);
+    background:var(--panel); color:var(--text); cursor:pointer; font-size:1rem;
+    transition:background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .rm2-close:hover{ background:var(--rose); color:#fff; transform:rotate(90deg); }
+
+  .rm2-tabs{ display:flex; gap:6px; padding:14px 22px 0; }
+  .rm2-tab{
+    flex:1; padding:10px 8px; border:none; border-radius:12px 12px 0 0; cursor:pointer;
+    background:var(--panel); color:var(--muted); font:700 .74rem var(--font-mono);
+    transition:color .2s ease, background .2s ease;
+  }
+  .rm2-tab.active{ background:var(--panel); color:var(--rm2-color); }
+  .rm2-tab.active::after{ content:''; }
+
+  .rm2-body{ flex:1; overflow-y:auto; padding:20px 22px 24px; background:var(--panel); }
+  .rm2-pane{ display:none; animation:rm2FadeIn .25s ease; }
+  .rm2-pane.active{ display:block; }
+  @keyframes rm2FadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+
+  .rm2-overview{ color:var(--text); font-size:.9rem; line-height:1.95; }
+
+  .rm2-timeline{ position:relative; padding-right:34px; }
+  .rm2-timeline::before{ content:''; position:absolute; right:11px; top:6px; bottom:6px; width:2px; background:var(--line); }
+  .rm2-tl-item{ position:relative; padding-bottom:20px; }
+  .rm2-tl-item:last-child{ padding-bottom:0; }
+  .rm2-tl-dot{
+    position:absolute; right:-34px; top:0; width:24px; height:24px; border-radius:50%;
+    display:grid; place-items:center; background:var(--rm2-color); color:#fff;
+    font-family:var(--font-mono); font-size:.66rem; font-weight:800;
+    box-shadow:0 0 0 4px var(--panel);
+  }
+  .rm2-tl-item strong{ display:block; font-size:.85rem; margin-bottom:3px; }
+  .rm2-tl-item > span:not(.rm2-tl-dot){ display:block; color:var(--muted); font-size:.78rem; }
+
+  .rm2-tips{ display:flex; flex-direction:column; gap:10px; }
+  .rm2-tip{
+    display:flex; gap:10px; padding:13px 14px; border-radius:12px; background:var(--panel-solid);
+    border-right:3px solid var(--rm2-color); font-size:.83rem; color:var(--text); line-height:1.8;
+  }
+  .rm2-tip .rm2-tip-ico{ flex:none; font-size:1rem; }
+
+  .rm2-code{ overflow:auto; margin:0; padding:14px; border:1px solid var(--panel-border,rgba(255,255,255,.08)); border-radius:10px; color:#67e8f9; background:#030712; font:.7rem/1.85 var(--font-mono); direction:ltr; text-align:left; }
+
+  @media(max-width:520px){
+    .rm2-tabs{ padding:12px 14px 0; }
+    .rm2-tab{ font-size:.66rem; padding:9px 4px; }
+    .rm2-body{ padding:16px 14px 20px; }
+    .rm2-head{ padding:18px 14px 14px; }
+  }
+
+  /* ---------- ORIGINAL INTERACTIVE GHOST ---------- */
+  .ghost-container{
+    position:fixed; right:28px; bottom:22px; z-index:150;
+    display:flex; flex-direction:column; align-items:center;
+    cursor:pointer; user-select:none;
+  }
+  .ghost-dialog{
+    margin-bottom:10px; padding:8px 15px; border:1px solid rgba(94,234,212,.28);
+    border-radius:13px; color:var(--text-on-dark); background:var(--panel-solid);
+    box-shadow:0 10px 25px rgba(0,0,0,.38);
+    font:.7rem var(--font-mono); opacity:0; transform:translateY(9px) scale(.94);
+    transition:opacity .3s ease, transform .3s ease; pointer-events:none;
+    max-width:min(78vw,320px); white-space:normal; text-align:center; line-height:1.6;
+  }
+  .ghost-container:hover .ghost-dialog,
+  .ghost-container.is-speaking .ghost-dialog{ opacity:1; transform:translateY(0) scale(1); }
+  .ghost-wrapper{
+    animation:ghost-float 3.5s ease-in-out infinite;
+    filter:drop-shadow(0 20px 18px rgba(0,0,0,.45));
+    transition:transform .2s ease;
+  }
+  .ghost-wrapper:active{ transform:scale(.92) translateY(-12px); }
+  .ghost-svg{ width:112px; height:132px; display:block; }
+  #ghostEyes{ transform-box:fill-box; transform-origin:center; transition:transform .1s linear; }
+  .ghost-shadow{
+    width:72px; height:12px; margin-top:5px; border-radius:50%;
+    background:rgba(0,0,0,.3); animation:ghost-shadow-scale 3.5s ease-in-out infinite;
+  }
+  @keyframes ghost-float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-18px);} }
+  @keyframes ghost-shadow-scale{ 0%,100%{transform:scale(1);opacity:.45;} 50%{transform:scale(.55);opacity:.15;} }
+  @media(max-width:720px){
+    .ghost-container{ right:14px; bottom:14px; }
+    .ghost-svg{ width:82px; height:98px; }
+    .ghost-shadow{ width:54px; }
+    .ghost-dialog{ font-size:.61rem; }
+  }
+  @media(max-width:720px){
+    .roadmap-merge .rm-grid{ grid-template-columns:1fr; }
+    .roadmap-merge .rm-panel{ padding:17px; }
+  }
+
   @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
 </style>
 </head>
 <body class="gated">
- 
+
 <canvas id="bgRain"></canvas>
- 
+
 <!-- MATRIX RAIN INTRO -->
 <div id="matrixIntro">
   <canvas id="matrixCanvas"></canvas>
   <div id="matrixSkip">تخطي ⌫</div>
 </div>
- 
+
 <!-- HEX NETWORK INTRO -->
 <div id="hexIntro">
   <div class="hexField"><svg id="hexSvg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"></svg></div>
@@ -360,19 +834,21 @@
   </div>
   <div id="introSkip">تخطي ⌫</div>
 </div>
- 
+
 <!-- BOOT SEQUENCE -->
 <div id="bootIntro">
   <div class="boot-box" id="bootBox"></div>
   <div id="bootSkip">تخطي ⌫</div>
 </div>
- 
+
 <header class="nav">
   <div class="wrap nav-inner">
-    <div class="brand"><span class="dot"></span> HAZEM_ELHUSSEINY.SYSTEM ADMINISTRATOR</div>
+    <div class="brand"><span class="dot"></span> HAZEM_ELHUSSEINY.IT Support Specialist</div>
     <nav>
       <ul>
         <li><a href="#about">نبذة</a></li>
+        <li><a href="#topology">الشبكة</a></li>
+        <li><a href="#osi">OSI</a></li>
         <li><a href="#experience">الخبرات</a></li>
         <li><a href="#skills">المهارات</a></li>
         <li><a href="#cert">الشهادات</a></li>
@@ -385,11 +861,11 @@
     </div>
   </div>
 </header>
- 
+
 <main class="wrap">
- 
+
   <section class="hero" style="border-top:none;">
-    <div class="status-line"><span class="dot"></span> SYSTEM STATUS: ONLINE — متاح لفرص جديدة <span class="cursor"></span></div>
+    <div class="status-line"><span class="dot"></span> IT Support Specialist & Network Support: ONLINE — متاح لفرص جديدة <span class="cursor"></span></div>
     <h1>حازم الحسيني<br><span>أخصائي دعم فني</span> ودعم الشبكات</h1>
     <div class="role">IT Support Specialist · Network Support // uptime: 3+ years</div>
     <p class="lead">
@@ -402,7 +878,7 @@
       <a class="btn btn-outline depth" href="#contact">بيانات التواصل</a>
     </div>
   </section>
- 
+
   <!-- DASHBOARD -->
   <div class="dash">
     <div class="hud panel depth">
@@ -414,10 +890,10 @@
         <div class="mini-stat"><div class="val">3</div><div class="lbl">شهادات معتمدة</div></div>
       </div>
     </div>
- 
+
     <div class="hud panel profile-card depth">
             <div class="name">حازم الحسيني</div>
-      <div class="role">Network &amp; Security Support</div>
+      <div class="role">Network &amp; SYSTEM ADMINISTRATOR</div>
       <div class="contact-list">
         <a href="tel:+201019354435">📞 01019354435</a>
         <a href="mailto:hazemelhussiny495@gmail.com">✉ hazemelhussiny495@gmail.com</a>
@@ -426,22 +902,300 @@
       </div>
     </div>
   </div>
- 
-  <section id="about">
+
+  <!-- LIVE NETWORK TOPOLOGY -->
+  <section id="topology">
+    <div class="eyebrow">// NETWORK_TOPOLOGY --live</div>
+    <h2>خريطة الشبكة </h2>
+    <div class="hud panel depth" style="padding:34px 10px 8px;">
+      <svg class="net-diagram" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="مخطط شبكة كثيفة: راوتر وفايروول وسويتش ومجموعة كبيرة من أجهزة الكمبيوتر واللابتوب والموبايل والطابعة وكاميرات المراقبة، كلها متصلة ببعض في شبكة واحدة">
+
+        <!-- ===== satellite dotted lines (decorative, static) ===== -->
+        <path class="sat-line" d="M150,190 L40,90"></path>
+        <path class="sat-line" d="M150,190 L60,290"></path>
+        <path class="sat-line" d="M570,100 L480,20"></path>
+        <path class="sat-line" d="M570,100 L680,30"></path>
+        <path class="sat-line" d="M960,180 L1070,80"></path>
+        <path class="sat-line" d="M1010,350 L1080,430"></path>
+        <path class="sat-line" d="M150,390 L30,470"></path>
+        <path class="sat-line" d="M310,490 L190,600"></path>
+        <path class="sat-line" d="M530,530 L480,660"></path>
+        <path class="sat-line" d="M960,530 L1050,620"></path>
+        <path class="sat-line" d="M770,140 L830,40"></path>
+        <path class="sat-line" d="M750,490 L830,610"></path>
+
+        <!-- ===== static breathing mesh lines ===== -->
+        <path class="mesh-diag" id="e3-4" d="M770,140 L960,180"></path>
+        <path class="mesh-diag" id="e4-5" d="M960,180 L1010,350"></path>
+        <path class="mesh-diag" id="e5-6" d="M1010,350 L840,310"></path>
+        <path class="mesh-diag" id="e6-7" d="M840,310 L570,340"></path>
+        <path class="mesh-diag" id="e7-8" d="M570,340 L340,310"></path>
+        <path class="mesh-diag" id="e8-9" d="M340,310 L150,390"></path>
+        <path class="mesh-diag" id="e9-10" d="M150,390 L310,490"></path>
+        <path class="mesh-diag" id="e10-11" d="M310,490 L530,530"></path>
+        <path class="mesh-diag" id="e11-12" d="M530,530 L750,490"></path>
+        <path class="mesh-diag" id="e6-12" d="M750,490 L840,310"></path>
+        <path class="mesh-diag" id="e7-11" d="M570,340 L530,530"></path>
+        <path class="mesh-diag" id="e3-7" d="M570,340 L770,140"></path>
+        <path class="mesh-diag" id="e12-13" d="M750,490 L960,530"></path>
+        <path class="mesh-diag" id="e5-13" d="M960,530 L1010,350"></path>
+
+        <!-- ===== animated backbone lines (core infrastructure) ===== -->
+        <path class="net-line" id="e0-1" d="M150,190 L340,130"></path>
+        <path class="net-line" id="e1-2" d="M340,130 L570,100"></path>
+        <path class="net-line" id="e2-3" d="M570,100 L770,140"></path>
+        <path class="net-line" id="e1-8" d="M340,130 L340,310"></path>
+        <path class="net-line" id="e2-7" d="M570,100 L570,340"></path>
+        <path class="net-line" id="e0-8" d="M150,190 L340,310"></path>
+        <path class="net-line" id="e0-9" d="M150,190 L150,390"></path>
+
+        <!-- messages travel here, generated live by JS, labeled with OSI layers -->
+        <g id="msgLayer"></g>
+
+        <!-- ===== satellite dots (decorative, no labels) ===== -->
+        <circle class="sat-dot" r="4" cx="40" cy="90"></circle>
+        <circle class="sat-dot" r="4" cx="60" cy="290" style="animation-delay:.3s"></circle>
+        <circle class="sat-dot" r="4" cx="480" cy="20" style="animation-delay:.6s"></circle>
+        <circle class="sat-dot" r="4" cx="680" cy="30" style="animation-delay:.9s"></circle>
+        <circle class="sat-dot" r="4" cx="1070" cy="80" style="animation-delay:1.2s"></circle>
+        <circle class="sat-dot" r="4" cx="1080" cy="430" style="animation-delay:1.5s"></circle>
+        <circle class="sat-dot" r="4" cx="30" cy="470" style="animation-delay:1.8s"></circle>
+        <circle class="sat-dot" r="4" cx="190" cy="600" style="animation-delay:.15s"></circle>
+        <circle class="sat-dot" r="4" cx="480" cy="660" style="animation-delay:.45s"></circle>
+        <circle class="sat-dot" r="4" cx="1050" cy="620" style="animation-delay:.75s"></circle>
+        <circle class="sat-dot" r="4" cx="830" cy="40" style="animation-delay:1.05s"></circle>
+        <circle class="sat-dot" r="4" cx="830" cy="610" style="animation-delay:1.35s"></circle>
+
+        <!-- ===== main device nodes (all glowing — every device sends & receives) ===== -->
+        <g id="node-0" class="net-node" data-node="0" data-x="150" data-y="190" transform="translate(150,190)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="30"></circle>
+          <g class="node-visual">
+            <circle class="node-circle" r="26"></circle>
+            <text class="node-icon" y="8" style="font-size:19px;">📡</text>
+          </g>
+        </g>
+        <g id="node-1" class="net-node" data-node="1" data-x="340" data-y="130" transform="translate(340,130)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="30" style="animation-delay:.2s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle" r="26"></circle>
+            <text class="node-icon" y="8" style="font-size:19px;">🔀</text>
+          </g>
+        </g>
+        <g id="node-2" class="net-node" data-node="2" data-x="570" data-y="100" transform="translate(570,100)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="30" style="animation-delay:.4s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle" r="26"></circle>
+            <text class="node-icon" y="8" style="font-size:19px;">🛡️</text>
+          </g>
+        </g>
+        <g id="node-3" class="net-node" data-node="3" data-x="770" data-y="140" transform="translate(770,140)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:.6s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">💻</text>
+          </g>
+        </g>
+        <g id="node-4" class="net-node" data-node="4" data-x="960" data-y="180" transform="translate(960,180)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="24" style="animation-delay:.8s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="20"></circle>
+            <text class="node-icon" y="6" style="font-size:15px;">📱</text>
+          </g>
+        </g>
+        <g id="node-5" class="net-node" data-node="5" data-x="1010" data-y="350" transform="translate(1010,350)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:1s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">🖥️</text>
+          </g>
+        </g>
+        <g id="node-6" class="net-node" data-node="6" data-x="840" data-y="310" transform="translate(840,310)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:1.2s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">💻</text>
+          </g>
+        </g>
+        <g id="node-7" class="net-node" data-node="7" data-x="570" data-y="340" transform="translate(570,340)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="28" style="animation-delay:1.4s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="24"></circle>
+            <text class="node-icon" y="7" style="font-size:18px;">🖥️</text>
+          </g>
+        </g>
+        <g id="node-8" class="net-node" data-node="8" data-x="340" data-y="310" transform="translate(340,310)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="24" style="animation-delay:1.6s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="20"></circle>
+            <text class="node-icon" y="6" style="font-size:15px;">📱</text>
+          </g>
+        </g>
+        <g id="node-9" class="net-node" data-node="9" data-x="150" data-y="390" transform="translate(150,390)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:1.8s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">🖨️</text>
+          </g>
+        </g>
+        <g id="node-10" class="net-node" data-node="10" data-x="310" data-y="490" transform="translate(310,490)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:.1s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">📹</text>
+          </g>
+        </g>
+        <g id="node-11" class="net-node" data-node="11" data-x="530" data-y="530" transform="translate(530,530)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:.3s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">🖥️</text>
+          </g>
+        </g>
+        <g class="auth-badge" id="authBadge" transform="translate(530,530)">
+          <rect x="-30" y="-56" width="60" height="22" rx="7"></rect>
+          <text x="0" y="-45">🔒 AUTH</text>
+        </g>
+        <g id="node-12" class="net-node" data-node="12" data-x="750" data-y="490" transform="translate(750,490)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="26" style="animation-delay:.5s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="22"></circle>
+            <text class="node-icon" y="7" style="font-size:17px;">💻</text>
+          </g>
+        </g>
+        <g id="node-13" class="net-node" data-node="13" data-x="960" data-y="530" transform="translate(960,530)">
+          <circle class="node-hit" r="36"></circle>
+          <circle class="ping" r="24" style="animation-delay:.7s"></circle>
+          <g class="node-visual">
+            <circle class="node-circle small" r="20"></circle>
+            <text class="node-icon" y="6" style="font-size:15px;">👆</text>
+          </g>
+        </g>
+      </svg>
+      <div class="node-tooltip" id="nodeTooltip"></div>
+      <div class="net-caption">شبكة واسعة من الأجهزة — كل جهاز بيبعت ويستقبل بيانات لحظة بلحظة. مرّر الماوس على أي جهاز لتفاصيله، أو دوس عليه.</div>
+    </div>
+  </section>
+
+  <!-- OSI DATA JOURNEY -->
+  <section id="osi">
+    <div class="eyebrow">// QUANTUM_DATA_ODYSSEY --osi</div>
+    <h2>رحلة البيانات عبر طبقات OSI</h2>
+    <p class="osi-subtitle">محاكاة حية لتغليف البيانات (Encapsulation) وفكّها (De-encapsulation) — لحظة بلحظة</p>
+
+    <div class="hud panel depth osi-wrap">
+      <button class="quantum-btn" id="sendPacketBtn" type="button">
+        <span class="quantum-btn-label">🚀 أضغط إرسال حزمة بيانات 🚀</span>
+      </button>
+
+      <div class="osi-grid" id="osiGrid">
+
+        <!-- floating orb + attached header badges, travels across the whole grid -->
+        <div id="orbContainer">
+          <div id="dataOrb"></div>
+          <div id="attachedBadges"></div>
+        </div>
+
+        <!-- Device A — sender / encapsulation -->
+        <div>
+          <div class="osi-device-head">
+            <div class="osi-device-icon">💻</div>
+            <div>
+              <h3>الجهاز A (المرسل)</h3>
+              <span>Encapsulation Process</span>
+            </div>
+          </div>
+          <div class="osi-stack" id="senderStack">
+            <div class="osi-layer" data-layer="7"><div class="osi-layer-main"><span class="osi-code">L7</span><span class="osi-name">Application</span></div><span class="osi-pdu">Data</span></div>
+            <div class="osi-layer" data-layer="6"><div class="osi-layer-main"><span class="osi-code">L6</span><span class="osi-name">Presentation</span></div><span class="osi-pdu">Formatted Data</span></div>
+            <div class="osi-layer" data-layer="5"><div class="osi-layer-main"><span class="osi-code">L5</span><span class="osi-name">Session</span></div><span class="osi-pdu">Session Data</span></div>
+            <div class="osi-layer" data-layer="4"><div class="osi-layer-main"><span class="osi-code">L4</span><span class="osi-name">Transport</span></div><span class="osi-pdu">Segments</span></div>
+            <div class="osi-layer" data-layer="3"><div class="osi-layer-main"><span class="osi-code">L3</span><span class="osi-name">Network</span></div><span class="osi-pdu">Packets</span></div>
+            <div class="osi-layer" data-layer="2"><div class="osi-layer-main"><span class="osi-code">L2</span><span class="osi-name">Data Link</span></div><span class="osi-pdu">Frames</span></div>
+            <div class="osi-layer" data-layer="1"><div class="osi-layer-main"><span class="osi-code">L1</span><span class="osi-name">Physical</span></div><span class="osi-pdu">Bits (0/1)</span></div>
+          </div>
+        </div>
+
+        <!-- Device B — receiver / de-encapsulation -->
+        <div>
+          <div class="osi-device-head">
+            <div class="osi-device-icon">🖥️</div>
+            <div>
+              <h3>الجهاز B (المستقبل)</h3>
+              <span>De-encapsulation Process</span>
+            </div>
+          </div>
+          <div class="osi-stack" id="receiverStack">
+            <div class="osi-layer" data-layer="7"><div class="osi-layer-main"><span class="osi-code">L7</span><span class="osi-name">Application</span></div><span class="osi-pdu">Data</span></div>
+            <div class="osi-layer" data-layer="6"><div class="osi-layer-main"><span class="osi-code">L6</span><span class="osi-name">Presentation</span></div><span class="osi-pdu">Formatted Data</span></div>
+            <div class="osi-layer" data-layer="5"><div class="osi-layer-main"><span class="osi-code">L5</span><span class="osi-name">Session</span></div><span class="osi-pdu">Session Data</span></div>
+            <div class="osi-layer" data-layer="4"><div class="osi-layer-main"><span class="osi-code">L4</span><span class="osi-name">Transport</span></div><span class="osi-pdu">Segments</span></div>
+            <div class="osi-layer" data-layer="3"><div class="osi-layer-main"><span class="osi-code">L3</span><span class="osi-name">Network</span></div><span class="osi-pdu">Packets</span></div>
+            <div class="osi-layer" data-layer="2"><div class="osi-layer-main"><span class="osi-code">L2</span><span class="osi-name">Data Link</span></div><span class="osi-pdu">Frames</span></div>
+            <div class="osi-layer" data-layer="1"><div class="osi-layer-main"><span class="osi-code">L1</span><span class="osi-name">Physical</span></div><span class="osi-pdu">Bits (0/1)</span></div>
+          </div>
+        </div>
+
+        <!-- physical transmission medium -->
+        <div class="osi-wire-row">
+          <div class="osi-wire-labels">
+            <span>الوسط الناقل (Physical Medium)</span>
+            <span class="osi-wire-bits" id="wireBitsText">10110101</span>
+            <span>Fiber / Ethernet</span>
+          </div>
+          <div class="osi-wire-pulse" id="wirePulse"></div>
+        </div>
+
+      </div>
+
+      <div class="osi-terminal" id="osiTerminal">
+        <div class="osi-terminal-head">
+          <div class="osi-terminal-dots"><span></span><span></span><span></span></div>
+          <span class="osi-terminal-title">SYSTEM TERMINAL LOG</span>
+          <span class="osi-terminal-badge" id="osiStatusBadge">IDLE</span>
+        </div>
+        <div class="osi-terminal-log" id="osiStatus">$ جاهز لبدء عملية نقل البيانات. انقر على زر الإرسال بالأعلى...</div>
+      </div>
+
+      <div style="text-align:center; margin-top:22px;">
+        <a class="btn btn-outline depth" href="#roadmaps">📚 استكشف خارطة الطريق الكاملة لتعلم الشبكات</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="About">
     <div class="eyebrow">// ABOUT</div>
-    <h2>نبذة</h2>
     <div class="hud panel depth">
       <p style="color:var(--muted); margin-bottom:14px; max-width:70ch;">
-        أعمل في المساحة اللي بين الشبكات، الأنظمة الأمنية، والدعم الفني — بخبرة عملية في إدارة
-        البنية التحتية وشبكات LAN/WAN، وضمان اتصال مستقر لخطوط الإنتاج والفروع التشغيلية.
+         محترف بخبرة عمليّة في إدارة البنية التحتية وتأمين شبكات (LAN / WAN)  
+         لضمان استقرار العمليات التشغيلية وخطوط الإنتاج (High Availability)
+          ماهر في إدارة بيئات Windows Server & Active Directory
+         ر ربط أجهزة البصمة بأنظمة وهندسة تكامل الأنظمة (Systems Integration)  عبر ربط أجهزة البصمة بأنظمة الـ HR
+       ومنع الوصول غير المصرح به (Hikvision) متميز في تطبيق معايير الأمن السيبراني لحماية أنظمة المراقبة الذكية 
+       (Downtime) يضمن تقليل وقت التوقف عن العمل  (Tier 2/3) تقديم دعم فني متقدم
       </p>
+     <!--
       <p style="color:var(--muted); max-width:70ch;">
         مسؤول عن إدارة بيئات Windows Server وActive Directory، والإشراف على أنظمة مراقبة Hikvision
         وتأمينها ضد الوصول غير المصرح به، بالإضافة إلى دمج أجهزة البصمة مع أنظمة الموارد البشرية.
       </p>
+       -->
+    
     </div>
   </section>
- 
+
   <!-- EXPERIENCE AS COMMIT LOG -->
   <section id="experience">
     <div class="eyebrow">// COMMIT_LOG --experience</div>
@@ -488,7 +1242,7 @@
       </div>
     </div>
   </section>
- 
+
   <!-- SKILLS AS SERVICE STATUS -->
   <section id="skills">
     <div class="eyebrow">// SERVICES --status</div>
@@ -520,7 +1274,7 @@
       </div>
     </div>
   </section>
- 
+
   <!-- CERTIFICATIONS -->
   <section id="cert">
     <div class="eyebrow">// CERTIFICATIONS --verified</div>
@@ -540,7 +1294,7 @@
       </div>
     </div>
   </section>
- 
+
   <!-- EDUCATION & LANGUAGES -->
   <section id="edu">
     <div class="eyebrow">// EDUCATION &amp; LANGUAGES</div>
@@ -561,25 +1315,75 @@
       </div>
     </div>
   </section>
- 
-</main>
- 
-<footer id="contact">
-  <div class="wrap">
-    <div class="hud contact-box depth">
-      <h2>محتاج مهندس دعم فني وشبكات يشتغل بدقة؟</h2>
-      <p>سواء تركيب نظام مراقبة كامل، إدارة بنية تحتية لشبكة، أو مشكلة محدش قدر يلاقيها — أنا هنا.</p>
-      <div class="cta-row" style="justify-content:center;">
-        <a class="btn btn-primary depth" href="https://www.linkedin.com/in/hazem-elhussiny-73bbb5192" target="_blank" rel="noopener">تواصل عبر لينكدان ↗</a>
-          <a class="btn btn-primary depth" href="mailto:hazemelhussiny495@gmail.com" target="_blank" rel="noopener">راسلني على الإيميل ↗</a>
-       <a class="btn btn-primary depth" href="https://wa.me/message/E6G4G6MZ3OTTB1" target="_blank" rel="noopener">راسلني على الواتس ↗</a>
-        
+
+  <!-- INTEGRATED ROADMAP: the original portfolio sections above remain unchanged -->
+  <section id="roadmaps" class="roadmap-merge">
+    <div class="rm-heading">
+      <div><div class="eyebrow">// ENTERPRISE_ARCHITECTURE --roadmaps</div><h2>الدليل الشامل للخرائط التقنية <span>وتقنيات الشبكات المتقدمة</span></h2></div>
+      <span class="mono" style="color:var(--muted); font-size:.68rem; direction:ltr;">01–17 / COMPLETE PATH INDEX</span>
+    </div>
+    
+    <div class="hud panel depth rm-panel">
+      <div class="rm-group">
+        <h3 class="rm-group-title">تقنيات الشبكات المتقدمة وأمن الشبكات <span class="mono" style="margin-inline-start:auto; color:var(--muted); font-size:.62rem; direction:ltr;"></span></h3>
+        <div class="rm-grid" id="rmAdvanced"></div>
+      </div>
+      <div class="rm-group">
+        <h3 class="rm-group-title">مسارات وخرائط الطريق التعليمية <span class="mono" style="margin-inline-start:auto; color:var(--muted); font-size:.62rem; direction:ltr;"></span></h3>
+        <div class="rm-grid" id="rmCareer"></div>
       </div>
     </div>
-    <div class="foot-note">©👩‍💻 حازم الحسيني — IT Support Specialist · Network Support</div>
+  </section>
+
+</main>
+
+<!-- ORIGINAL ANIMATED GHOST: floating helper with interactive eyes -->
+<div class="ghost-container" id="ghostWidget" role="button" tabindex="0" aria-label="المساعد المتحرك">
+  <div class="ghost-dialog" id="ghostDialog">مرحباً! اضغط عليّ للمساعدة 👻</div>
+  <div class="ghost-wrapper">
+    <svg class="ghost-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M10 51C10 16 90 16 90 51v53s-12-10-25 0c-12 10-25-5-30 0-10 7-25 0-25 0Z" fill="#fff"/>
+      <g id="ghostEyes">
+        <ellipse id="eyeL" cx="42" cy="48" rx="6" ry="9.5" fill="#090d16"/>
+        <ellipse id="eyeR" cx="62" cy="48" rx="6" ry="9.5" fill="#090d16"/>
+      </g>
+    </svg>
   </div>
+  <div class="ghost-shadow"></div>
+</div>
+
+<footer id="contact">
+  <div class="hero-card">
+    <h2 class="hero-title">محتاج مهندس دعم فني وشبكات يشتغل بدقة؟</h2>
+    <p class="hero-subtitle">سواء تركيب نظام مراقبة كامل، إدارة بنية تحتية لشبكة، أو مشكلة محدش قدر يلاقيها — أنا هنا.</p>
+
+    <div class="social-buttons">
+      <a href="https://wa.me/01019354435" class="social-btn whatsapp" target="_blank">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12.001 2C6.478 2 2 6.478 2 12c0 1.821.487 3.53 1.338 5.003L2 22l5.114-1.324A9.958 9.958 0 0012.001 22C17.523 22 22 17.523 22 12S17.523 2 12.001 2zm0 18.161a8.132 8.132 0 01-4.15-1.135l-.297-.176-3.037.786.81-2.96-.194-.304a8.128 8.128 0 01-1.246-4.372c0-4.495 3.658-8.153 8.154-8.153 4.495 0 8.153 3.658 8.153 8.153 0 4.496-3.658 8.161-8.153 8.161z"/>
+        </svg>
+        <span>واتساب</span>
+      </a>
+
+      <a href="https://t.me/Hazem212i" class="social-btn telegram" target="_blank">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.899-.499 1.2-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </svg>
+        <span>تيلجرام</span>
+      </a>
+
+      <a href="https://linkedin.com/in/hazem-elhussiny-73bbb5192" class="social-btn linkedin" target="_blank">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.114 20.452H3.558V9h3.556v11.452z"/>
+        </svg>
+        <span>لينكدإن</span>
+      </a>
+    </div>
+  </div>
+  <div class="foot-note">©👩‍💻 حازم الحسيني — IT Support Specialist · Network Support</div>
 </footer>
- 
+
 <script>
   // clock
   function tick(){
@@ -587,66 +1391,108 @@
     document.getElementById('clock').textContent = d.toLocaleTimeString('en-GB');
   }
   tick(); setInterval(tick, 1000);
- 
+
   // theme toggle
   const root = document.documentElement;
   const toggle = document.getElementById('themeToggle');
   function flipToggle(){ root.setAttribute('data-theme', root.getAttribute('data-theme') === 'night' ? 'day' : 'night'); }
   toggle.addEventListener('click', flipToggle);
   toggle.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); flipToggle(); } });
- 
+
   // ---------- HEX NETWORK GRID (generated) ----------
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- AMBIENT BACKGROUND RAIN (calm, site-wide) ----------
+  // ---------- INTERACTIVE WEB NETWORK BACKGROUND ----------
   (function(){
-    const bgCanvas = document.getElementById('bgRain');
-    if(!bgCanvas) return;
-    const bCtx = bgCanvas.getContext('2d');
-    const bChars = '01ABCDEFGHJKLMNPQRSTUVXYZ*+=/<>#';
-    const bFontSize = 15;
-    let bCols = [];
-    function resizeBgRain(){
-      bgCanvas.width = window.innerWidth;
-      bgCanvas.height = window.innerHeight;
-      const total = Math.ceil(bgCanvas.width / bFontSize);
-      bCols = [];
-      for(let i = 0; i < total; i++){
-        if(Math.random() < 0.62){ // sparse, not every column — keeps it calm
-          bCols.push({
-            x: i * bFontSize,
-            head: -Math.random() * 40,
-            speed: 0.06 + Math.random() * 0.09,
-            char: bChars[Math.floor(Math.random()*bChars.length)]
-          });
-        }
+    const canvas = document.getElementById('bgRain');
+    const context = canvas && canvas.getContext('2d');
+    if(!canvas || !context || reduceMotion) return;
+
+    let width = 0;
+    let height = 0;
+    let nodes = [];
+    const mouse = { x:null, y:null, radius:150 };
+
+    window.addEventListener('mousemove', event => {
+      mouse.x = event.clientX;
+      mouse.y = event.clientY;
+    }, {passive:true});
+    window.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function initNodes(){
+      nodes = [];
+      const nodeCount = Math.min(160, Math.floor((width * height) / 18000));
+      for(let i = 0; i < nodeCount; i++){
+        nodes.push({
+          x:Math.random() * width,
+          y:Math.random() * height,
+          vx:(Math.random() - .5) * .8,
+          vy:(Math.random() - .5) * .8,
+          radius:Math.random() * 2 + 1.5
+        });
       }
     }
-    resizeBgRain();
-    window.addEventListener('resize', resizeBgRain);
-    const trailLen = 11, maxAlpha = 0.42;
-    function drawBgRain(){
-      bCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-      bCtx.font = bFontSize + 'px monospace';
-      const rows = Math.ceil(bgCanvas.height / bFontSize) + trailLen;
-      bCols.forEach(col => {
-        const headRow = Math.floor(col.head);
-        for(let j = 0; j < trailLen; j++){
-          const row = headRow - j;
-          if(row < 0) continue;
-          const alpha = maxAlpha * (1 - j / trailLen);
-          if(alpha <= 0) continue;
-          if(j % 4 === 0 && Math.random() < 0.1){ col.char = bChars[Math.floor(Math.random()*bChars.length)]; }
-          bCtx.fillStyle = `rgba(220,38,38,${alpha.toFixed(2)})`;
-          bCtx.fillText(bChars[Math.floor(Math.random()*bChars.length)], col.x, row * bFontSize);
-        }
-        col.head += col.speed;
-        if((col.head - trailLen) * bFontSize > bgCanvas.height && Math.random() < 0.01){
-          col.head = -Math.random() * 30;
-        }
-      });
+
+    function resizeCanvas(){
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initNodes();
     }
-    if(!reduceMotion){ setInterval(drawBgRain, 80); }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function animateNetwork(){
+      context.clearRect(0, 0, width, height);
+      const isNight = root.getAttribute('data-theme') === 'night';
+      const strokeColor = isNight ? 'rgba(56, 189, 248,' : 'rgba(2, 132, 199,';
+
+      for(let i = 0; i < nodes.length; i++){
+        const node = nodes[i];
+        node.x += node.vx;
+        node.y += node.vy;
+        if(node.x < 0 || node.x > width) node.vx *= -1;
+        if(node.y < 0 || node.y > height) node.vy *= -1;
+
+        context.fillStyle = strokeColor + '0.5)';
+        context.beginPath();
+        context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        context.fill();
+
+        for(let j = i + 1; j < nodes.length; j++){
+          const other = nodes[j];
+          const dx = node.x - other.x;
+          const dy = node.y - other.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if(distance < 120){
+            context.strokeStyle = strokeColor + ((1 - distance / 120) * .25) + ')';
+            context.lineWidth = .8;
+            context.beginPath();
+            context.moveTo(node.x, node.y);
+            context.lineTo(other.x, other.y);
+            context.stroke();
+          }
+        }
+
+        if(mouse.x !== null && mouse.y !== null){
+          const mouseDx = node.x - mouse.x;
+          const mouseDy = node.y - mouse.y;
+          const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+          if(mouseDistance < mouse.radius){
+            context.strokeStyle = strokeColor + ((1 - mouseDistance / mouse.radius) * .4) + ')';
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(node.x, node.y);
+            context.lineTo(mouse.x, mouse.y);
+            context.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateNetwork);
+    }
+    animateNetwork();
   })();
 
   const hexSvg = document.getElementById('hexSvg');
@@ -673,7 +1519,7 @@
     hexSvg.innerHTML = frag;
   }
   buildHexGrid();
- 
+
   // randomly "light up" hex cells to feel like a live network
   function litUpRandomCells(){
     const cells = hexSvg.querySelectorAll('.hexcell');
@@ -690,7 +1536,7 @@
     if(!reduceMotion){ litUpRandomCells(); litInterval = setInterval(litUpRandomCells, 380); }
     introTimer = setTimeout(endIntro, reduceMotion ? 300 : 3200);
   }
- 
+
   // ---------- MATRIX RAIN -> HEX -> BOOT -> SITE SEQUENCE ----------
   const matrixIntro = document.getElementById('matrixIntro');
   const matrixCanvas = document.getElementById('matrixCanvas');
@@ -802,7 +1648,7 @@
     runBootSequence();
   }
   introSkip.addEventListener('click', ()=>{ clearTimeout(introTimer); endIntro(); });
- 
+
   // live ops feed
   const feedLines = [
     '[NET] فحص إعدادات Cisco Switch <b>OK</b>',
@@ -826,7 +1672,508 @@
   }
   pushFeed();
   if(!reduceMotion){ setInterval(pushFeed, 1900); }
- 
+
+  // ---------- CYBER NETWORK OVERSEER: hover tooltip / click ripple / auth badge / featured events ----------
+  (function(){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const netContainer = document.querySelector('#topology .hud.panel.depth');
+    const netSvg = document.querySelector('#topology .net-diagram');
+    const tooltip = document.getElementById('nodeTooltip');
+    if(!netContainer || !netSvg || !tooltip) return;
+
+    const NODE_META = {
+      0:{name:'Router',      short:'RTR-01', ip:'192.168.1.1',   status:'Active'},
+      1:{name:'Switch',      short:'SW-01',  ip:'192.168.1.2',   status:'Active'},
+      2:{name:'Firewall',    short:'FW-01',  ip:'192.168.1.254', status:'Secure'},
+      3:{name:'Laptop',      short:'LAP-01', ip:'192.168.1.11',  status:'Active'},
+      4:{name:'Phone',       short:'MOB-01', ip:'192.168.1.12',  status:'Active'},
+      5:{name:'PC',          short:'PC-01',  ip:'192.168.1.13',  status:'Active'},
+      6:{name:'Laptop',      short:'LAP-02', ip:'192.168.1.14',  status:'Active'},
+      7:{name:'Server',      short:'SRV-01', ip:'192.168.1.10',  status:'Secure'},
+      8:{name:'Phone',       short:'MOB-02', ip:'192.168.1.15',  status:'Active'},
+      9:{name:'Printer',     short:'PRN-01', ip:'192.168.1.16',  status:'Idle'},
+      10:{name:'Camera',     short:'CAM-01', ip:'192.168.1.17',  status:'Active'},
+      11:{name:'PC',         short:'PC-02',  ip:'192.168.1.18',  status:'Secure'},
+      12:{name:'Laptop',     short:'LAP-03', ip:'192.168.1.19',  status:'Active'},
+      13:{name:'Fingerprint',short:'BIO-01', ip:'192.168.1.20',  status:'Active'}
+    };
+
+    // ----- hover: glassmorphic tooltip with Node ID / Status / IP -----
+    document.querySelectorAll('#topology .net-node').forEach(node=>{
+      const meta = NODE_META[node.dataset.node];
+      if(!meta) return;
+      node.addEventListener('mouseenter', ()=>{
+        tooltip.innerHTML =
+          `<div class="tt-id">${meta.name} · ${meta.short}</div>`+
+          `<div class="tt-row">Status: <b>${meta.status}</b></div>`+
+          `<div class="tt-row">IP: <b>${meta.ip}</b></div>`;
+        const nRect = node.getBoundingClientRect();
+        const cRect = netContainer.getBoundingClientRect();
+        tooltip.style.left = (nRect.left + nRect.width/2 - cRect.left) + 'px';
+        tooltip.style.top = (nRect.top - cRect.top) + 'px';
+        tooltip.classList.add('show');
+      });
+      node.addEventListener('mouseleave', ()=>{ tooltip.classList.remove('show'); });
+
+      // ----- click: radial ripple outward from the node -----
+      node.addEventListener('click', ()=>{
+        const ripple = document.createElementNS(svgNS,'circle');
+        ripple.setAttribute('class','click-ripple');
+        ripple.setAttribute('cx', node.dataset.x);
+        ripple.setAttribute('cy', node.dataset.y);
+        netSvg.appendChild(ripple);
+        ripple.addEventListener('animationend', ()=>ripple.remove());
+        setTimeout(()=>{ if(ripple.parentNode) ripple.remove(); }, 900); // fallback cleanup
+      });
+    });
+
+    // ----- AUTH badge pulsing over the secure PC (PC-02) -----
+    const authBadge = document.getElementById('authBadge');
+    if(authBadge){
+      if(reduceMotion){
+        authBadge.classList.add('show');
+      } else {
+        (function toggleAuth(){
+          authBadge.classList.add('show');
+          setTimeout(()=>{
+            authBadge.classList.remove('show');
+            setTimeout(toggleAuth, 4200);
+          }, 2600);
+        })();
+      }
+    }
+
+    // ----- featured, named traffic events (bigger + bolder than ambient background traffic) -----
+    function animateFeatureEvent(waypoints, cls, label, dur){
+      const dot = document.createElementNS(svgNS,'circle');
+      dot.setAttribute('class','feature-dot '+cls);
+      dot.setAttribute('r', cls==='motion' ? '6' : '5');
+      const tag = document.createElementNS(svgNS,'text');
+      tag.setAttribute('class','feature-tag '+cls);
+      tag.setAttribute('y','-14');
+      tag.textContent = label;
+      netSvg.appendChild(dot); netSvg.appendChild(tag);
+
+      let totalLen = 0; const segLens = [];
+      for(let i=0;i<waypoints.length-1;i++){
+        const dx = waypoints[i+1].x-waypoints[i].x, dy = waypoints[i+1].y-waypoints[i].y;
+        const len = Math.hypot(dx,dy); segLens.push(len); totalLen += len;
+      }
+      const start = performance.now();
+      function step(now){
+        const p = Math.min((now-start)/dur, 1);
+        const dist = p*totalLen; let acc=0, idx=0;
+        for(let i=0;i<segLens.length;i++){ if(dist<=acc+segLens[i] || i===segLens.length-1){ idx=i; break; } acc+=segLens[i]; }
+        const segP = segLens[idx] ? Math.min(1,(dist-acc)/segLens[idx]) : 1;
+        const a = waypoints[idx], b = waypoints[idx+1] || waypoints[idx];
+        const x = a.x+(b.x-a.x)*segP, y = a.y+(b.y-a.y)*segP;
+        dot.setAttribute('cx', x.toFixed(1)); dot.setAttribute('cy', y.toFixed(1));
+        tag.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+        const fade = p<0.08 ? p/0.08 : (p>0.9 ? (1-p)/0.1 : 1);
+        dot.style.opacity = fade; tag.style.opacity = fade;
+        if(p<1){ requestAnimationFrame(step); } else { dot.remove(); tag.remove(); }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // fixed, real routes across the actual mesh (not random) — always the same story each time
+    const httpRoute   = [{x:840,y:310},{x:570,y:340}];                 // LAP-02 -> SRV-01
+    const syncRoute    = [{x:570,y:340},{x:840,y:310},{x:750,y:490}];  // SRV-01(DB) -> LAP-02 -> LAP-03
+    const motionRoute  = [{x:310,y:490},{x:150,y:390},{x:150,y:190}];  // CAM-01 -> PRN-01 -> RTR-01 (-> WAN)
+
+    if(reduceMotion){
+      animateFeatureEvent(httpRoute, 'http', 'HTTP_REQUEST', 900);
+    } else {
+      setTimeout(()=>{ animateFeatureEvent(httpRoute,'http','HTTP_REQUEST',2200); setInterval(()=>animateFeatureEvent(httpRoute,'http','HTTP_REQUEST',2200), 6000); }, 1500);
+      setTimeout(()=>{ animateFeatureEvent(syncRoute,'sync','SYNC_HR_DB',3200); setInterval(()=>animateFeatureEvent(syncRoute,'sync','SYNC_HR_DB',3200), 9000); }, 3200);
+      setTimeout(()=>{ animateFeatureEvent(motionRoute,'motion','MOTION_ALERT → WAN',2600); setInterval(()=>animateFeatureEvent(motionRoute,'motion','MOTION_ALERT → WAN',2600), 7500); }, 4800);
+    }
+  })();
+
+  // ---------- REALISTIC ROUTED DATA-FLOW SIMULATION ----------
+  (function(){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const netSvg = document.querySelector('.net-diagram');
+    const msgLayer = document.getElementById('msgLayer');
+    if(!netSvg || !msgLayer) return;
+
+    // ----- node registry: infrastructure (routers/switch/server) vs edge devices -----
+    const NODES = {
+      0:{x:150,y:190, name:'Router',   short:'RTR-01', kind:'hub'},
+      1:{x:340,y:130, name:'Switch',   short:'SW-01',  kind:'hub'},
+       2:{x:570,y:100, name:'Firewall', short:'FW-01',  kind:'gateway'},
+      3:{x:770,y:140, name:'Laptop',   short:'LAP-01', kind:'edge'},
+      4:{x:960,y:180, name:'Phone',    short:'MOB-01', kind:'edge'},
+      5:{x:1010,y:350,name:'PC',       short:'PC-01',  kind:'edge'},
+      6:{x:840,y:310, name:'Laptop',   short:'LAP-02', kind:'edge'},
+       7:{x:570,y:340, name:'Server',   short:'SRV-01', kind:'hub'},
+      8:{x:340,y:310, name:'Phone',    short:'MOB-02', kind:'edge'},
+      9:{x:150,y:390, name:'Printer',  short:'PRN-01', kind:'edge'},
+      10:{x:310,y:490,name:'Camera',   short:'CAM-01', kind:'edge'},
+      11:{x:530,y:530,name:'PC',       short:'PC-02',  kind:'edge'},
+      12:{x:750,y:490,name:'Laptop',   short:'LAP-03', kind:'edge'},
+      13:{x:960,y:530,name:'Fingerprint',short:'BIO-01',kind:'edge'}
+    };
+    const EDGE_DEVICE_IDS = [3,4,5,6,8,9,10,11,12,13];
+    const HUB_IDS = [0,1,7]; // router / switch / central server
+    const FIREWALL_ID = 2;
+
+    // ----- full visual graph (every line actually drawn on screen) -----
+    const EDGE_LIST = [
+      [0,1],[1,2],[2,3],[1,8],[2,7],[0,8],[0,9],
+      [3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],
+      [11,12],[6,12],[7,11],[3,7],[12,13],[5,13]
+    ];
+    const ADJ = {};
+    EDGE_LIST.forEach(([a,b])=>{
+      (ADJ[a] = ADJ[a]||[]).push(b);
+      (ADJ[b] = ADJ[b]||[]).push(a);
+    });
+    function edgeKey(a,b){ return a<b ? `e${a}-${b}` : `e${b}-${a}`; }
+
+    function bfs(start,end){
+      if(start===end) return [start];
+      const visited = new Set([start]);
+      const queue = [[start]];
+      while(queue.length){
+        const path = queue.shift();
+        const node = path[path.length-1];
+        for(const next of (ADJ[node]||[])){
+          if(visited.has(next)) continue;
+          const newPath = path.concat(next);
+          if(next===end) return newPath;
+          visited.add(next);
+          queue.push(newPath);
+        }
+      }
+      return [start,end]; // fallback, shouldn't happen — graph is connected
+    }
+
+    // nearest routing hub (Router/Switch/Server) to a given device, by hop count
+    function nearestHub(nodeId){
+      let best = HUB_IDS[0], bestLen = Infinity;
+      HUB_IDS.forEach(h=>{
+        const len = bfs(nodeId,h).length;
+        if(len < bestLen){ bestLen = len; best = h; }
+      });
+      return best;
+    }
+
+    // internal (device -> device) traffic must touch a routing hub somewhere along the way
+    function routeInternal(sender, receiver){
+      let path = bfs(sender, receiver);
+      const touchesHub = path.some(id => HUB_IDS.includes(id));
+      if(!touchesHub){
+        const hub = nearestHub(sender);
+        const p1 = bfs(sender, hub);
+        const p2 = bfs(hub, receiver);
+        path = p1.concat(p2.slice(1));
+      }
+      return path;
+    }
+    // outbound (device -> internet) traffic must pass through the firewall for inspection
+    function routeExternal(sender){
+      return bfs(sender, FIREWALL_ID);
+    }
+
+    // ----- realistic payloads, specific to what each device actually sends -----
+    const PAYLOADS = {
+      Camera:      ['VIDEO_STREAM','MOTION_ALERT','RECORDING_SYNC'],
+      Printer:     ['PRINT_JOB','TONER_STATUS','PAPER_JAM_ALERT'],
+      Fingerprint: ['ATTENDANCE_CHECKIN','ATTENDANCE_CHECKOUT','SYNC_HR_DB'],
+      generic:     ['HTTP_REQUEST','FILE_SYNC','AUTH_TOKEN','HEARTBEAT','BACKUP_JOB','EMAIL_SEND']
+    };
+    function payloadFor(node){
+      const pool = PAYLOADS[node.name] || PAYLOADS.generic;
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+
+    // ----- congestion tracking: which edges are currently carrying traffic -----
+    const activeMessages = [];
+    function updateCongestion(){
+      const load = {};
+      activeMessages.forEach(m=>{ if(m.edgeKey) load[m.edgeKey] = (load[m.edgeKey]||0)+1; });
+      document.querySelectorAll('#topology .net-line, #topology .mesh-diag').forEach(path=>{
+        const n = load[path.id] || 0;
+        path.classList.remove('cong-mid','cong-high');
+        if(n >= 3) path.classList.add('cong-high');
+        else if(n >= 2) path.classList.add('cong-mid');
+      });
+    }
+    if(!reduceMotion){ setInterval(updateCongestion, 260); }
+
+    const MAX_CONCURRENT = 7;
+
+    function spawnMessage(){
+      if(activeMessages.length >= MAX_CONCURRENT) return;
+
+      const sender = EDGE_DEVICE_IDS[Math.floor(Math.random()*EDGE_DEVICE_IDS.length)];
+      const senderNode = NODES[sender];
+      const isExternal = Math.random() < 0.32;
+
+      let path, receiverLabel, isSpecialToServer = false;
+      if(isExternal){
+        path = routeExternal(sender);
+        receiverLabel = '🌐 WAN';
+      } else {
+        // cameras / printers / fingerprint devices mostly report to the central server
+        let receiver;
+        if(['Camera','Printer','Fingerprint'].includes(senderNode.name) && Math.random() < 0.7){
+          receiver = 7; isSpecialToServer = true;
+        } else {
+          const pool = EDGE_DEVICE_IDS.filter(id=>id!==sender);
+          receiver = pool[Math.floor(Math.random()*pool.length)];
+        }
+        path = routeInternal(sender, receiver);
+        receiverLabel = NODES[receiver].short;
+      }
+
+      const payload = payloadFor(senderNode);
+      const waypoints = path.map(id => NODES[id]);
+
+      // total travel distance -> constant-ish speed -> readable duration
+      let totalLen = 0;
+      const segLens = [];
+      for(let i=0;i<waypoints.length-1;i++){
+        const dx = waypoints[i+1].x-waypoints[i].x, dy = waypoints[i+1].y-waypoints[i].y;
+        const len = Math.hypot(dx,dy);
+        segLens.push(len); totalLen += len;
+      }
+      const dur = Math.max(2600, Math.min(9000, totalLen * 7.5));
+
+      const trail = document.createElementNS(svgNS,'circle');
+      trail.setAttribute('class','msg-trail'); trail.setAttribute('r','3');
+      msgLayer.appendChild(trail);
+
+      const dot = document.createElementNS(svgNS,'circle');
+      dot.setAttribute('class', 'msg-dot' + (isExternal ? ' ext' : ''));
+      dot.setAttribute('r','5');
+      msgLayer.appendChild(dot);
+
+      const tag = document.createElementNS(svgNS,'text');
+      tag.setAttribute('class','msg-tag'); tag.setAttribute('y','-11');
+      const tspanPayload = document.createElementNS(svgNS,'tspan');
+      tspanPayload.setAttribute('class','payload');
+      tspanPayload.textContent = payload;
+      const tspanRoute = document.createElementNS(svgNS,'tspan');
+      tspanRoute.setAttribute('class','route');
+      tspanRoute.setAttribute('x','0'); tspanRoute.setAttribute('dy','10');
+      tspanRoute.textContent = `${senderNode.short} → ${receiverLabel}`;
+      tag.appendChild(tspanPayload); tag.appendChild(tspanRoute);
+      msgLayer.appendChild(tag);
+
+      const msgObj = { edgeKey:null };
+      activeMessages.push(msgObj);
+
+      let firewallFlashed = false;
+      const start = performance.now();
+      function step(now){
+        const p = Math.min((now - start)/dur, 1);
+        const dist = p * totalLen;
+        let acc = 0, segIdx = 0;
+        for(let i=0;i<segLens.length;i++){
+          if(dist <= acc + segLens[i] || i === segLens.length-1){ segIdx = i; break; }
+          acc += segLens[i];
+        }
+        const segP = segLens[segIdx] ? Math.min(1,(dist-acc)/segLens[segIdx]) : 1;
+        const a = waypoints[segIdx], b = waypoints[segIdx+1] || waypoints[segIdx];
+        const x = a.x + (b.x-a.x)*segP, y = a.y + (b.y-a.y)*segP;
+
+        dot.setAttribute('cx',x.toFixed(1)); dot.setAttribute('cy',y.toFixed(1));
+        tag.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+        const tt = Math.max(0, p - 0.05);
+        const tdist = tt*totalLen; let tacc=0, tsegIdx=0;
+        for(let i=0;i<segLens.length;i++){ if(tdist<=tacc+segLens[i] || i===segLens.length-1){ tsegIdx=i; break; } tacc+=segLens[i]; }
+        const tsegP = segLens[tsegIdx] ? Math.min(1,(tdist-tacc)/segLens[tsegIdx]) : 1;
+        const ta = waypoints[tsegIdx], tb = waypoints[tsegIdx+1] || waypoints[tsegIdx];
+        trail.setAttribute('cx',(ta.x+(tb.x-ta.x)*tsegP).toFixed(1));
+        trail.setAttribute('cy',(ta.y+(tb.y-ta.y)*tsegP).toFixed(1));
+
+        msgObj.edgeKey = path[segIdx]!==undefined && path[segIdx+1]!==undefined ? edgeKey(path[segIdx],path[segIdx+1]) : null;
+
+        const fade = p<0.06 ? p/0.06 : (p>0.93 ? (1-p)/0.07 : 1);
+        dot.style.opacity = fade; trail.style.opacity = fade*0.35; tag.style.opacity = fade*0.9;
+
+        // brief inspection flash as external traffic reaches the firewall
+        if(isExternal && !firewallFlashed && p > 0.85){
+          firewallFlashed = true;
+          const fwNode = document.getElementById('node-2');
+          if(fwNode){
+            fwNode.classList.add('scanning');
+            setTimeout(()=>fwNode.classList.remove('scanning'), 550);
+          }
+        }
+
+        if(p < 1){ requestAnimationFrame(step); }
+        else{
+          dot.remove(); trail.remove(); tag.remove();
+          const idx = activeMessages.indexOf(msgObj);
+          if(idx>-1) activeMessages.splice(idx,1);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    if(reduceMotion){ spawnMessage(); }
+    else{ setInterval(spawnMessage, 1100); }
+  })();
+
+  // ---------- OSI DATA JOURNEY (rebuilt: single travelling orb + attached header badges) ----------
+  (function(){
+    const grid = document.getElementById('osiGrid');
+    const orbContainer = document.getElementById('orbContainer');
+    const attachedBadges = document.getElementById('attachedBadges');
+    const wirePulse = document.getElementById('wirePulse');
+    const wireBitsText = document.getElementById('wireBitsText');
+    const status = document.getElementById('osiStatus');
+    const statusBadge = document.getElementById('osiStatusBadge');
+    const statusGlass = document.getElementById('osiTerminal');
+    const sendBtn = document.getElementById('sendPacketBtn');
+    if(!grid || !orbContainer || !status || !sendBtn) return;
+
+    const senderLayers = Array.from(document.querySelectorAll('#senderStack .osi-layer'));
+    const receiverLayers = Array.from(document.querySelectorAll('#receiverStack .osi-layer')).slice().reverse();
+
+    // one color + header-tag per layer — real networking terms, not generic placeholders
+    const LAYER_INFO = {
+      7:{ tag:'L7 - APPLICATION',  badge:'+AH',   color:'#7c3aed', sendMsg:'جاري تجهيز حزمة البيانات وإرسالها من التطبيق...', recvMsg:'البيانات وصلت للتطبيق سليمة 100%' },
+      6:{ tag:'L6 - PRESENTATION', badge:'+PH',   color:'#4f46e5', sendMsg:'حقن Presentation Header — تشفير وتنسيق الصيغة...', recvMsg:'فك التشفير وإعادة الصيغة الأصلية...' },
+      5:{ tag:'L5 - SESSION',      badge:'+SH',   color:'#2563eb', sendMsg:'طبقة الجلسة تقوم بإنشاء Session Header لتأمين الاتصال...', recvMsg:'إغلاق نقطة الحوار وإزالة Session Header...' },
+      4:{ tag:'L4 - TRANSPORT',    badge:'+TH',   color:'#0891b2', sendMsg:'تقسيم البيانات وإضافة Transport Header (منافذ TCP/UDP)...', recvMsg:'إعادة تجميع الـ Segments بالترتيب الصحيح...' },
+      3:{ tag:'L3 - NETWORK',      badge:'+IP',   color:'#0d9488', sendMsg:'إضافة IP Header وتحديد عناوين المصدر والهدف...', recvMsg:'قراءة IP الوجهة ثم إزالة Header الشبكة...' },
+      2:{ tag:'L2 - DATA LINK',    badge:'+MAC',  color:'#059669', sendMsg:'تغليف الحزمة في Frame وإضافة عناوين MAC...', recvMsg:'فحص Trailer وإزالة MAC Header...' },
+      1:{ tag:'L1 - PHYSICAL',     badge:'+BITS', color:'#d97706', sendMsg:'تحويل الإطار إلى نبضات ضوئية/كهربائية جاهزة للإطلاق 🚀', recvMsg:'استقبال النبضات وإعادة بنائها لبتات...' }
+    };
+
+    const sleep = ms => new Promise(res => setTimeout(res, ms));
+    function randomBits(len){ let s=''; for(let i=0;i<len;i++) s += Math.random()<0.5?'0':'1'; return s; }
+
+    function setStatus(tag, msg, badgeText, success){
+      if(statusBadge) statusBadge.textContent = badgeText;
+      status.innerHTML = success
+        ? `<span class="tag">✅ [${tag}]</span> ${msg}`
+        : `<span class="tag">[${tag}]</span> ${msg}`;
+      status.classList.toggle('success', !!success);
+    }
+
+    function moveOrbTo(layerEl){
+      const r = layerEl.getBoundingClientRect();
+      const g = grid.getBoundingClientRect();
+      orbContainer.style.transform = `translate(${r.left - g.left + 16}px, ${r.top - g.top + r.height/2 - 11}px)`;
+    }
+
+    function attachBadge(layerId){
+      const info = LAYER_INFO[layerId];
+      const el = document.createElement('span');
+      el.className = 'header-badge';
+      el.id = 'badge-' + layerId;
+      el.textContent = info.badge;
+      el.style.background = info.color;
+      attachedBadges.appendChild(el);
+    }
+    function detachBadge(layerId){
+      const el = document.getElementById('badge-' + layerId);
+      if(!el) return;
+      el.style.transition = 'all .3s ease';
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0)';
+      setTimeout(()=>el.remove(), 300);
+    }
+
+    function resetAll(){
+      senderLayers.forEach(l=>l.classList.remove('active'));
+      receiverLayers.forEach(l=>l.classList.remove('active'));
+      attachedBadges.innerHTML = '';
+      orbContainer.style.opacity = '0';
+      wirePulse.style.width = '0%'; wirePulse.style.opacity = '0';
+      if(wireBitsText) wireBitsText.style.opacity = '0';
+      if(statusGlass) statusGlass.classList.remove('delivered');
+    }
+
+    async function runCycle(){
+      resetAll();
+      await sleep(300);
+      orbContainer.style.opacity = '1';
+
+      // Phase 1 — downward encapsulation on Device A (L7 -> L1)
+      for(const layerEl of senderLayers){
+        const id = +layerEl.dataset.layer;
+        const info = LAYER_INFO[id];
+        senderLayers.forEach(l=>l.classList.remove('active'));
+        layerEl.classList.add('active');
+        moveOrbTo(layerEl);
+        attachBadge(id);
+        setStatus(info.tag, info.sendMsg, 'ENCAPSULATING', false);
+        await sleep(700);
+      }
+      await sleep(250);
+
+      // Phase 2 — physical transmission across the wire
+      setStatus('L1 - PHYSICAL MEDIUM', 'جاري نقل البتات الرقمية عبر الوسط الناقل...', 'TRANSMITTING', false);
+      wirePulse.style.opacity = '1';
+      wirePulse.style.width = '100%';
+      if(wireBitsText){
+        wireBitsText.style.opacity = '1';
+        var streamTimer = setInterval(()=>{ wireBitsText.textContent = randomBits(8); }, 90);
+      }
+      await sleep(1000);
+      if(streamTimer) clearInterval(streamTimer);
+      wirePulse.style.width = '0%'; wirePulse.style.opacity = '0';
+      if(wireBitsText) wireBitsText.style.opacity = '0';
+
+      // Phase 3 — upward de-encapsulation on Device B (L1 -> L7)
+      for(const layerEl of receiverLayers){
+        const id = +layerEl.dataset.layer;
+        const info = LAYER_INFO[id];
+        receiverLayers.forEach(l=>l.classList.remove('active'));
+        layerEl.classList.add('active');
+        moveOrbTo(layerEl);
+        detachBadge(id);
+        const isFinal = id === 7;
+        setStatus(info.tag, isFinal ? info.recvMsg : info.recvMsg, isFinal ? 'SUCCESS' : 'DE-ENCAPSULATING', isFinal);
+        if(isFinal && statusGlass){ statusGlass.classList.add('delivered'); }
+        await sleep(700);
+      }
+
+      await sleep(500);
+      orbContainer.style.opacity = '0';
+      senderLayers.forEach(l=>l.classList.remove('active'));
+      receiverLayers.forEach(l=>l.classList.remove('active'));
+    }
+
+    let running = false;
+    async function sendPacket(){
+      if(running) return;
+      running = true;
+      sendBtn.disabled = true;
+      const label = sendBtn.querySelector('.quantum-btn-label');
+      const original = label.textContent;
+      label.textContent = '⚡ جاري الإرسال...';
+      await runCycle();
+      label.textContent = original;
+      sendBtn.disabled = false;
+      running = false;
+    }
+
+    sendBtn.addEventListener('click', sendPacket);
+    window.addEventListener('resize', ()=>{
+      // keep the orb aligned with its current layer if the layout reflows mid-animation
+      const activeSender = senderLayers.find(l=>l.classList.contains('active'));
+      const activeReceiver = receiverLayers.find(l=>l.classList.contains('active'));
+      if(activeSender) moveOrbTo(activeSender);
+      else if(activeReceiver) moveOrbTo(activeReceiver);
+    });
+
+    if(reduceMotion){
+      senderLayers.forEach(l=>l.classList.add('active'));
+      receiverLayers.forEach(l=>l.classList.add('active'));
+      setStatus('L7 - APPLICATION', LAYER_INFO[7].recvMsg, 'SUCCESS', true);
+    } else {
+      // auto-run once shortly after load so first-time visitors see it without clicking
+      setTimeout(sendPacket, 1200);
+    }
+  })();
+
   // subtle mouse-follow glow in hero section
   if(!reduceMotion){
     const heroSection = document.querySelector('.hero');
@@ -880,7 +2227,225 @@
       el.addEventListener('mouseleave', () => { el.style.transform = ''; });
     });
   }
- 
+
+  // Integrated roadmap — cards + centered tabbed detail modal (distinct from a side drawer)
+  (function(){
+    const advanced = [
+       {id:'pvlan', n:'1', title:'أمن الشبكات وعزل الطبقة الثانية', en:'Private VLAN (PVLAN)', color:'var(--rose)', badge:'Security & Layer 2', overview:'تقدم PVLAN عزلًا دقيقًا داخل نفس الـ subnet، فتقلل الحركة الجانبية بين المضيفين مع إبقاء الوصول المسموح إلى البوابة والخدمات المركزية.', steps:[['Primary VLAN','شبكة أم تحمل حركة المرور من الشبكات الثانوية.'],['Isolated VLAN','تعزل الأجهزة عن بعضها وتسمح بالوصول إلى المنفذ الشامل فقط.'],['Community VLAN','تسمح بالتواصل داخل المجموعة نفسها.'],['Port roles','توزيع منافذ Promiscuous وHost حسب وظيفة الجهاز.']], code:'vtp mode transparent\nvlan 200\n private-vlan isolated\nvlan 100\n private-vlan primary\n private-vlan association 200\ninterface Gi0/1\n switchport mode private-vlan promiscuous'},
+       {id:'hsrp', n:'2', title:'عالية التوافر واستمرار الأعمال', en:'HSRP Architecture & Redundancy', color:'var(--emerald)', badge:'Availability & Layer 3', overview:'يجعل HSRP عدة أجهزة توجيه تظهر كـ default gateway افتراضي واحد، ثم ينقل الدور إلى Standby عند تعطل Active.', steps:[['Virtual IP & MAC','عنوانان افتراضيان يمثلان البوابة أمام المستخدمين.'],['Active / Standby','Active يمرر الحزم وStandby يراقب ويستلم الدور.'],['Priority & preemption','الأولوية تحدد القائد والاستباقية تعيد الجهاز الأقوى.'],['Timers','Hello وHold Time لاكتشاف الفشل.']], code:'interface Vlan10\n ip address 10.0.0.2 255.255.255.0\n standby 1 ip 10.0.0.1\n standby 1 priority 160\n standby 1 preempt\nshow standby brief'},
+       {id:'vpn', n:'3', title:'الشبكات الافتراضية الخاصة', en:'VPN — Virtual Private Network', color:'var(--quantum)', badge:'Remote Access & Encryption', overview:'الـ VPN بيعمل "نفق" مشفّر بين جهازك وشبكة الشركة عبر الإنترنت العام، فيسمح للموظف اللي شغال من البيت أو الفرع البعيد إنه يوصل لملفات وأنظمة الشركة بأمان زي إنه جوه المكتب تمامًا.', steps:[['التشفير (Encryption)','البيانات بتتحول لصيغة مش مقروءة لأي طرف تالت لو حاول يتجسس عليها.'],['Site-to-Site VPN','ربط دائم بين فرعين أو أكتر عن طريق أجهزة Router/Firewall.'],['Remote Access VPN','اتصال فردي لموظف واحد من جهازه الشخصي أو اللابتوب.'],['البروتوكولات الشائعة','IPSec وSSL/TLS وWireGuard — كل واحد له استخدام مختلف حسب الاحتياج.']], tips:['اختار بروتوكول WireGuard لو عايز سرعة وسهولة تهيئة أكتر من IPSec التقليدي.','فعّل Multi-Factor Authentication على اتصال الـ VPN عشان تقفل باب اختراق كلمة السر لوحدها.']},
+       {id:'qos', n:'4', title:'جودة الخدمة وترتيب الأولويات', en:'Quality of Service (QoS)', color:'var(--cyan)', badge:'Traffic Prioritization', overview:'مش كل البيانات في الشبكة بنفس الأهمية — مكالمة فيديو حساسة للتأخير أكتر من تحميل ملف عادي. الـ QoS بيدي الأولوية للحركة المهمة عشان تفضل شغالة كويس حتى وقت ازدحام الشبكة.', steps:[['التصنيف (Classification)','تحديد نوع كل حركة مرور — صوت، فيديو، أو بيانات عادية.'],['العلامات (Marking)','وضع علامة على كل حزمة بمستوى أولويتها زي DSCP.'],['إدارة الازدحام','منح الحركة عالية الأولوية النصيب الأكبر من عرض النطاق وقت الضغط.'],['المراقبة والتحسين','قياس الأداء بشكل دوري وتعديل السياسات حسب الاحتياج الفعلي.']], tips:['اعطِ حركة الصوت (VoIP) أعلى أولوية دايمًا — أي تأخير فيها بيتسمع فورًا في المكالمة.','لا تعتمد على QoS كحل لضعف البنية التحتية نفسها — لازم تكون إضافة لشبكة أساسها كويس.']},
+       {id:'wireless', n:'5', title:'الشبكات اللاسلكية للمؤسسات', en:'Enterprise Wireless (WLAN)', color:'var(--amber)', badge:'Wi-Fi & Coverage', overview:'الفرق بين راوتر البيت العادي وشبكة Wi-Fi لمبنى أو مصنع كامل كبير جدًا — المؤسسات بتستخدم عدة نقاط وصول (Access Points) متحكم فيها من جهاز مركزي واحد لتوزيع تغطية متساوية بدون "مناطق ميتة".', steps:[['Access Points (APs)','أجهزة موزعة في المبنى بتبعت وتستقبل إشارة Wi-Fi.'],['Wireless LAN Controller (WLC)','جهاز مركزي يدير كل الـ APs ويوزع الإعدادات عليهم دفعة واحدة.'],['Site Survey','مسح ميداني لتحديد أفضل أماكن لتركيب الـ APs وتجنب التداخل.'],['أمان الشبكة اللاسلكية','WPA3 والفصل بين شبكة الموظفين وشبكة الزوار (Guest Network).']], tips:['اعمل Site Survey قبل التركيب دايمًا — توفير موقع نقطة وصول واحدة ممكن يحل مشكلة تغطية كاملة.','خلي شبكة الضيوف (Guest Wi-Fi) منفصلة تمامًا عن شبكة العمل الداخلية.']},
+       {id:'loadbalance', n:'6', title:'موازنة الأحمال بين السيرفرات', en:'Load Balancing', color:'var(--purple)', badge:'Scalability & Uptime', overview:'لو موقع أو نظام واحد بس بيستقبل كل الزوار، أي ضغط زيادة ممكن يوقفه تمامًا. موازن الأحمال بيوزع الطلبات على أكتر من سيرفر في نفس الوقت، فيضمن استمرار الخدمة حتى لو سيرفر واحد وقع.', steps:[['خوارزميات التوزيع','Round Robin بيوزع بالتناوب، وLeast Connections بيبعت للأقل ضغطًا.'],['فحص الصحة (Health Check)','مراقبة مستمرة لكل سيرفر واستبعاد أي واحد واقع تلقائيًا.'],['SSL Offloading','فك التشفير عند الموازن نفسه لتخفيف الحمل عن السيرفرات.'],['التوسع الأفقي (Scaling Out)','إضافة سيرفرات جديدة بسهولة وقت الضغط بدل ترقية سيرفر واحد.']], tips:['استخدم Health Checks بفترات قصيرة عشان تكشف أي سيرفر واقع بسرعة قبل ما يأثر على المستخدمين.','وزّع السيرفرات جغرافيًا لو أمكن — بيقلل زمن الاستجابة ويحمي من انقطاع منطقة كاملة.']}
+    ];
+    const career = [
+      {id:'ccna', n:'1', title:'شبكات سيسكو للمبتدئين', en:'CCNA 200-301', color:'var(--cyan)', badge:'Cisco Networking', overview:'المسار الأساسي لفهم OSI وTCP/IP والعنونة وSwitching وRouting والخدمات والأتمتة.', steps:[['Fundamentals','OSI وTCP/IP وIPv4 وIPv6 وSubnetting.'],['Switching','VLAN وTrunk وSTP وEtherChannel.'],['Routing','Static Routing وOSPFv2.'],['Services','DHCP وNAT وACL وتأمين الأجهزة.']]},
+      {id:'ccnp', n:'2', title:'شبكات سيسكو المتقدمة', en:'CCNP Enterprise', color:'var(--accent)', badge:'Professional Level', overview:'تصميم شبكات المؤسسات، BGP وVRF وSD-WAN واستكشاف الأعطال المتقدمة.', steps:[['ENCOR','Architecture وVirtualization وHSRP.'],['Advanced routing','BGP وOSPF Multi-area وVRF.'],['SD-WAN','ربط الفروع بمرونة.'],['Troubleshooting','تحليل أعطال L2 وL3.']]},
+      {id:'mcsa', n:'3', title:'إدارة أنظمة ويندوز', en:'MCSA / Windows Server', color:'var(--purple)', badge:'System Administration', overview:'إدارة Windows Server وActive Directory وDNS وDHCP والسياسات والنسخ الاحتياطي.', steps:[['Server roles','تثبيت وإدارة الأدوار والخدمات.'],['Active Directory','Users وGroups وOU وGroup Policy.'],['Networking','DNS وDHCP وIP Services.'],['Operations','Backup وMonitoring وPowerShell.']]},
+      {id:'cyber', n:'4', title:'الأمن السيبراني والإنقاذ', en:'Cyber Security & Blue Team', color:'var(--rose)', badge:'Cyber Security', overview:'مسار دفاعي لفهم التهديدات، تحليل السجلات، تقوية الأنظمة، والاستجابة للحوادث.', steps:[['Foundations','التشفير والهوية والثغرات.'],['Visibility','Wireshark وNmap داخل بيئة مصرح بها.'],['SOC & SIEM','تحليل الأحداث والتنبيهات.'],['Blue Team','IDS/IPS وتقوية الوصول.']]},
+      {id:'cloud', n:'5', title:'الحوسبة السحابية', en:'Cloud Computing (AWS / Azure)', color:'var(--amber)', badge:'Cloud Infrastructure', overview:'بناء الشبكات الافتراضية، الهوية، التخزين، الحوسبة، والأتمتة في AWS أو Azure.', steps:[['Cloud basics','IaaS وPaaS وSaaS.'],['Virtual networks','VPC وSubnets وRoute Tables.'],['Security','IAM وSecurity Groups.'],['Automation','Terraform والبنية ككود.']]},
+      {id:'linux', n:'6', title:'نظام لينكس وإدارة السيرفرات', en:'Linux System Admin (RHCSA)', color:'var(--orange)', badge:'Linux System', overview:'إدارة الخوادم عبر الطرفية والصلاحيات والخدمات والشبكات والنسخ الاحتياطي.', steps:[['Bash','إدارة الملفات والبحث والمعالجة.'],['Permissions','chmod وchown وsudo والمجموعات.'],['Services','systemd ومراقبة الأداء.'],['Networking','nmcli وفحص المنافذ والحزم.']]},
+      {id:'fortigate', n:'7', title:'الجدران النارية فورنت', en:'Fortinet FortiGate (NSE4)', color:'var(--emerald)', badge:'Network Security', overview:'تصميم سياسات FortiGate وNAT وVPN وUTM والتسجيل والمراقبة لحماية فروع المؤسسة.', steps:[['Interfaces','Zones وVLAN وRouting.'],['Policies','Firewall Policy وNAT.'],['VPN','IPSec وSSL VPN.'],['Security profiles','Web Filter وIPS وApplication Control.']]},
+      {id:'automation', n:'8', title:'برمجة وأتمتة الشبكات', en:'Programming & Network Automation', color:'var(--pink)', badge:'DevNet / Automation', overview:'تحويل المهام المتكررة إلى عمليات قابلة للتكرار باستخدام Python وAnsible وواجهات REST.', steps:[['Python','الأساسيات والملفات ومعالجة الأخطاء.'],['Libraries','Netmiko وParamiko وNAPALM.'],['Data formats','JSON وYAML وXML.'],['Ansible & APIs','Playbooks وREST APIs.']]},
+      {id:'comptia', n:'9', title:'شهادات الأساسيات لمن بيبدأ', en:'CompTIA Network+ / Security+', color:'var(--orange)', badge:'Entry-Level Certifications', overview:'قبل الدخول في تخصصات Cisco أو الأمن المتقدم، شهادات CompTIA بتبني الأساس النظري السليم لأي شخص جديد في المجال — مفيدة جدًا كنقطة انطلاق مهنية.', steps:[['Network+','مفاهيم الشبكات الأساسية، الكابلات، البروتوكولات، واستكشاف الأعطال البسيطة.'],['Security+','أساسيات الأمن السيبراني، التهديدات الشائعة، وسياسات الحماية.'],['لا تحتاج خبرة سابقة','مصممة للمبتدئين تمامًا، عكس CCNA اللي بيحتاج فهم أعمق.'],['معترف بها عالميًا','مطلوبة في كتير من وظائف الدعم الفني حول العالم.']], tips:['ابدأ بـ Network+ قبل Security+ — الترتيب ده بيبني فهمك تدريجيًا وبمنطق.','اتدرب على أسئلة تجريبية (Practice Exams) قبل الامتحان الحقيقي لتتعرف على شكل الأسئلة.']},
+      {id:'virtualization', n:'10', title:'الأجهزة الافتراضية ومراكز البيانات', en:'Virtualization (VMware / Hyper-V)', color:'var(--pink)', badge:'Data Center Fundamentals', overview:'بدل شراء سيرفر فيزيائي منفصل لكل خدمة، الفرتشوالايزيشن بتسمح بتشغيل عشرات "السيرفرات الوهمية" على جهاز واحد قوي، وده أساس أي مركز بيانات حديث دلوقتي.', steps:[['Hypervisor','البرنامج اللي بيدير توزيع موارد الجهاز الفيزيائي على الأجهزة الوهمية (VMware ESXi أو Hyper-V).'],['Virtual Machines (VMs)','كل جهاز وهمي بيعمل كسيرفر مستقل تمامًا بنظام تشغيل خاص بيه.'],['Snapshots','حفظ نسخة من حالة الجهاز الوهمي في لحظة معينة، والرجوع ليها لو حصل خطأ.'],['Resource Allocation','تخصيص المعالج والذاكرة لكل جهاز وهمي حسب احتياجه الفعلي.']], tips:['استخدم Snapshots قبل أي تحديث أو تعديل مهم — بيوفر عليك وقت لو احتجت الرجوع للحالة السابقة.','راقب استهلاك الموارد بشكل دوري؛ تكديس أجهزة وهمية كتير على سيرفر واحد بيأثر على الأداء.']},
+      {id:'itsm', n:'11', title:'إدارة طلبات وتذاكر الدعم الفني', en:'ITSM / Help Desk Systems', color:'var(--emerald)', badge:'IT Service Management', overview:'بدل ما الأعطال توصل بمكالمات متفرقة صعب تتبعها، أنظمة إدارة خدمات تقنية المعلومات (زي ServiceNow) بتنظم كل طلب في تذكرة واحدة قابلة للتتبع من أول لحظة لحد الحل النهائي.', steps:[['فتح التذكرة (Ticketing)','كل مشكلة أو طلب بيتسجل بتفاصيله ووقت استلامه.'],['التصنيف والأولوية','تحديد نوع المشكلة ومدى تأثيرها لتحديد ترتيب الحل.'],['اتفاقيات مستوى الخدمة (SLA)','مواعيد نهائية محددة لحل كل نوع مشكلة حسب أهميتها.'],['قاعدة المعرفة (Knowledge Base)','توثيق الحلول السابقة لتسريع حل المشاكل المتكررة.']], tips:['وثّق كل حل جديد في قاعدة المعرفة فورًا — بيوفر عليك ومعاك وقت كبير في المرة القادمة.','التزم بمواعيد SLA حتى في المشاكل الصغيرة، لأن الثقة بتُبنى بالانتظام.']}
+    ];
+    const all = advanced.concat(career);
+    const card = item => `<button class="rm-card" style="--rm-color:${item.color}" data-rm-id="${item.id}" type="button"><span class="rm-card-main"><span class="rm-number">${item.n}</span><span class="rm-title">${item.title}<span class="rm-en">${item.en}</span></span></span><span class="rm-arrow">←</span></button>`;
+    document.getElementById('rmAdvanced').innerHTML = advanced.map(card).join('');
+    document.getElementById('rmCareer').innerHTML = career.map(card).join('');
+
+    // ----- centered tabbed modal (distinct from a side drawer) -----
+    const overlay = document.createElement('div');
+    overlay.className = 'rm2-overlay';
+    overlay.innerHTML = `
+      <div class="rm2-modal" role="dialog" aria-modal="true" aria-labelledby="rm2Title">
+        <div class="rm2-head">
+          <div class="rm2-icon" id="rm2Icon"></div>
+          <div class="rm2-head-text">
+            <span class="rm2-badge" id="rm2Badge">ROADMAP</span>
+            <h3 class="rm2-title" id="rm2Title"></h3>
+            <span class="rm2-sub" id="rm2Sub"></span>
+          </div>
+          <button class="rm2-close" type="button" aria-label="إغلاق">×</button>
+        </div>
+        <div class="rm2-tabs" id="rm2Tabs">
+          <button class="rm2-tab" data-tab="overview" type="button">نظرة عامة</button>
+          <button class="rm2-tab" data-tab="path" type="button">مسار التعلم</button>
+          <button class="rm2-tab" data-tab="extra" type="button" id="rm2ExtraTabBtn">نصائح عملية</button>
+        </div>
+        <div class="rm2-body">
+          <div class="rm2-pane" data-pane="overview"><p class="rm2-overview" id="rm2Overview"></p></div>
+          <div class="rm2-pane" data-pane="path"><div class="rm2-timeline" id="rm2Timeline"></div></div>
+          <div class="rm2-pane" data-pane="extra" id="rm2ExtraPane"></div>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    const modal = overlay.querySelector('.rm2-modal');
+    const tabsWrap = overlay.querySelector('#rm2Tabs');
+
+    function setTab(tabName){
+      overlay.querySelectorAll('.rm2-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+      overlay.querySelectorAll('.rm2-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === tabName));
+    }
+    tabsWrap.addEventListener('click', e => {
+      const btn = e.target.closest('.rm2-tab');
+      if(btn) setTab(btn.dataset.tab);
+    });
+
+    const closeModal = () => {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    const openModal = item => {
+      overlay.querySelector('#rm2Icon').textContent = item.n;
+      overlay.querySelector('#rm2Icon').style.setProperty('--rm2-color', item.color);
+      overlay.style.setProperty('--rm2-color', item.color);
+      overlay.querySelector('#rm2Badge').textContent = item.badge;
+      overlay.querySelector('#rm2Badge').style.setProperty('--rm2-color', item.color);
+      overlay.querySelector('#rm2Title').textContent = item.title;
+      overlay.querySelector('#rm2Sub').textContent = item.en;
+      overlay.querySelector('#rm2Overview').textContent = item.overview;
+
+      const tl = overlay.querySelector('#rm2Timeline');
+      tl.innerHTML = item.steps.map((s,i) => `
+        <div class="rm2-tl-item">
+          <span class="rm2-tl-dot">${i+1}</span>
+          <strong>${s[0]}</strong>
+          <span>${s[1]}</span>
+        </div>`).join('');
+
+      const extraPane = overlay.querySelector('#rm2ExtraPane');
+      const extraTabBtn = overlay.querySelector('#rm2ExtraTabBtn');
+      if(item.code){
+        extraTabBtn.textContent = 'أمر تهيئة';
+        extraPane.innerHTML = `<pre class="rm2-code"><code>${item.code}</code></pre>`;
+      } else if(item.tips && item.tips.length){
+        extraTabBtn.textContent = 'نصائح عملية';
+        extraPane.innerHTML = `<div class="rm2-tips">${item.tips.map(t => `<div class="rm2-tip"><span class="rm2-tip-ico">💡</span><span>${t}</span></div>`).join('')}</div>`;
+      } else {
+        extraTabBtn.textContent = 'نصائح عملية';
+        extraPane.innerHTML = `<div class="rm2-tips"><div class="rm2-tip"><span class="rm2-tip-ico">💡</span><span>طبّق الخطوات داخل بيئة اختبار موثقة قبل نقلها إلى شبكة الإنتاج.</span></div><div class="rm2-tip"><span class="rm2-tip-ico">💡</span><span>راجع الوثائق الرسمية دايمًا لآخر تحديثات المعايير والأدوات.</span></div></div>`;
+      }
+
+      setTab('overview');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      document.dispatchEvent(new CustomEvent('roadmap:open', { detail: item }));
+    };
+
+    document.querySelectorAll('[data-rm-id]').forEach(button => button.addEventListener('click', () => openModal(all.find(item => item.id === button.dataset.rmId))));
+    overlay.querySelector('.rm2-close').addEventListener('click', closeModal);
+    overlay.addEventListener('click', event => { if(event.target === overlay) closeModal(); });
+    document.addEventListener('keydown', event => { if(event.key === 'Escape') closeModal(); });
+  })();
+
+  // Original floating ghost: animated body, eye tracking, blinking, and contextual click messages.
+  (function(){
+    const ghost = document.getElementById('ghostWidget');
+    const eyes = document.getElementById('ghostEyes');
+    const eyeL = document.getElementById('eyeL');
+    const eyeR = document.getElementById('eyeR');
+    const dialog = document.getElementById('ghostDialog');
+    if(!ghost || !eyes || !dialog) return;
+    const IDLE_TEXT = 'مرحباً! اضغط عليّ للمساعدة 👻';
+
+    document.addEventListener('mousemove', event => {
+      const rect = ghost.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+      const distance = Math.min(6, Math.hypot(event.clientX - centerX, event.clientY - centerY) / 25);
+      eyes.style.transform = `translate(${(Math.cos(angle) * distance).toFixed(2)}px, ${(Math.sin(angle) * distance).toFixed(2)}px)`;
+    });
+
+    // ----- idle blinking, independent of the mouse-tracking transform above -----
+    function blinkOnce(){
+      if(!eyeL || !eyeR) return;
+      eyeL.setAttribute('ry','1.3'); eyeR.setAttribute('ry','1.3');
+      setTimeout(()=>{ eyeL.setAttribute('ry','9.5'); eyeR.setAttribute('ry','9.5'); }, 110);
+    }
+    function scheduleBlink(){
+      const delay = 2600 + Math.random()*3400;
+      setTimeout(()=>{ blinkOnce(); scheduleBlink(); }, delay);
+    }
+    if(!reduceMotion) scheduleBlink();
+
+    // ----- phrase pool: general tips + coverage of every roadmap topic -----
+    const phrases = [
+      'مرحباً بك! اختر مساراً للاطلاع عليه 🚀',
+      'تذكر: PVLAN لعزل L2 و HSRP لجاهزية L3 💻',
+      'التطبيق العملي هو سر احتراف الشبكات! ⚡',
+      'هل تبحث عن شهادات سيسكو أم تقنيات الأمان؟ 🤔',
+      'جرّب زر إرسال حزمة البيانات فوق وشاهد رحلتها عبر طبقات OSI 📡',
+      'مرّر الماوس على أجهزة خريطة الشبكة لتشوف تفاصيل كل جهاز 🖱️',
+      'VPN يبني نفق مشفّر — مفيد جدًا للفروع والعمل عن بعد 🔒',
+      'QoS بيعطي الأولوية للمكالمات والفيديو وقت ازدحام الشبكة 🎧',
+      'الفرق بين راوتر بيتك وشبكة مؤسسة؟ اتفرج على قسم Wireless 📶',
+      'موازنة الأحمال بتخلي موقعك واقف حتى لو سيرفر واحد وقع ⚖️',
+      'مش عندك خبرة قبل كده؟ ابدأ من CompTIA Network+ 🎓',
+      'الأجهزة الوهمية (VMware/Hyper-V) هي أساس مراكز البيانات الحديثة 🖥️',
+      'وثّق كل حل تكتشفه — ده جوهر أي نظام ITSM كويس 🗂️',
+      'جاهز لفرصة عمل جديدة في الشبكات والدعم الفني 📨'
+    ];
+
+    // ----- one contextual line per roadmap topic, shown when that card is opened -----
+    const TOPIC_REACTIONS = {
+      pvlan: 'اختيار قوي! PVLAN بيعزل الأجهزة حتى في نفس الشبكة 🛡️',
+      hsrp: 'HSRP معناه الشبكة متوقفتش أبدًا حتى لو راوتر وقع 🔁',
+      vpn: 'نفق مشفّر لكل بياناتك — كأنك في المكتب من أي مكان 🔐',
+      qos: 'كل حزمة بيانات ليها أولوية — ده سر الشبكات السريعة ⏱️',
+      wireless: 'تغطية Wi-Fi كاملة من غير مناطق ميتة — هندسة حقيقية 📶',
+      loadbalance: 'سيرفر واحد وقع؟ مفيش مشكلة، الباقي شغال 💪',
+      ccna: 'شهادة CCNA هي أول خطوة حقيقية في عالم الشبكات 🎯',
+      ccnp: 'CCNP بيوديك لمستوى الاحترافية في تصميم الشبكات 📈',
+      mcsa: 'إدارة Windows Server وAD مهارة مطلوبة جدًا في أي شركة 🗄️',
+      cyber: 'الأمن السيبراني: كل يوم فيه تهديد جديد لازم تكون جاهز له 🕵️',
+      cloud: 'الحوسبة السحابية بقت لغة كل شركة تقريبًا دلوقتي ☁️',
+      linux: 'من غير Linux مفيش سيرفر حديث تقريبًا 🐧',
+      fortigate: 'FortiGate من أقوى الجدران النارية في السوق 🔥',
+      automation: 'أتمتة الشبكات بتوفر وقتك وتقلل الأخطاء البشرية 🤖',
+      comptia: 'بداية مثالية لمين لسه بادئ في المجال 🌱',
+      virtualization: 'سيرفر واحد... عشرات الأجهزة الوهمية بداخله 🧩',
+      itsm: 'كل تذكرة دعم فني منظمة = عملاء أسعد 🎫'
+    };
+
+    const say = (text, duration) => {
+      dialog.textContent = text;
+      ghost.classList.add('is-speaking');
+      window.clearTimeout(ghost._dialogTimer);
+      ghost._dialogTimer = window.setTimeout(() => {
+        ghost.classList.remove('is-speaking');
+        dialog.textContent = IDLE_TEXT;
+      }, duration || 3400);
+    };
+    const sayHello = () => say(phrases[Math.floor(Math.random() * phrases.length)]);
+
+    ghost.addEventListener('click', sayHello);
+    ghost.addEventListener('keydown', event => {
+      if(event.key === 'Enter' || event.key === ' '){
+        event.preventDefault();
+        sayHello();
+      }
+    });
+
+    // gentle one-time nudge if the visitor hasn't interacted with the ghost yet
+    if(!reduceMotion){
+      setTimeout(() => {
+        if(!ghost.classList.contains('is-speaking')) say(phrases[0], 4200);
+      }, 7000);
+    }
+
+    // reacts with a line specific to whichever roadmap topic was just opened
+    document.addEventListener('roadmap:open', event => {
+      const item = event.detail;
+      if(!item) return;
+      const line = TOPIC_REACTIONS[item.id] || `اختيار ممتاز: ${item.title} 👍`;
+      say(line, 4200);
+    });
+  })();
+
   // 3D reveal on scroll
   if(!reduceMotion && 'IntersectionObserver' in window){
     const io = new IntersectionObserver((entries) => {
@@ -900,6 +2465,6 @@
     });
   }
 </script>
- 
+
 </body>
 </html>
