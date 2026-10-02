@@ -30,13 +30,13 @@
     --glass-blur:0px; --scan-op:0;
   }
   html[data-theme="day"]{
-    --bg:#eef1f6; --panel:#f8fafc; --panel-solid:#1c2333; --panel-2:#242e44;
-    --line:rgba(28,35,51,0.08); --text:#1e2532; --text-on-dark:#f2f5fa; --muted:#5c6579;
-    --accent:#0d9488; --accent-dim:#a7e6dd; --amber:#b45f06; --amber-dim:#f3c98a; --pink:#be185d;
-    --cyan:#0284c7; --purple:#9333ea; --rose:#e11d48; --emerald:#059669; --orange:#c2410c;
-    --quantum:#7c3aed; --quantum-dim:#ddd6fe;
-    --shadow-l:rgba(255,255,255,.95); --shadow-d:rgba(163,177,198,.5);
-    --glass-blur:0px; --scan-op:0;
+    --bg:#eaeff8; --panel:#ffffff; --panel-solid:#ffffff; --panel-2:#f5f7fc;
+  --line:rgba(60,70,130,0.10); --text:#161d33; --text-on-dark:#161d33; --muted:#6b7590;
+  --accent:#9333ea; --accent-dim:#e9d5ff; --amber:#d97706; --amber-dim:#fde3b4; --pink:#db2777;
+  --cyan:#0284c7; --purple:#9333ea; --rose:#e11d48; --emerald:#059669; --orange:#ea580c;
+  --quantum:#7c3aed; --quantum-dim:#ddd6fe;
+  --shadow-l:rgba(255,255,255,0); --shadow-d:rgba(60,70,130,.14);
+  --glass-blur:0px; --scan-op:0;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -1144,6 +1144,62 @@ $('td').innerHTML=dv;
     #osi .xbars{display:flex;gap:3px;align-items:flex-end;height:68px;direction:ltr}
     #osi .xbars i{width:5px;border-radius:2px;background:linear-gradient(#34d399,#0d9488);height:10%;transition:height .4s}
     @media(prefers-reduced-motion:reduce){#osi *{animation:none!important;transition:none!important}}
+    /* ===== DAY MODE — clean light cards ===== */
+html[data-theme="day"] .hud,
+html[data-theme="day"] .hero-card,
+html[data-theme="day"] .mini-stat,
+html[data-theme="day"] .osi-terminal{
+  background:#fff;
+  border:1px solid rgba(60,70,130,.10);
+  box-shadow:0 10px 30px rgba(60,70,130,.10), 0 1px 3px rgba(60,70,130,.08);
+}
+html[data-theme="day"] .hud:hover{
+  border-color:var(--accent);
+  box-shadow:0 14px 34px rgba(147,51,234,.16), 0 1px 3px rgba(60,70,130,.08);
+}
+/* الخط البنفسجي/الأزرق العلوي زي الصورة */
+html[data-theme="day"] .hud::before{
+  content:''; position:absolute; top:0; left:28px; right:28px; height:3px;
+  border-radius:0 0 99px 99px; background:linear-gradient(90deg,#9333ea,#0284c7);
+  opacity:.85; pointer-events:none;
+}
+
+/* الهيدر والأزرار */
+html[data-theme="day"] header.nav{ background:rgba(255,255,255,.88); backdrop-filter:blur(10px); box-shadow:0 4px 18px rgba(60,70,130,.10); }
+html[data-theme="day"] nav ul li a.active{ background:#f3e8ff; box-shadow:none; }
+html[data-theme="day"] .nav-cta,
+html[data-theme="day"] .btn-primary{ background:#9333ea; color:#fff; box-shadow:0 8px 20px rgba(147,51,234,.30); animation:none; }
+html[data-theme="day"] .btn-outline{ background:#fff; border:1px solid rgba(60,70,130,.14); box-shadow:0 4px 12px rgba(60,70,130,.08); }
+html[data-theme="day"] .toggle{ box-shadow:inset 2px 2px 5px rgba(60,70,130,.18); background:#dfe5f2; }
+html[data-theme="day"] .toggle .knob{ background:#fff; box-shadow:0 2px 6px rgba(60,70,130,.3); }
+
+/* اللوج المباشر والكروت الصغيرة */
+html[data-theme="day"] .feed{ background:#f5f7fc; box-shadow:inset 0 2px 8px rgba(60,70,130,.10); }
+html[data-theme="day"] .contact-list a,
+html[data-theme="day"] .cert-badge,
+html[data-theme="day"] .commit-date .tag{ background:#f5f7fc; box-shadow:none; border:1px solid rgba(60,70,130,.10); }
+html[data-theme="day"] .commit-date .tag{ color:var(--text); }
+
+/* كروت خرائط الطريق (زي الصورة بالظبط) */
+html[data-theme="day"] .roadmap-merge .rm-card{
+  background:#fff; border:1px solid rgba(60,70,130,.14); border-right-width:1px; border-radius:14px;
+}
+html[data-theme="day"] .roadmap-merge .rm-card:hover{
+  border-color:var(--rm-color); box-shadow:0 12px 26px color-mix(in srgb,var(--rm-color) 22%,transparent);
+}
+html[data-theme="day"] .roadmap-merge .rm-number{ border-radius:50%; }
+html[data-theme="day"] .roadmap-merge .rm-en{ color:var(--muted); }
+
+/* النافذة المنبثقة */
+html[data-theme="day"] .rm2-overlay{ background:rgba(40,50,90,.35); }
+html[data-theme="day"] .rm2-modal{ background:#fff; box-shadow:0 30px 70px rgba(60,70,130,.28); }
+html[data-theme="day"] .rm2-body,
+html[data-theme="day"] .rm2-tab{ background:#f7f9fd; }
+html[data-theme="day"] .rm2-tip{ background:#fff; box-shadow:0 2px 8px rgba(60,70,130,.08); }
+
+/* الشبح */
+html[data-theme="day"] .ghost-dialog{ background:#fff; border-color:rgba(147,51,234,.3); box-shadow:0 10px 25px rgba(60,70,130,.18); }
+html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70,130,.25)); }
     </style>
     
     <section id="osi">
