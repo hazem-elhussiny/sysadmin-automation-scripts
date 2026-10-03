@@ -841,6 +841,49 @@
     .roadmap-merge .rm-grid{ grid-template-columns:1fr; }
     .roadmap-merge .rm-panel{ padding:17px; }
   }
+  .rm-guide{ padding:26px; margin-bottom:18px; }
+.rm-guide .gd-block{ margin-bottom:30px; }
+.rm-guide .gd-block:last-child{ margin-bottom:0; }
+.gd-title{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:800; font-size:1.08rem; margin-bottom:6px; color:var(--text); }
+.gd-title::before{ content:''; width:4px; height:19px; border-radius:99px; background:var(--accent); }
+.gd-lead{ color:var(--muted); font-size:.86rem; margin-bottom:16px; max-width:76ch; }
+
+.gd-phases{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.gd-phase{ background:var(--panel-solid); border:1px solid var(--line); border-top:3px solid var(--c); border-radius:14px; padding:14px 16px; color:var(--text-on-dark); }
+.gd-phase .ph-tag{ font:700 .62rem var(--font-mono); color:var(--c); direction:ltr; display:block; margin-bottom:4px; }
+.gd-phase h4{ font-family:var(--font-display); font-size:.95rem; margin-bottom:4px; }
+.gd-phase p{ color:var(--muted); font-size:.78rem; margin-bottom:10px; line-height:1.8; }
+.gd-chips{ display:flex; flex-wrap:wrap; gap:6px; }
+.gd-chip{ font:700 .64rem var(--font-mono); padding:4px 9px; border-radius:99px; color:#fff; background:var(--c); direction:ltr; }
+.gd-chip.par{ background:transparent; color:var(--c); border:1px dashed var(--c); }
+.gd-note{ margin-top:12px; padding:12px 14px; border-radius:12px; border-right:3px solid var(--amber); background:var(--panel-solid); color:var(--text-on-dark); font-size:.8rem; line-height:1.9; }
+
+.gd-paths{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.gd-path{ background:var(--panel-solid); border:1px solid var(--line); border-radius:14px; padding:16px; color:var(--text-on-dark); position:relative; overflow:hidden; }
+.gd-path::before{ content:''; position:absolute; top:0; right:0; left:0; height:3px; background:var(--c); }
+.gd-path .pt-ico{ font-size:1.5rem; }
+.gd-path h4{ font-family:var(--font-display); font-size:.98rem; margin:6px 0 2px; }
+.gd-path .pt-en{ display:block; font:.62rem var(--font-mono); color:var(--muted); direction:ltr; margin-bottom:10px; }
+.gd-path p{ color:var(--muted); font-size:.78rem; line-height:1.8; margin-bottom:12px; }
+.gd-flow{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+.gd-flow li{ display:flex; align-items:center; gap:8px; font-size:.76rem; }
+.gd-flow li b{ width:22px; height:22px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--c); color:#fff; font:800 .62rem var(--font-mono); }
+.gd-goal{ margin-top:12px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--c); font-weight:700; }
+
+.gd-soft{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.gd-soft-card{ display:flex; gap:12px; padding:14px 16px; border-radius:14px; background:var(--panel-solid); border:1px solid var(--line); color:var(--text-on-dark); }
+.gd-soft-card .si{ font-size:1.4rem; flex:none; }
+.gd-soft-card strong{ display:block; font-size:.86rem; margin-bottom:3px; }
+.gd-soft-card span{ color:var(--muted); font-size:.78rem; line-height:1.8; display:block; }
+.gd-cta{ margin-top:16px; text-align:center; padding:16px; border-radius:14px; background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 14%,transparent),color-mix(in srgb,var(--quantum) 14%,transparent)); font-weight:800; font-size:.9rem; line-height:1.9; }
+
+html[data-theme="day"] .gd-phase,
+html[data-theme="day"] .gd-path,
+html[data-theme="day"] .gd-soft-card,
+html[data-theme="day"] .gd-note{ background:#fff; border-color:rgba(60,70,130,.12); box-shadow:0 4px 14px rgba(60,70,130,.07); }
+
+@media(max-width:900px){ .gd-paths{ grid-template-columns:1fr; } }
+@media(max-width:720px){ .gd-phases,.gd-soft{ grid-template-columns:1fr; } .rm-guide{ padding:17px; } }
 
   @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
 </style>
@@ -1481,10 +1524,162 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
   <!-- INTEGRATED ROADMAP: the original portfolio sections above remain unchanged -->
   <section id="roadmaps" class="roadmap-merge">
     <div class="rm-heading">
-      <div><div class="eyebrow">// ENTERPRISE_ARCHITECTURE --roadmaps</div><h2>الدليل الشامل للخرائط التقنية <span>وتقنيات الشبكات المتقدمة</span></h2></div>
+      <div>
+        <div class="eyebrow">// ENTERPRISE_ARCHITECTURE --roadmaps</div>
+        <h2>الدليل الشامل للخرائط التقنية <span>وتقنيات الشبكات المتقدمة</span></h2>
+      </div>
       <span class="mono" style="color:var(--muted); font-size:.68rem; direction:ltr;">01–17 / COMPLETE PATH INDEX</span>
     </div>
-    
+  
+    <p class="rm-intro">
+      من صفر الخبرة إلى مهندس محترف — خطوة بخطوة. مش لازم تتعلم كل حاجة مرة واحدة: اتبع الترتيب،
+      وركّز على مرحلة واحدة في كل وقت، واستمر. الاستمرار أهم من السرعة. 🚀
+    </p>
+  
+    <!-- ===== دليل التعلم ===== -->
+    <div class="hud panel depth rm-guide">
+  
+      <!-- 1) الترتيب الصحيح للتعلم -->
+      <div class="gd-block">
+        <h3 class="gd-title">أولًا: خريطة التعلم — من أين أبدأ؟</h3>
+        <p class="gd-lead">4 مراحل متتالية. الشارات المصمتة = المادة الأساسية في المرحلة، والشارات المنقّطة = مواد تذاكرها <b>بالتوازي</b> مع الأساسية.</p>
+  
+        <div class="gd-phases">
+          <div class="gd-phase" style="--c:var(--orange)">
+            <span class="ph-tag">PHASE 1 · الأساسات · 2–3 شهور</span>
+            <h4>🧱 ابنِ القاعدة</h4>
+            <p>افهم الكمبيوتر والشبكة والأمان من الأساس. هنا بتتعلم اللغة اللي كل المجال بيتكلمها: IP وSubnet وOSI والبروتوكولات.</p>
+            <div class="gd-chips">
+              <span class="gd-chip">1 · Network+ / Security+</span>
+              <span class="gd-chip par">11 · Soft Skills &amp; English</span>
+              <span class="gd-chip par">5 · Linux (أساسيات)</span>
+            </div>
+          </div>
+  
+          <div class="gd-phase" style="--c:var(--cyan)">
+            <span class="ph-tag">PHASE 2 · قلب الشبكات · 3–4 شهور</span>
+            <h4>🌐 اتقن الشبكات</h4>
+            <p>CCNA هي أهم محطة في الطريق. مع الـ Labs (Packet Tracer / GNS3) هتفهم Switching وRouting فهم حقيقي مش حفظ.</p>
+            <div class="gd-chips">
+              <span class="gd-chip">2 · CCNA 200-301</span>
+              <span class="gd-chip par">4 · Windows Server</span>
+              <span class="gd-chip par">10 · ITSM / Help Desk</span>
+            </div>
+          </div>
+  
+          <div class="gd-phase" style="--c:var(--emerald)">
+            <span class="ph-tag">PHASE 3 · البنية التحتية · 3–4 شهور</span>
+            <h4>🏗️ سيرفرات وأمان</h4>
+            <p>دلوقتي بتتعامل مع بيئة الشركات الحقيقية: سيرفرات، أجهزة افتراضية، ولينكس، وجدران نارية تحمي كل ده.</p>
+            <div class="gd-chips">
+              <span class="gd-chip">5 · Linux RHCSA</span>
+              <span class="gd-chip">6 · Virtualization</span>
+              <span class="gd-chip">8 · FortiGate NSE4</span>
+            </div>
+          </div>
+  
+          <div class="gd-phase" style="--c:var(--quantum)">
+            <span class="ph-tag">PHASE 4 · الاحتراف · 4–6 شهور+</span>
+            <h4>🚀 الجيل الجديد</h4>
+            <p>هنا بتتميز عن أغلب المنافسين: شبكات المؤسسات المتقدمة، السحابة والحاويات، وأتمتة المهام المتكررة بالكود.</p>
+            <div class="gd-chips">
+              <span class="gd-chip">3 · CCNP (SD-WAN / DNA Center)</span>
+              <span class="gd-chip">7 · Cloud + Docker / K8s</span>
+              <span class="gd-chip">9 · Network Automation</span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="gd-note">
+          💡 <b>قاعدة ذهبية:</b> ما تنتقلش لمرحلة قبل ما تخلّص Labs المرحلة اللي قبلها. وإنجليزي المجال (رقم 11) <b>بيمشي معاك من أول يوم لآخر يوم</b> — كل مصدر تعلّم مهم بالإنجليزي.
+        </div>
+      </div>
+  
+      <!-- 2) المسارات الوظيفية -->
+      <div class="gd-block">
+        <h3 class="gd-title">ثانيًا: المسارات الوظيفية — اختار وجهتك</h3>
+        <p class="gd-lead">الأرقام جوه الدوائر هي أرقام الكروت بالأسفل. ممكن تبدأ بمسار وتتحول لمسار تاني — المواد متداخلة.</p>
+  
+        <div class="gd-paths">
+          <div class="gd-path" style="--c:var(--orange)">
+            <span class="pt-ico">🛠️</span>
+            <h4>مهندس دعم فني</h4>
+            <span class="pt-en">IT Support Engineer · Help Desk → Tier 2/3</span>
+            <p>أسرع مسار للحصول على أول وظيفة. بتحل مشاكل المستخدمين والأجهزة والسيرفرات يوميًا.</p>
+            <ul class="gd-flow">
+              <li><b>1</b> Network+ / Security+</li>
+              <li><b>4</b> Windows Server &amp; AD</li>
+              <li><b>10</b> ITSM / تذاكر الدعم</li>
+              <li><b>2</b> CCNA</li>
+              <li><b>11</b> التواصل مع العملاء</li>
+            </ul>
+            <div class="gd-goal">🎯 الهدف: وظيفة خلال 4–6 شهور</div>
+          </div>
+  
+          <div class="gd-path" style="--c:var(--cyan)">
+            <span class="pt-ico">🌐</span>
+            <h4>مهندس شبكات محترف</h4>
+            <span class="pt-en">Network Engineer · Enterprise</span>
+            <p>تصمم وتدير وتأمّن شبكات الشركات والمصانع والفروع، وتضمن إنها ما تقعش.</p>
+            <ul class="gd-flow">
+              <li><b>1</b> Network+</li>
+              <li><b>2</b> CCNA</li>
+              <li><b>3</b> CCNP (SD-WAN / DNA Center)</li>
+              <li><b>8</b> FortiGate NSE4</li>
+              <li><b>6</b> Virtualization</li>
+            </ul>
+            <div class="gd-goal">🎯 الهدف: Network Engineer / Senior</div>
+          </div>
+  
+          <div class="gd-path" style="--c:var(--quantum)">
+            <span class="pt-ico">☁️</span>
+            <h4>مهندس شبكات سحابية وأتمتة</h4>
+            <span class="pt-en">Cloud / Automation Network Engineer</span>
+            <p>أكتر مسار مطلوب ومدفوع في السوق: بتبني شبكات في السحابة وبتبرمج المهام بدل ما تعملها يدوي.</p>
+            <ul class="gd-flow">
+              <li><b>2</b> CCNA</li>
+              <li><b>5</b> Linux RHCSA</li>
+              <li><b>7</b> Cloud + Docker / Kubernetes</li>
+              <li><b>9</b> Python &amp; Network Automation</li>
+              <li><b>3</b> CCNP / SD-WAN</li>
+            </ul>
+            <div class="gd-goal">🎯 الهدف: Cloud Network / DevNet Engineer</div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- 3) المهارات غير التقنية -->
+      <div class="gd-block">
+        <h3 class="gd-title">ثالثًا: إيه اللي بيفرّق المهندس المتميز؟</h3>
+        <p class="gd-lead">الشهادات بتفتحلك باب المقابلة، لكن اللي بيخلّيك تاخد الوظيفة هو مزيج من الفهم الحديث والتواصل.</p>
+  
+        <div class="gd-soft">
+          <div class="gd-soft-card">
+            <span class="si">🗣️</span>
+            <div><strong>مهارات التواصل</strong><span>تشرح مشكلة تقنية معقدة لمدير أو عميل بكلام بسيط. ده بيفرّق بين فني بينفّذ ومهندس بيتحمل مسؤولية.</span></div>
+          </div>
+          <div class="gd-soft-card">
+            <span class="si">🇬🇧</span>
+            <div><strong>الإنجليزية التقنية</strong><span>كل الوثائق والـ CLI وتذاكر الدعم والمقابلات بالإنجليزي. اتعلم تكتب Email وتوثق حل وتشرح Troubleshooting بشكل واضح.</span></div>
+          </div>
+          <div class="gd-soft-card">
+            <span class="si">🐳</span>
+            <div><strong>فهم الحاويات والسحابة</strong><span>Docker وKubernetes بقوا جزء من بيئة أغلب الشركات. مهندس الشبكات اللي يفهم إزاي التطبيقات بتتشغّل بيتميز فورًا.</span></div>
+          </div>
+          <div class="gd-soft-card">
+            <span class="si">🤖</span>
+            <div><strong>الأتمتة والتفكير بالكود</strong><span>تهيئة 50 سويتش يدويًا مضيعة وقت. بسكربت Python واحد بتعملها في دقايق وبدون أخطاء — والشركات بتدفع كويس مقابل ده.</span></div>
+          </div>
+        </div>
+  
+        <div class="gd-note">
+          🎤 <b>في المقابلة:</b> هيسألوك «حصلت مشكلة؟ إزاي حليتها؟». جاوب بـ <b>الموقف ← اللي عملته ← النتيجة</b>، وبإنجليزي بسيط واثق. مهندس بيشرح بوضوح بيتفوّق على اللي بيحفظ أكتر منه.
+        </div>
+        <div class="gd-cta">✨ ابدأ النهاردة بخطوة صغيرة: اختار الكارت الأول بالأسفل واقرأ مساره. رحلة الألف ميل بتبدأ بـ Lab واحد. 💪</div>
+      </div>
+    </div>
+  
+    <!-- ===== الكروت (الأصلية) ===== -->
     <div class="hud panel depth rm-panel">
       <div class="rm-group">
         <h3 class="rm-group-title">تقنيات الشبكات المتقدمة وأمن الشبكات <span class="mono" style="margin-inline-start:auto; color:var(--muted); font-size:.62rem; direction:ltr;"></span></h3>
@@ -1929,17 +2124,60 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
        {id:'loadbalance', n:'6', title:'موازنة الأحمال بين السيرفرات', en:'Load Balancing', color:'var(--purple)', badge:'Scalability & Uptime', overview:'لو موقع أو نظام واحد بس بيستقبل كل الزوار، أي ضغط زيادة ممكن يوقفه تمامًا. موازن الأحمال بيوزع الطلبات على أكتر من سيرفر في نفس الوقت، فيضمن استمرار الخدمة حتى لو سيرفر واحد وقع.', steps:[['خوارزميات التوزيع','Round Robin بيوزع بالتناوب، وLeast Connections بيبعت للأقل ضغطًا.'],['فحص الصحة (Health Check)','مراقبة مستمرة لكل سيرفر واستبعاد أي واحد واقع تلقائيًا.'],['SSL Offloading','فك التشفير عند الموازن نفسه لتخفيف الحمل عن السيرفرات.'],['التوسع الأفقي (Scaling Out)','إضافة سيرفرات جديدة بسهولة وقت الضغط بدل ترقية سيرفر واحد.']], tips:['استخدم Health Checks بفترات قصيرة عشان تكشف أي سيرفر واقع بسرعة قبل ما يأثر على المستخدمين.','وزّع السيرفرات جغرافيًا لو أمكن — بيقلل زمن الاستجابة ويحمي من انقطاع منطقة كاملة.']}
     ];
     const career = [
-      {id:'ccna', n:'1', title:'شبكات سيسكو للمبتدئين', en:'CCNA 200-301', color:'var(--cyan)', badge:'Cisco Networking', overview:'المسار الأساسي لفهم OSI وTCP/IP والعنونة وSwitching وRouting والخدمات والأتمتة.', steps:[['Fundamentals','OSI وTCP/IP وIPv4 وIPv6 وSubnetting.'],['Switching','VLAN وTrunk وSTP وEtherChannel.'],['Routing','Static Routing وOSPFv2.'],['Services','DHCP وNAT وACL وتأمين الأجهزة.']]},
-      {id:'ccnp', n:'2', title:'شبكات سيسكو المتقدمة', en:'CCNP Enterprise', color:'var(--accent)', badge:'Professional Level', overview:'تصميم شبكات المؤسسات، BGP وVRF وSD-WAN واستكشاف الأعطال المتقدمة.', steps:[['ENCOR','Architecture وVirtualization وHSRP.'],['Advanced routing','BGP وOSPF Multi-area وVRF.'],['SD-WAN','ربط الفروع بمرونة.'],['Troubleshooting','تحليل أعطال L2 وL3.']]},
-      {id:'mcsa', n:'3', title:'إدارة أنظمة ويندوز', en:'MCSA / Windows Server', color:'var(--purple)', badge:'System Administration', overview:'إدارة Windows Server وActive Directory وDNS وDHCP والسياسات والنسخ الاحتياطي.', steps:[['Server roles','تثبيت وإدارة الأدوار والخدمات.'],['Active Directory','Users وGroups وOU وGroup Policy.'],['Networking','DNS وDHCP وIP Services.'],['Operations','Backup وMonitoring وPowerShell.']]},
-      {id:'cyber', n:'4', title:'الأمن السيبراني والدفاع', en:'Cyber Security & Blue Team', color:'var(--rose)', badge:'Cyber Security', overview:'مسار دفاعي لفهم التهديدات، تحليل السجلات، تقوية الأنظمة، والاستجابة للحوادث.', steps:[['Foundations','التشفير والهوية والثغرات.'],['Visibility','Wireshark وNmap داخل بيئة مصرح بها.'],['SOC & SIEM','تحليل الأحداث والتنبيهات.'],['Blue Team','IDS/IPS وتقوية الوصول.']]},
-      {id:'cloud', n:'5', title:'الحوسبة السحابية', en:'Cloud Computing (AWS / Azure)', color:'var(--amber)', badge:'Cloud Infrastructure', overview:'بناء الشبكات الافتراضية، الهوية، التخزين، الحوسبة، والأتمتة في AWS أو Azure.', steps:[['Cloud basics','IaaS وPaaS وSaaS.'],['Virtual networks','VPC وSubnets وRoute Tables.'],['Security','IAM وSecurity Groups.'],['Automation','Terraform والبنية ككود.']]},
-      {id:'linux', n:'6', title:'نظام لينكس وإدارة السيرفرات', en:'Linux System Admin (RHCSA)', color:'var(--orange)', badge:'Linux System', overview:'إدارة الخوادم عبر الطرفية والصلاحيات والخدمات والشبكات والنسخ الاحتياطي.', steps:[['Bash','إدارة الملفات والبحث والمعالجة.'],['Permissions','chmod وchown وsudo والمجموعات.'],['Services','systemd ومراقبة الأداء.'],['Networking','nmcli وفحص المنافذ والحزم.']]},
-      {id:'fortigate', n:'7', title:'الجدران النارية فورنت', en:'Fortinet FortiGate (NSE4)', color:'var(--emerald)', badge:'Network Security', overview:'تصميم سياسات FortiGate وNAT وVPN وUTM والتسجيل والمراقبة لحماية فروع المؤسسة.', steps:[['Interfaces','Zones وVLAN وRouting.'],['Policies','Firewall Policy وNAT.'],['VPN','IPSec وSSL VPN.'],['Security profiles','Web Filter وIPS وApplication Control.']]},
-      {id:'automation', n:'8', title:'برمجة وأتمتة الشبكات', en:'Programming & Network Automation', color:'var(--pink)', badge:'DevNet / Automation', overview:'تحويل المهام المتكررة إلى عمليات قابلة للتكرار باستخدام Python وAnsible وواجهات REST.', steps:[['Python','الأساسيات والملفات ومعالجة الأخطاء.'],['Libraries','Netmiko وParamiko وNAPALM.'],['Data formats','JSON وYAML وXML.'],['Ansible & APIs','Playbooks وREST APIs.']]},
-      {id:'comptia', n:'9', title:'شهادات الأساسيات لمن بيبدأ', en:'CompTIA Network+ / Security+', color:'var(--orange)', badge:'Entry-Level Certifications', overview:'قبل الدخول في تخصصات Cisco أو الأمن المتقدم، شهادات CompTIA بتبني الأساس النظري السليم لأي شخص جديد في المجال — مفيدة جدًا كنقطة انطلاق مهنية.', steps:[['Network+','مفاهيم الشبكات الأساسية، الكابلات، البروتوكولات، واستكشاف الأعطال البسيطة.'],['Security+','أساسيات الأمن السيبراني، التهديدات الشائعة، وسياسات الحماية.'],['لا تحتاج خبرة سابقة','مصممة للمبتدئين تمامًا، عكس CCNA اللي بيحتاج فهم أعمق.'],['معترف بها عالميًا','مطلوبة في كتير من وظائف الدعم الفني حول العالم.']], tips:['ابدأ بـ Network+ قبل Security+ — الترتيب ده بيبني فهمك تدريجيًا وبمنطق.','اتدرب على أسئلة تجريبية (Practice Exams) قبل الامتحان الحقيقي لتتعرف على شكل الأسئلة.']},
-      {id:'virtualization', n:'10', title:'الأجهزة الافتراضية ومراكز البيانات', en:'Virtualization (VMware / Hyper-V)', color:'var(--pink)', badge:'Data Center Fundamentals', overview:'بدل شراء سيرفر فيزيائي منفصل لكل خدمة، الفرتشوالايزيشن بتسمح بتشغيل عشرات "السيرفرات الوهمية" على جهاز واحد قوي، وده أساس أي مركز بيانات حديث دلوقتي.', steps:[['Hypervisor','البرنامج اللي بيدير توزيع موارد الجهاز الفيزيائي على الأجهزة الوهمية (VMware ESXi أو Hyper-V).'],['Virtual Machines (VMs)','كل جهاز وهمي بيعمل كسيرفر مستقل تمامًا بنظام تشغيل خاص بيه.'],['Snapshots','حفظ نسخة من حالة الجهاز الوهمي في لحظة معينة، والرجوع ليها لو حصل خطأ.'],['Resource Allocation','تخصيص المعالج والذاكرة لكل جهاز وهمي حسب احتياجه الفعلي.']], tips:['استخدم Snapshots قبل أي تحديث أو تعديل مهم — بيوفر عليك وقت لو احتجت الرجوع للحالة السابقة.','راقب استهلاك الموارد بشكل دوري؛ تكديس أجهزة وهمية كتير على سيرفر واحد بيأثر على الأداء.']},
-      {id:'itsm', n:'11', title:'إدارة طلبات وتذاكر الدعم الفني', en:'ITSM / Help Desk Systems', color:'var(--emerald)', badge:'IT Service Management', overview:'بدل ما الأعطال توصل بمكالمات متفرقة صعب تتبعها، أنظمة إدارة خدمات تقنية المعلومات (زي ServiceNow) بتنظم كل طلب في تذكرة واحدة قابلة للتتبع من أول لحظة لحد الحل النهائي.', steps:[['فتح التذكرة (Ticketing)','كل مشكلة أو طلب بيتسجل بتفاصيله ووقت استلامه.'],['التصنيف والأولوية','تحديد نوع المشكلة ومدى تأثيرها لتحديد ترتيب الحل.'],['اتفاقيات مستوى الخدمة (SLA)','مواعيد نهائية محددة لحل كل نوع مشكلة حسب أهميتها.'],['قاعدة المعرفة (Knowledge Base)','توثيق الحلول السابقة لتسريع حل المشاكل المتكررة.']], tips:['وثّق كل حل جديد في قاعدة المعرفة فورًا — بيوفر عليك ومعاك وقت كبير في المرة القادمة.','التزم بمواعيد SLA حتى في المشاكل الصغيرة، لأن الثقة بتُبنى بالانتظام.']}
+  {id:'comptia', n:'1', title:'شهادات الأساسيات لمن يبدأ', en:'CompTIA Network+ / Security+', color:'var(--orange)', badge:'Phase 1 · Foundations',
+   overview:'نقطة البداية المثالية لأي شخص جديد. Network+ تعلمك أساسيات الشبكات، وSecurity+ تضيف أساسيات الأمان. مفيش شرط خبرة سابقة، والشهادتين معترف بهما عالميًا في وظائف الدعم الفني.',
+   steps:[['Network+','OSI وTCP/IP والعنونة والكابلات والبروتوكولات واستكشاف الأعطال.'],['Security+','التهديدات الشائعة والتشفير والهوية وسياسات الحماية.'],['الأجهزة والأنظمة','فهم المكونات والأنظمة قبل الدخول للتخصص.'],['اختبار تجريبي','حل Practice Exams قبل الامتحان الحقيقي.']],
+   tips:['ابدأ بـ Network+ ثم Security+ — الترتيب ده بيبني فهمك تدريجيًا.','ما تحفظش الأرقام فقط، افهم ليه البروتوكول بيشتغل كده.']},
+
+  {id:'ccna', n:'2', title:'شبكات سيسكو للمبتدئين', en:'CCNA 200-301', color:'var(--cyan)', badge:'Phase 2 · Core Networking',
+   overview:'أهم شهادة في مسار الشبكات. بعدها هتفهم إزاي الحزمة بتتحرك من جهاز لجهاز، وتقدر تهيئ Switch وRouter وتحل أعطالهم.',
+   steps:[['Fundamentals','OSI وTCP/IP وIPv4/IPv6 وSubnetting.'],['Switching','VLAN وTrunk وSTP وEtherChannel.'],['Routing','Static Routing وOSPFv2.'],['Services & Security','DHCP وNAT وACL وتأمين الأجهزة، مع مقدمة في الأتمتة.']],
+   tips:['اشتغل Labs يوميًا على Packet Tracer أو GNS3 — النظري لوحده مش كفاية.','أتقن الـ Subnetting لحد ما تحله في دقيقة بدون آلة حاسبة.']},
+
+  {id:'ccnp', n:'3', title:'شبكات سيسكو المتقدمة والجيل الجديد', en:'CCNP Enterprise · SD-WAN & DNA Center', color:'var(--accent)', badge:'Phase 4 · Professional',
+   overview:'تصميم وإدارة شبكات المؤسسات الكبيرة. أهم ما يميزها اليوم هو الانتقال من الإدارة اليدوية جهاز بجهاز إلى الإدارة المركزية الذكية عبر SD-WAN وCisco DNA Center.',
+   steps:[['ENCOR','Architecture وVirtualization وHSRP وQoS.'],['Advanced routing','BGP وOSPF Multi-area وVRF.'],['SD-WAN','ربط الفروع عبر الإنترنت بسياسات مركزية ومرنة وأداء أفضل.'],['DNA Center','إدارة الشبكة من لوحة واحدة: Automation وAssurance وSegmentation.']],
+   tips:['لازم تكون متمكن من CCNA قبل ما تبدأ — CCNP بيفترض إنك مستوعب الأساس.','ركّز على فكرة الـ Controller-based: ده مستقبل الشبكات.']},
+
+  {id:'mcsa', n:'4', title:'إدارة أنظمة ويندوز', en:'MCSA / Windows Server', color:'var(--purple)', badge:'Phase 2 · Systems',
+   overview:'معظم الشركات بتعتمد على Windows Server وActive Directory لإدارة المستخدمين والأجهزة. المهارة دي أساسية لمهندس الدعم الفني والبنية التحتية.',
+   steps:[['Server roles','تثبيت وإدارة الأدوار والخدمات.'],['Active Directory','Users وGroups وOU وGroup Policy.'],['Networking Services','DNS وDHCP وFile Services.'],['Operations','Backup وMonitoring وPowerShell.']],
+   tips:['شهادة MCSA نفسها اتوقف تقديمها من مايكروسوفت، لكن المحتوى لسه مطلوب جدًا — تقدر تتجه لشهادات Windows Server الأحدث.','اعمل Lab في VirtualBox أو Hyper-V وكوّن دومين من الصفر.']},
+
+  {id:'linux', n:'5', title:'نظام لينكس وإدارة السيرفرات', en:'Linux System Admin (RHCSA)', color:'var(--orange)', badge:'Phase 3 · Linux',
+   overview:'أغلب السيرفرات والسحابة والحاويات بتشتغل على لينكس. إتقانه ضروري لأي مهندس يطمح للسحابة أو الأتمتة.',
+   steps:[['Command Line','التنقل وإدارة الملفات والبحث والمعالجة النصية.'],['Users & Permissions','chmod وchown وsudo والمجموعات.'],['Services','systemd وإدارة العمليات والمراقبة.'],['Networking & Storage','nmcli وفحص المنافذ والأقراص وLVM والنسخ الاحتياطي.']],
+   tips:['اشتغل على لينكس يوميًا كنظام أساسي أو على جهاز افتراضي — الممارسة هي السر.','تعلّم Bash Scripting بدري، هيسهل عليك الأتمتة بعدين.']},
+
+  {id:'virtualization', n:'6', title:'الأجهزة الافتراضية ومراكز البيانات', en:'Virtualization (VMware / Hyper-V)', color:'var(--pink)', badge:'Phase 3 · Data Center',
+   overview:'بدل سيرفر فيزيائي لكل خدمة، بنشغّل عشرات السيرفرات الوهمية على جهاز واحد قوي. ده أساس مراكز البيانات الحديثة، وأساس فهم السحابة بعد كده.',
+   steps:[['Hypervisor','VMware ESXi أو Hyper-V لتوزيع موارد الجهاز الفيزيائي.'],['Virtual Machines','إنشاء وإدارة أجهزة وهمية مستقلة.'],['Virtual Networking','Virtual Switches وVLANs داخل البيئة الافتراضية.'],['Snapshots & Backup','نقاط استرجاع ونسخ احتياطي للأجهزة الوهمية.']],
+   tips:['خد Snapshot قبل أي تحديث أو تعديل مهم.','راقب استهلاك المعالج والذاكرة — تكديس VMs كتير بيبطّئ الكل.']},
+
+  {id:'cloud', n:'7', title:'الحوسبة السحابية وحاويات البرمجيات', en:'Cloud (AWS / Azure) + Docker & Kubernetes', color:'var(--amber)', badge:'Phase 4 · Cloud & Containers',
+   overview:'الشركات بتنقل بنيتها للسحابة، والتطبيقات بتتشغل داخل حاويات. مهندس الشبكات اللي يفهم VPC وDocker وKubernetes بيبقى مطلوب بشدة.',
+   steps:[['Cloud Basics','IaaS وPaaS وSaaS ومفاهيم AWS أو Azure.'],['Virtual Networks','VPC وSubnets وRoute Tables وSecurity Groups.'],['Containers','Docker: الصور والحاويات وشبكات الحاويات.'],['Kubernetes','Pods وServices وIngress وفهم شبكة الكلاستر.']],
+   tips:['ابدأ بالطبقة المجانية (Free Tier) في AWS أو Azure — وراقب الفاتورة دايمًا.','اتعلم Docker قبل Kubernetes: ماينفعش تدير تنسيق حاويات وإنت مش فاهم الحاوية.']},
+
+  {id:'fortigate', n:'8', title:'الجدران النارية والأمن', en:'Fortinet FortiGate (NSE4)', color:'var(--emerald)', badge:'Phase 3 · Network Security',
+   overview:'الجدار الناري هو بوابة الحماية للشبكة. FortiGate من أكتر الأجهزة انتشارًا، وتعلمه بيفتحلك فرص في الأمن والشبكات.',
+   steps:[['Interfaces & Routing','Zones وVLAN والتوجيه.'],['Firewall Policy','سياسات الوصول وNAT.'],['VPN','IPSec وSSL VPN للفروع والعمل عن بعد.'],['Security Profiles','Web Filter وIPS وApplication Control واللوج.']],
+   tips:['ابدأ بنسخة افتراضية من FortiGate في Lab قبل أي جهاز حقيقي.','اقرأ اللوج دايمًا — هو أول مصدر لفهم أي مشكلة.']},
+
+  {id:'automation', n:'9', title:'برمجة وأتمتة الشبكات', en:'Programming & Network Automation', color:'var(--pink)', badge:'Phase 4 · Automation',
+   overview:'تحويل المهام المتكررة لعمليات تلقائية باستخدام Python وAnsible وREST APIs. بتوفر وقت وبتقلل الأخطاء وبترفع قيمتك في السوق.',
+   steps:[['Python','الأساسيات والملفات ومعالجة الأخطاء.'],['Libraries','Netmiko وParamiko وNAPALM.'],['Data Formats','JSON وYAML وXML.'],['Ansible & APIs','Playbooks وREST APIs وGit.']],
+   tips:['ابدأ بسكربت بسيط: بيسحب Backup من 5 سويتشات — وبعدين وسّع.','استخدم Git من أول مشروع، ده معيار كل فرق العمل.']},
+
+  {id:'itsm', n:'10', title:'إدارة طلبات وتذاكر الدعم الفني', en:'ITSM / Help Desk Systems', color:'var(--emerald)', badge:'Phase 2 · IT Service Management',
+   overview:'أنظمة التذاكر (زي ServiceNow وJira Service Management) بتنظم كل طلب من لحظة فتحه لحد حله، وده أسلوب الشغل في أي شركة محترمة.',
+   steps:[['Ticketing','تسجيل كل مشكلة بتفاصيلها ووقتها.'],['الأولوية والتصنيف','تحديد التأثير والأولوية لترتيب الحل.'],['SLA','مواعيد نهائية لحل كل نوع مشكلة.'],['Knowledge Base','توثيق الحلول لتسريع المشاكل المتكررة.']],
+   tips:['وثّق كل حل جديد فورًا — بيوفر وقت ليك ولزملائك.','اكتب في التذكرة بوضوح: المشكلة، الخطوات، النتيجة.']},
+
+  {id:'soft', n:'11', title:'المهارات الناعمة والمهنية', en:'Soft Skills & Technical English', color:'var(--rose)', badge:'Parallel · Every Phase',
+   overview:'المهارة اللي بتمشي مع كل المراحل. التواصل الواضح والإنجليزية التقنية بيفرّقوا بين مهندس كويس ومهندس يتوظف ويترقّى بسرعة.',
+   steps:[['Technical English','قراءة الوثائق وكتابة Emails وتوثيق الحلول.'],['التواصل','شرح مشكلة تقنية لشخص غير تقني ببساطة.'],['إدارة الوقت والأولويات','ترتيب الطلبات والتعامل مع الضغط.'],['المقابلات','أسلوب STAR: Situation وTask وAction وResult.']],
+   tips:['اقرأ 15 دقيقة يوميًا من وثائق رسمية بالإنجليزي، وبعد شهرين هتلاحظ الفرق.','اتدرب تشرح كل Lab بتعمله بصوت عالي — ده أسرع طريقة لاختبار فهمك.']}
     ];
     const all = advanced.concat(career);
     const card = item => `<button class="rm-card" style="--rm-color:${item.color}" data-rm-id="${item.id}" type="button"><span class="rm-card-main"><span class="rm-number">${item.n}</span><span class="rm-title">${item.title}<span class="rm-en">${item.en}</span></span></span><span class="rm-arrow">←</span></button>`;
@@ -2050,7 +2288,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
       eyes.style.transform = `translate(${(Math.cos(angle) * distance).toFixed(2)}px, ${(Math.sin(angle) * distance).toFixed(2)}px)`;
     });
 
-    // ----- idle blinking, independent of the mouse-tracking transform above -----
     function blinkOnce(){
       if(!eyeL || !eyeR) return;
       eyeL.setAttribute('ry','1.3'); eyeR.setAttribute('ry','1.3');
@@ -2062,7 +2299,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
     }
     if(!reduceMotion) scheduleBlink();
 
-    // ----- fixed tip sequence: shows one at a time, in order -----
     if(!dialog) return;
     const TIPS = [
       'مرحباً بك! اختر مساراً للاطلاع عليه 🚀',
@@ -2097,10 +2333,8 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
       autoTimer = setTimeout(()=>{ nextTip(); scheduleAuto(); }, 30000);
     }
 
-    // first tip appears shortly after load, then advances automatically every 30s
     setTimeout(()=>{ showTip(0); scheduleAuto(); }, 1500);
 
-    // clicking / tapping the ghost jumps straight to the next tip
     function advanceOnInteract(){
       clearTimeout(autoTimer);
       nextTip();
