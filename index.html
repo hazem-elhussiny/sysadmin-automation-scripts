@@ -192,7 +192,9 @@
     border-bottom:none; box-shadow:0 6px 16px var(--shadow-d);
   }
   .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:16px; flex-wrap:nowrap;}
-  .brand{display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-weight:700; font-size:.95rem; min-width:0; flex:1 1 auto; overflow:hidden; margin-inline-start:70px;}  .nav-right{display:flex; align-items:center; gap:14px; flex-shrink:0;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-weight:700; font-size:.95rem; min-width:0; flex:1 1 auto; overflow:hidden; margin-inline-start:40px;}
+  .brand .brand-text{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .nav-right{display:flex; align-items:center; gap:14px; flex-shrink:0;}
   #clock{font-family:var(--font-mono); font-size:.76rem; color:var(--accent); min-width:66px; text-align:center; flex-shrink:0;}
   .nav-cta{
     font-family:var(--font-mono); font-size:.74rem; color:var(--accent);
@@ -1021,6 +1023,10 @@ main,section,.wrap{min-width:0;max-width:100%}
 #topology .pk{filter:drop-shadow(0 0 4px #fff)}
 #topology .led{animation:tbl 2.4s ease-in-out infinite}
 @keyframes tbl{50%{opacity:.25}}
+#topology .msg{pointer-events:none}
+#topology .msg-env{filter:drop-shadow(0 0 4px rgba(34,211,238,.9)) drop-shadow(0 0 10px rgba(34,211,238,.65))}
+#topology .msg-head{direction:ltr;font:800 10.5px Orbitron,'JetBrains Mono',monospace;letter-spacing:1.2px;fill:#22d3ee;text-anchor:middle;filter:drop-shadow(0 0 4px #22d3ee) drop-shadow(0 0 9px rgba(34,211,238,.7));paint-order:stroke;stroke:#050a14;stroke-width:3px}
+#topology .msg-sub{direction:ltr;unicode-bidi:isolate;font:500 9px 'JetBrains Mono',monospace;fill:#7fb3c2;paint-order:stroke;stroke:#050a14;stroke-width:3px}
 #topology .wave{animation:twv 2s ease-in-out infinite;fill:none;stroke:#fbbf68;stroke-width:2;stroke-linecap:round}
 @keyframes twv{0%,100%{opacity:.15}50%{opacity:1}}
 </style>
@@ -1038,7 +1044,7 @@ main,section,.wrap{min-width:0;max-width:100%}
           <radialGradient id="tvg" cx=".5" cy=".5" r=".7"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
         </defs>
         <rect width="1200" height="790" fill="url(#tg1)"/><rect width="1200" height="790" fill="url(#tg2)"/>
-        <g id="tz"></g><g id="tc"></g><g id="td"></g>
+        <g id="tz"></g><g id="tc"></g><g id="td"></g><g id="tp"></g>
         <rect width="1200" height="790" fill="url(#tvg)" pointer-events="none"/>
       </svg>
       <div class="tlegend">
@@ -1144,6 +1150,28 @@ links.forEach(([A,B,s],i)=>{
 $('tc').innerHTML=cb;
 Object.keys(D).filter(k=>k!='net').sort((a,b)=>D[a].y-D[b].y).forEach(k=>dv+=draw(D[k]));
 $('td').innerHTML=dv;
+/* ===== Data-transmission packets: glowing white packet + neon label + device IDs ===== */
+if(!rm){
+ const bez=(A,B)=>{const p=anc(A),q=anc(B),h=Math.abs(q[0]-p[0])>Math.abs(q[1]-p[1])*1.3;
+  return h?`C${(p[0]+q[0])/2} ${p[1]},${(p[0]+q[0])/2} ${q[1]},${q[0]} ${q[1]}`:`C${p[0]} ${(p[1]+q[1])/2},${q[0]} ${(p[1]+q[1])/2},${q[0]} ${q[1]}`};
+ const routeD=ns=>{const f=anc(ns[0]);let d=`M${f[0]} ${f[1]}`;for(let i=1;i<ns.length;i++)d+=bez(ns[i-1],ns[i]);return d};
+ const ID={lap:'LAP-01',srv:'SRV-01',bio:'BIO-01',bkp:'BKP-01',cam:'CAM-01',pc1:'PC-01',pc2:'PC-02',net:'WAN',fw:'FW-01'};
+ const msgs=[
+  {label:'HTTP_REQUEST',path:['lap','ap','sw2','core','srv'],dur:9,begin:0},
+  {label:'AUTH_CHECK',path:['bio','sw2','core','fw'],dur:7,begin:2.5},
+  {label:'DB_SYNC',path:['srv','nas','bkp'],dur:6,begin:5},
+  {label:'HTTPS_GET',path:['pc2','sw2','core','fw','rtr','net'],dur:10,begin:7.5}
+ ];
+ $('tp').innerHTML=msgs.map(m=>{
+  const a=ID[m.path[0]]||m.path[0].toUpperCase(),b=ID[m.path[m.path.length-1]]||m.path[m.path.length-1].toUpperCase();
+  return `<g class="msg" opacity="0"><animateMotion dur="${m.dur}s" begin="${m.begin}s" repeatCount="indefinite" path="${routeD(m.path)}"/>
+   <animate attributeName="opacity" dur="${m.dur}s" begin="${m.begin}s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;.06;.94;1"/>
+   <text class="msg-head" x="0" y="-16">${m.label}</text>
+   <g class="msg-env"><rect x="-12" y="-8.5" width="24" height="17" rx="3" fill="#F9CB45" stroke="#111" stroke-width="1.4"/><path d="M-11 -7.5L0 2L11 -7.5M-11 7.5L-4.2 1M11 7.5L4.2 1" fill="none" stroke="#111" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/></g>
+   <text class="msg-sub" x="-15" y="21" text-anchor="end">${a}</text>
+   <text class="msg-sub" x="15" y="21" text-anchor="start">${b}</text></g>`}).join('');
+}
+
 })();
 </script>
 <!-- ============ END NEW TOPOLOGY ============ -->
@@ -1746,35 +1774,35 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
           <path d="M12.001 2C6.478 2 2 6.478 2 12c0 1.821.487 3.53 1.338 5.003L2 22l5.114-1.324A9.958 9.958 0 0012.001 22C17.523 22 22 17.523 22 12S17.523 2 12.001 2zm0 18.161a8.132 8.132 0 01-4.15-1.135l-.297-.176-3.037.786.81-2.96-.194-.304a8.128 8.128 0 01-1.246-4.372c0-4.495 3.658-8.153 8.154-8.153 4.495 0 8.153 3.658 8.153 8.153 0 4.496-3.658 8.161-8.153 8.161z"/>
         </svg>
-        <span>WhatsApp</span>
+        <span>واتساب</span>
       </a>
 
       <a href="https://t.me/Hazem212i" class="social-btn telegram" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
           <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.899-.499 1.2-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
         </svg>
-        <span>Telegram</span>
+        <span>تيلجرام</span>
       </a>
 
       <a href="https://linkedin.com/in/hazem-elhussiny-73bbb5192" class="social-btn linkedin" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.114 20.452H3.558V9h3.556v11.452z"/>
         </svg>
-        <span>LinkedIn</span>
+        <span>لينكدإن</span>
       </a>
 
       <a href="https://www.youtube.com/@YOUR_CHANNEL" class="social-btn youtube" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
           <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
         </svg>
-        <span>YouTube</span>
+        <span>يوتيوب</span>
       </a>
 
       <a href="https://github.com/YOUR_USERNAME" class="social-btn github" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
           <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.921.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
         </svg>
-        <span>GitHub</span>
+        <span>جيت هب</span>
       </a>
 
     </div>
