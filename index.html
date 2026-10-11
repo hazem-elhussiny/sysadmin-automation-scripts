@@ -916,6 +916,59 @@ main,section,.wrap{min-width:0;max-width:100%}
 .hud{max-width:100%}
 nav{margin-inline-end:36px}
 @media(max-width:1000px){nav{margin-inline-end:12px}}
+
+/* ===== Cyber ghost: neon outline + hollow eyes ===== */
+.ghost-svg{--gl:#fff;--gg:rgba(94,234,212,.85);color:#5eead4}
+html[data-theme="day"] .ghost-body{stroke:#1e2d4d}
+.ghost-body{stroke:#33486f;stroke-width:1.2;stroke-linejoin:round;filter:none}
+.ghost-tech path{stroke:#6f8fbf}
+.ghost-inner{stroke:#6f8fbf}
+.ghost-eye{stroke:#d9e4f5;stroke-width:1}
+.ghost-wrapper{animation:ghost-float 3.5s ease-in-out infinite, ghostFlicker 6s steps(1) infinite}
+@keyframes ghostFlicker{0%,92%,96%,100%{opacity:1}93%{opacity:.82}95%{opacity:.92}}
+.ghost-shadow{background:rgba(0,0,0,.3)!important}
+
+/* ===== Ghost inner circuit: flowing + glowing ===== */
+.ghost-tech path.ghost-scan{stroke:#5eead4;opacity:.16}
+.ghost-tech path.ghost-wire{stroke:#5eead4;opacity:.3}
+.ghost-tech path.ghost-flow{stroke:#9ffff0;stroke-linecap:round;stroke-dasharray:16 84;stroke-dashoffset:100;
+  filter:drop-shadow(0 0 2px #5eead4) drop-shadow(0 0 5px #22d3ee);animation:ghostFlow 2s linear infinite}
+.ghost-tech path.ghost-flow.f2{animation-duration:2.6s;animation-delay:-.9s}
+.ghost-node{fill:#9ffff0;filter:drop-shadow(0 0 3px #5eead4) drop-shadow(0 0 6px #22d3ee);animation:ghostNode 1.6s ease-in-out infinite}
+.ghost-node.n2{animation-delay:-.8s}
+.ghost-sweep{animation:ghostSweep 3.4s ease-in-out infinite}
+@keyframes ghostFlow{to{stroke-dashoffset:0}}
+@keyframes ghostNode{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.35)}}
+@keyframes ghostSweep{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(80px);opacity:0}}
+.ghost-node,.ghost-sweep{transform-box:fill-box;transform-origin:center}
+html[data-theme="day"] .ghost-tech path.ghost-flow{stroke:#c4b5fd;filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px #7c3aed)}
+html[data-theme="day"] .ghost-node{fill:#c4b5fd;filter:drop-shadow(0 0 3px #a78bfa) drop-shadow(0 0 6px #7c3aed)}
+
+/* ===== Ghost: full-body neon rings with circular motion ===== */
+.ghost-rings{filter:drop-shadow(0 0 2px #5eead4) drop-shadow(0 0 5px rgba(34,211,238,.8))}
+.ghost-rings circle.gr{fill:none;transform-box:fill-box;transform-origin:center;animation:ghostSpin var(--d,5s) linear infinite;animation-direction:var(--dir,normal);opacity:.9}
+.ghost-rings .gr-orbit{transform-origin:50px 66px;animation:ghostSpin var(--d,5s) linear infinite;animation-direction:var(--dir,normal)}
+@keyframes ghostSpin{to{transform:rotate(360deg)}}
+html[data-theme="day"] .ghost-rings{filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px rgba(124,58,237,.7))}
+
+/* ===== Pac-Man cyber ghost v3: horizontal lines + bottom circuits + hollow eyes ===== */
+.ghost-body{stroke:#2f6f86!important;stroke-width:1.3!important}
+.ghost-hl{stroke:#22d3ee;stroke-width:.8;opacity:.16;animation:ghostHl 3.2s ease-in-out infinite;animation-delay:calc(var(--i) * .13s)}
+@keyframes ghostHl{0%,100%{opacity:.13}18%{opacity:.7}36%{opacity:.16}}
+.ghost-circuit{filter:drop-shadow(0 0 2px #22d3ee) drop-shadow(0 0 5px rgba(94,234,212,.8))}
+.ghost-wire{stroke:#5eead4;stroke-width:1;opacity:.45;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.ghost-flow{stroke:#b6fff4;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 86;stroke-dashoffset:100;animation:ghostFlow 2.2s linear infinite;animation-delay:calc(var(--i) * -.45s)}
+.ghost-node{fill:#d9fffa;transform-box:fill-box;transform-origin:center;animation:ghostNode 1.8s ease-in-out infinite;animation-delay:calc(var(--i) * -.35s)}
+@keyframes ghostFlow{to{stroke-dashoffset:0}}
+@keyframes ghostNode{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.4)}}
+.ghost-eye{fill:#050912;stroke:#7ff5ff;stroke-width:1.5;filter:drop-shadow(0 0 2px #22d3ee)}
+html[data-theme="day"] .ghost-hl{stroke:#a78bfa}
+html[data-theme="day"] .ghost-wire{stroke:#a78bfa}
+html[data-theme="day"] .ghost-flow{stroke:#e9ddff}
+html[data-theme="day"] .ghost-node{fill:#efe7ff}
+html[data-theme="day"] .ghost-circuit{filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px rgba(124,58,237,.7))}
+html[data-theme="day"] .ghost-eye{stroke:#c4b5fd;filter:drop-shadow(0 0 2px #7c3aed)}
+html[data-theme="day"] .ghost-body{stroke:#1e2d4d!important}
 </style>
 </head>
 <body class="gated">
@@ -1755,10 +1808,18 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
   <div class="ghost-dialog" id="ghostDialog"></div>
   <div class="ghost-wrapper">
     <svg class="ghost-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M10 51C10 16 90 16 90 51v53s-12-10-25 0c-12 10-25-5-30 0-10 7-25 0-25 0Z" fill="#fff"/>
+      <defs>
+        <linearGradient id="ghostFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14233f" stop-opacity=".78"/><stop offset="1" stop-color="#060b16" stop-opacity=".72"/></linearGradient>
+        <clipPath id="ghostClip"><path d="M12 104V50C12 28 28 16 50 16C72 16 88 28 88 50V104L79 95L70 104L60 95L50 104L40 95L30 104L21 95Z"/></clipPath>
+      </defs>
+      <path class="ghost-body" d="M12 104V50C12 28 28 16 50 16C72 16 88 28 88 50V104L79 95L70 104L60 95L50 104L40 95L30 104L21 95Z" fill="url(#ghostFill)"/>
+      <g clip-path="url(#ghostClip)" class="ghost-tech">
+        <g class="ghost-hlines"><path class="ghost-hl" d="M10 24H90" style="--i:19"/><path class="ghost-hl" d="M10 28H90" style="--i:18"/><path class="ghost-hl" d="M10 32H90" style="--i:17"/><path class="ghost-hl" d="M10 36H90" style="--i:16"/><path class="ghost-hl" d="M10 40H90" style="--i:15"/><path class="ghost-hl" d="M10 44H90" style="--i:14"/><path class="ghost-hl" d="M10 48H90" style="--i:13"/><path class="ghost-hl" d="M10 52H90" style="--i:12"/><path class="ghost-hl" d="M10 56H90" style="--i:11"/><path class="ghost-hl" d="M10 60H90" style="--i:10"/><path class="ghost-hl" d="M10 64H90" style="--i:9"/><path class="ghost-hl" d="M10 68H90" style="--i:8"/><path class="ghost-hl" d="M10 72H90" style="--i:7"/><path class="ghost-hl" d="M10 76H90" style="--i:6"/><path class="ghost-hl" d="M10 80H90" style="--i:5"/><path class="ghost-hl" d="M10 84H90" style="--i:4"/><path class="ghost-hl" d="M10 88H90" style="--i:3"/><path class="ghost-hl" d="M10 92H90" style="--i:2"/><path class="ghost-hl" d="M10 96H90" style="--i:1"/><path class="ghost-hl" d="M10 100H90" style="--i:0"/></g>
+        <g class="ghost-circuit"><path class="ghost-wire" d="M24 100V88h8V76" pathLength="100"/><path class="ghost-flow" d="M24 100V88h8V76" pathLength="100" style="--i:0"/><path class="ghost-wire" d="M38 96V84" pathLength="100"/><path class="ghost-flow" d="M38 96V84" pathLength="100" style="--i:1"/><path class="ghost-wire" d="M50 100V80h-6V68" pathLength="100"/><path class="ghost-flow" d="M50 100V80h-6V68" pathLength="100" style="--i:2"/><path class="ghost-wire" d="M62 96V86h8V74" pathLength="100"/><path class="ghost-flow" d="M62 96V86h8V74" pathLength="100" style="--i:3"/><path class="ghost-wire" d="M76 100V82h-6V70" pathLength="100"/><path class="ghost-flow" d="M76 100V82h-6V70" pathLength="100" style="--i:4"/><circle class="ghost-node" cx="32" cy="76" r="1.9" style="--i:0"/><circle class="ghost-node" cx="38" cy="84" r="1.9" style="--i:1"/><circle class="ghost-node" cx="44" cy="68" r="1.9" style="--i:2"/><circle class="ghost-node" cx="70" cy="74" r="1.9" style="--i:3"/><circle class="ghost-node" cx="70" cy="70" r="1.9" style="--i:4"/></g>
+      </g>
       <g id="ghostEyes">
-        <ellipse id="eyeL" cx="42" cy="48" rx="6" ry="9.5" fill="#090d16"/>
-        <ellipse id="eyeR" cx="62" cy="48" rx="6" ry="9.5" fill="#090d16"/>
+        <ellipse id="eyeL" class="ghost-eye" cx="39" cy="46" rx="6" ry="9.5"/>
+        <ellipse id="eyeR" class="ghost-eye" cx="61" cy="46" rx="6" ry="9.5"/>
       </g>
     </svg>
   </div>
@@ -1804,7 +1865,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
           <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.921.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
         </svg>
-        <span>GitHub</span>
+        <span> GitHub</span>
       </a>
 
     </div>
