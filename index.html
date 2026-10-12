@@ -917,58 +917,42 @@ main,section,.wrap{min-width:0;max-width:100%}
 nav{margin-inline-end:36px}
 @media(max-width:1000px){nav{margin-inline-end:12px}}
 
-/* ===== Cyber ghost: neon outline + hollow eyes ===== */
-.ghost-svg{--gl:#fff;--gg:rgba(94,234,212,.85);color:#5eead4}
+/* ===== Cloudi-style ghost: neon scanlines + neural network + glowing AI eyes ===== */
+.ghost-body{stroke:#2f8aa3;stroke-width:1;stroke-linejoin:round;opacity:.9}
+.ghost-hlines{filter:drop-shadow(0 0 1.2px rgba(34,211,238,.9))}
+.ghost-hl{stroke:#35e0f5;stroke-width:.7;opacity:.7;animation:ghostHl 3s ease-in-out infinite}
+@keyframes ghostHl{0%,100%{opacity:.62}50%{opacity:.82}}
+.nn-edge{stroke:#7ff5ff;stroke-width:.45;opacity:.5;stroke-linecap:round}
+.nn-signals{filter:drop-shadow(0 0 2px #22d3ee) drop-shadow(0 0 4px rgba(34,211,238,.8))}
+.nn-pulse{stroke:#e8ffff;stroke-width:1.2;stroke-linecap:round;stroke-dasharray:14 86;stroke-dashoffset:100;animation:ghostFlow 2.4s linear infinite;animation-delay:calc(var(--i) * -.37s)}
+@keyframes ghostFlow{to{stroke-dashoffset:0}}
+.nn-node{fill:#d9fffa;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 0 2px #22d3ee) drop-shadow(0 0 5px rgba(34,211,238,.9));animation:ghostNode 2s ease-in-out infinite;animation-delay:calc(var(--i) * -.23s)}
+@keyframes ghostNode{0%,100%{opacity:.55;transform:scale(.8)}50%{opacity:1;transform:scale(1.35)}}
+.ghost-eye{fill:url(#ghostEyeG);stroke:none;filter:drop-shadow(0 0 3px #67e8f9) drop-shadow(0 0 8px rgba(34,211,238,.95)) drop-shadow(0 0 16px rgba(34,211,238,.55));animation:ghostEyePulse 3.2s ease-in-out infinite}
+@keyframes ghostEyePulse{0%,100%{opacity:.92}50%{opacity:1}}
+.ghost-wrapper{animation:ghost-float 3.5s ease-in-out infinite}
 html[data-theme="day"] .ghost-body{stroke:#1e2d4d}
-.ghost-body{stroke:#33486f;stroke-width:1.2;stroke-linejoin:round;filter:none}
-.ghost-tech path{stroke:#6f8fbf}
-.ghost-inner{stroke:#6f8fbf}
-.ghost-eye{stroke:#d9e4f5;stroke-width:1}
-.ghost-wrapper{animation:ghost-float 3.5s ease-in-out infinite, ghostFlicker 6s steps(1) infinite}
-@keyframes ghostFlicker{0%,92%,96%,100%{opacity:1}93%{opacity:.82}95%{opacity:.92}}
-.ghost-shadow{background:rgba(0,0,0,.3)!important}
-
-/* ===== Ghost inner circuit: flowing + glowing ===== */
-.ghost-tech path.ghost-scan{stroke:#5eead4;opacity:.16}
-.ghost-tech path.ghost-wire{stroke:#5eead4;opacity:.3}
-.ghost-tech path.ghost-flow{stroke:#9ffff0;stroke-linecap:round;stroke-dasharray:16 84;stroke-dashoffset:100;
-  filter:drop-shadow(0 0 2px #5eead4) drop-shadow(0 0 5px #22d3ee);animation:ghostFlow 2s linear infinite}
-.ghost-tech path.ghost-flow.f2{animation-duration:2.6s;animation-delay:-.9s}
-.ghost-node{fill:#9ffff0;filter:drop-shadow(0 0 3px #5eead4) drop-shadow(0 0 6px #22d3ee);animation:ghostNode 1.6s ease-in-out infinite}
-.ghost-node.n2{animation-delay:-.8s}
-.ghost-sweep{animation:ghostSweep 3.4s ease-in-out infinite}
-@keyframes ghostFlow{to{stroke-dashoffset:0}}
-@keyframes ghostNode{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.35)}}
-@keyframes ghostSweep{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(80px);opacity:0}}
-.ghost-node,.ghost-sweep{transform-box:fill-box;transform-origin:center}
-html[data-theme="day"] .ghost-tech path.ghost-flow{stroke:#c4b5fd;filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px #7c3aed)}
-html[data-theme="day"] .ghost-node{fill:#c4b5fd;filter:drop-shadow(0 0 3px #a78bfa) drop-shadow(0 0 6px #7c3aed)}
-
-/* ===== Ghost: full-body neon rings with circular motion ===== */
-.ghost-rings{filter:drop-shadow(0 0 2px #5eead4) drop-shadow(0 0 5px rgba(34,211,238,.8))}
-.ghost-rings circle.gr{fill:none;transform-box:fill-box;transform-origin:center;animation:ghostSpin var(--d,5s) linear infinite;animation-direction:var(--dir,normal);opacity:.9}
-.ghost-rings .gr-orbit{transform-origin:50px 66px;animation:ghostSpin var(--d,5s) linear infinite;animation-direction:var(--dir,normal)}
-@keyframes ghostSpin{to{transform:rotate(360deg)}}
-html[data-theme="day"] .ghost-rings{filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px rgba(124,58,237,.7))}
-
-/* ===== Pac-Man cyber ghost v3: horizontal lines + bottom circuits + hollow eyes ===== */
-.ghost-body{stroke:#2f6f86!important;stroke-width:1.3!important}
-.ghost-hl{stroke:#22d3ee;stroke-width:.8;opacity:.16;animation:ghostHl 3.2s ease-in-out infinite;animation-delay:calc(var(--i) * .13s)}
-@keyframes ghostHl{0%,100%{opacity:.13}18%{opacity:.7}36%{opacity:.16}}
-.ghost-circuit{filter:drop-shadow(0 0 2px #22d3ee) drop-shadow(0 0 5px rgba(94,234,212,.8))}
-.ghost-wire{stroke:#5eead4;stroke-width:1;opacity:.45;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.ghost-flow{stroke:#b6fff4;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 86;stroke-dashoffset:100;animation:ghostFlow 2.2s linear infinite;animation-delay:calc(var(--i) * -.45s)}
-.ghost-node{fill:#d9fffa;transform-box:fill-box;transform-origin:center;animation:ghostNode 1.8s ease-in-out infinite;animation-delay:calc(var(--i) * -.35s)}
-@keyframes ghostFlow{to{stroke-dashoffset:0}}
-@keyframes ghostNode{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.4)}}
-.ghost-eye{fill:#050912;stroke:#7ff5ff;stroke-width:1.5;filter:drop-shadow(0 0 2px #22d3ee)}
 html[data-theme="day"] .ghost-hl{stroke:#a78bfa}
-html[data-theme="day"] .ghost-wire{stroke:#a78bfa}
-html[data-theme="day"] .ghost-flow{stroke:#e9ddff}
-html[data-theme="day"] .ghost-node{fill:#efe7ff}
-html[data-theme="day"] .ghost-circuit{filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px rgba(124,58,237,.7))}
-html[data-theme="day"] .ghost-eye{stroke:#c4b5fd;filter:drop-shadow(0 0 2px #7c3aed)}
-html[data-theme="day"] .ghost-body{stroke:#1e2d4d!important}
+html[data-theme="day"] .ghost-hlines{filter:drop-shadow(0 0 1.2px rgba(124,58,237,.8))}
+html[data-theme="day"] .nn-edge{stroke:#c4b5fd}
+html[data-theme="day"] .nn-pulse{stroke:#f3ecff}
+html[data-theme="day"] .nn-signals{filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 4px rgba(124,58,237,.8))}
+html[data-theme="day"] .nn-node{fill:#f3ecff;filter:drop-shadow(0 0 2px #a78bfa) drop-shadow(0 0 5px rgba(124,58,237,.9))}
+html[data-theme="day"] .ghost-eye{filter:drop-shadow(0 0 3px #a78bfa) drop-shadow(0 0 8px rgba(124,58,237,.9))}
+
+/* ===== Layout fixes ===== */
+/* القائمة العلوية كانت بتزق زر "تواصل معي" والتبديل برة الشاشة بين 800 و1000px */
+@media(max-width:1100px){
+  nav{margin-inline-end:8px}
+  nav ul{gap:2px}
+  nav ul li a{padding:9px 10px}
+  nav ul li a .nav-ico{display:none}
+  #clock{display:none}
+}
+/* الروابط الداخلية كانت بتنزل تحت الهيدر الثابت */
+section{scroll-margin-top:84px}
+/* الشبح الثابت كان بيغطي أزرار التواصل في آخر الصفحة على الموبايل */
+@media(max-width:720px){footer{padding-bottom:150px}}
 </style>
 </head>
 <body class="gated">
@@ -1443,7 +1427,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
     function laptop(){const sc=FL(110,92,58,6,66);
      return DEFS+'<ellipse cx="110" cy="122" rx="95" ry="14" fill="#a78bfa" opacity=".16"/><ellipse cx="114" cy="124" rx="80" ry="10" fill="#000" opacity=".5"/>'
      +bx(110,92,58,6,66,'#1f2937')+sc(.06,.94,.07,.9,'url(#xsc)')+sc(.14,.5,.2,.28,'rgba(255,255,255,.55)')+bx(110,122,66,33,7,'#94a3b8')}
-    function rack(){const L=FL(110,118,40,20,92);let o=DEFS+'<ellipse cx="110" cy="128" rx="80" ry="12" fill="#22d3ee" opacity=".14"/><ellipse cx="112" cy="130" rx="62" ry="9" fill="#000" opacity=".5"/>'+bx(110,118,40,20,92,'#334155');
+    function rack(){const L=FL(110,118,40,20,92);let o='<ellipse cx="110" cy="128" rx="80" ry="12" fill="#22d3ee" opacity=".14"/><ellipse cx="112" cy="130" rx="62" ry="9" fill="#000" opacity=".5"/>'+bx(110,118,40,20,92,'#334155');
      for(let i=0;i<6;i++)o+=L(.1,.9,.06+i*.15,.06+i*.15+.1,'#0b1220')+L(.78,.86,.085+i*.15,.115+i*.15,i%2?'#4ade80':'#38bdf8',`style="animation:xbl ${1.5+i*.3}s step-end infinite"`);return o}
     $('xDevA').innerHTML=laptop();$('xDevB').innerHTML=rack();
     
@@ -1700,14 +1684,14 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         </div>
   
         <div class="gd-note">
-          💡 <b>قاعدة ذهبية:</b> ما تنتقلش لمرحلة قبل ما تخلّص Labs المرحلة اللي قبلها. وإنجليزي المجال (رقم 11) <b>بيمشي معاك من أول يوم لآخر يوم</b> — كل مصدر تعلّم مهم بالإنجليزي.
+          💡 <b>قاعدة ذهبية:</b> ما تنتقلش لمرحلة قبل ما تخلّص Labs المرحلة اللي قبلها. وإنجليزي المجال <b>بيمشي معاك من أول يوم لآخر يوم</b> — كل مصدر تعلّم مهم بالإنجليزي.
         </div>
       </div>
   
       <!-- 2) المسارات الوظيفية -->
       <div class="gd-block">
         <h3 class="gd-title">ثانيًا: المسارات الوظيفية — اختار وجهتك</h3>
-        <p class="gd-lead">الأرقام جوه الدوائر هي أرقام الكروت بالأسفل. ممكن تبدأ بمسار وتتحول لمسار تاني — المواد متداخلة.</p>
+        <p class="gd-lead">الأرقام جوه الدوائر هي ترتيب الخطوات في كل مسار. ممكن تبدأ بمسار وتتحول لمسار تاني — المواد متداخلة.</p>
   
         <div class="gd-paths">
           <div class="gd-path" style="--c:var(--orange)">
@@ -1784,7 +1768,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         <div class="gd-note">
           🎤 <b>في المقابلة:</b> هيسألوك «حصلت مشكلة؟ إزاي حليتها؟». جاوب بـ <b>الموقف ← اللي عملته ← النتيجة</b>، وبإنجليزي بسيط واثق. مهندس بيشرح بوضوح بيتفوّق على اللي بيحفظ أكتر منه.
         </div>
-        <div class="gd-cta">✨ ابدأ النهاردة بخطوة صغيرة: اختار الكارت الأول بالأسفل واقرأ مساره. رحلة الألف ميل بتبدأ بـ Lab واحد. 💪</div>
+        <div class="gd-cta">✨ ابدأ النهاردة بخطوة صغيرة: اختار أول كارت من المسارات بالأسفل واقرأ مساره. رحلة الألف ميل بتبدأ بـ Lab واحد. 💪</div>
       </div>
     </div>
   
@@ -1804,26 +1788,77 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
 </main>
 
 <!-- ANIMATED GHOST: floating mascot with a fixed, rotating set of tips (auto-advances every 30s, click also advances) -->
-<div class="ghost-container" id="ghostWidget" role="button" tabindex="0" aria-label="نصائح متحركة">
+<style id="cinematic-ghost-style">
+:root{--bright-cyan:#00f6ff;--electric-blue:#0055ff;--matrix-dark:#02040a}
+/* الأبعاد: ديسكتوب 112×132 — موبايل (≤720px) 82×98. غيّر الرقمين هنا فقط لتكبير/تصغير الشبح */
+.cinematic-stage{--gw:112px;--gh:132px;position:fixed;right:60px;bottom:14px;z-index:150;width:var(--gw);height:var(--gh);display:flex;justify-content:center;align-items:center;overflow:visible;cursor:pointer;user-select:none}
+/* الفقاعة: متثبتة من اليمين عشان ماتخرجش برة الشاشة على الموبايل */
+.cinematic-stage .ghost-dialog{position:absolute;z-index:5;right:0;left:auto;top:auto;bottom:calc(100% + 10px);width:max-content;max-width:min(78vw,320px);margin:0;transform-origin:100% 100%;transform:translateY(9px) scale(.94);background:rgba(2,8,20,.94);border-color:rgba(0,246,255,.42);color:#e7fbff;box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 18px rgba(0,246,255,.1)}
+.cinematic-stage.is-speaking .ghost-dialog{opacity:1;transform:translateY(0) scale(1)}
+.energy-mist{position:absolute;width:84%;height:82%;border-radius:50% 50% 0 0;background:var(--electric-blue);filter:blur(28px);opacity:.25;animation:mistPulse 5s ease-in-out infinite alternate;pointer-events:none;z-index:1}
+.dynamic-ghost-wrap{position:relative;width:100%;height:100%;z-index:2;animation:cyberFloat 2.5s ease-in-out infinite;filter:drop-shadow(0 0 13px rgba(0,246,255,.5));transition:filter .2s ease,transform .2s ease}
+.dynamic-ghost-wrap:active{filter:drop-shadow(0 0 38px rgba(0,246,255,.72))}
+.cinematic-svg{display:block;width:100%;height:100%;overflow:visible}
+.particle{animation:particleFly 2s infinite ease-in-out;transform-origin:center}
+.p-fast{animation-duration:1.2s;animation-delay:.2s}.p-slow{animation-duration:2.8s;animation-delay:.6s}.p-delay{animation-duration:1.8s;animation-delay:1.1s}
+.hyper-stream{stroke-dasharray:60;stroke-dashoffset:60;animation:dataStream 1.5s linear infinite}.stream-2{animation-delay:.5s;animation-duration:1.1s}
+@keyframes cyberFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.02)}}
+@keyframes mistPulse{0%{opacity:.2;filter:blur(55px)}100%{opacity:.35;filter:blur(75px)}}
+@keyframes dataStream{from{stroke-dashoffset:60}to{stroke-dashoffset:-60}}
+@keyframes particleFly{0%{transform:translateY(20px) scale(0);opacity:0}50%{opacity:1;transform:translateY(-5px) scale(1.2)}100%{transform:translateY(-35px) scale(0);opacity:0}}
+@media(max-width:720px){.cinematic-stage{--gw:82px;--gh:98px;right:30px;bottom:10px}}
+@media(prefers-reduced-motion:reduce){.energy-mist,.dynamic-ghost-wrap,.particle,.hyper-stream{animation:none!important}}
+</style>
+<div class="ghost-container cinematic-stage" id="ghostWidget" role="button" tabindex="0" aria-label="نصائح متحركة">
   <div class="ghost-dialog" id="ghostDialog"></div>
-  <div class="ghost-wrapper">
-    <svg class="ghost-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <div class="energy-mist" aria-hidden="true"></div>
+  <div class="ghost-wrapper dynamic-ghost-wrap">
+    <svg class="cinematic-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="ghostFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14233f" stop-opacity=".78"/><stop offset="1" stop-color="#060b16" stop-opacity=".72"/></linearGradient>
-        <clipPath id="ghostClip"><path d="M12 104V50C12 28 28 16 50 16C72 16 88 28 88 50V104L79 95L70 104L60 95L50 104L40 95L30 104L21 95Z"/></clipPath>
+        <linearGradient id="cinematicGrad" x1="100" y1="28" x2="100" y2="210" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="20%" stop-color="#00f6ff"/>
+          <stop offset="65%" stop-color="#0055ff"/>
+          <stop offset="100%" stop-color="#001133" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="neonGlow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
-      <path class="ghost-body" d="M12 104V50C12 28 28 16 50 16C72 16 88 28 88 50V104L79 95L70 104L60 95L50 104L40 95L30 104L21 95Z" fill="url(#ghostFill)"/>
-      <g clip-path="url(#ghostClip)" class="ghost-tech">
-        <g class="ghost-hlines"><path class="ghost-hl" d="M10 24H90" style="--i:19"/><path class="ghost-hl" d="M10 28H90" style="--i:18"/><path class="ghost-hl" d="M10 32H90" style="--i:17"/><path class="ghost-hl" d="M10 36H90" style="--i:16"/><path class="ghost-hl" d="M10 40H90" style="--i:15"/><path class="ghost-hl" d="M10 44H90" style="--i:14"/><path class="ghost-hl" d="M10 48H90" style="--i:13"/><path class="ghost-hl" d="M10 52H90" style="--i:12"/><path class="ghost-hl" d="M10 56H90" style="--i:11"/><path class="ghost-hl" d="M10 60H90" style="--i:10"/><path class="ghost-hl" d="M10 64H90" style="--i:9"/><path class="ghost-hl" d="M10 68H90" style="--i:8"/><path class="ghost-hl" d="M10 72H90" style="--i:7"/><path class="ghost-hl" d="M10 76H90" style="--i:6"/><path class="ghost-hl" d="M10 80H90" style="--i:5"/><path class="ghost-hl" d="M10 84H90" style="--i:4"/><path class="ghost-hl" d="M10 88H90" style="--i:3"/><path class="ghost-hl" d="M10 92H90" style="--i:2"/><path class="ghost-hl" d="M10 96H90" style="--i:1"/><path class="ghost-hl" d="M10 100H90" style="--i:0"/></g>
-        <g class="ghost-circuit"><path class="ghost-wire" d="M24 100V88h8V76" pathLength="100"/><path class="ghost-flow" d="M24 100V88h8V76" pathLength="100" style="--i:0"/><path class="ghost-wire" d="M38 96V84" pathLength="100"/><path class="ghost-flow" d="M38 96V84" pathLength="100" style="--i:1"/><path class="ghost-wire" d="M50 100V80h-6V68" pathLength="100"/><path class="ghost-flow" d="M50 100V80h-6V68" pathLength="100" style="--i:2"/><path class="ghost-wire" d="M62 96V86h8V74" pathLength="100"/><path class="ghost-flow" d="M62 96V86h8V74" pathLength="100" style="--i:3"/><path class="ghost-wire" d="M76 100V82h-6V70" pathLength="100"/><path class="ghost-flow" d="M76 100V82h-6V70" pathLength="100" style="--i:4"/><circle class="ghost-node" cx="32" cy="76" r="1.9" style="--i:0"/><circle class="ghost-node" cx="38" cy="84" r="1.9" style="--i:1"/><circle class="ghost-node" cx="44" cy="68" r="1.9" style="--i:2"/><circle class="ghost-node" cx="70" cy="74" r="1.9" style="--i:3"/><circle class="ghost-node" cx="70" cy="70" r="1.9" style="--i:4"/></g>
+
+      <!-- الجسم: عرض 152 × ارتفاع 170 وحدة = حوالي 85 × 94px عند حجم 112×132 -->
+      <path d="M24,100 C24,4 176,4 176,100 L176,196 L152,184 L126,198 L100,184 L74,198 L48,184 L24,196 Z"
+            fill="url(#cinematicGrad)" stroke="#00f6ff" stroke-width="1.5" opacity="0.85" />
+
+      <g id="ghostEyes" filter="url(#neonGlow)">
+        <ellipse id="eyeL" cx="72" cy="88" rx="12" ry="22" fill="none" stroke="#00f6ff" stroke-width="3" />
+        <ellipse cx="72" cy="88" rx="4.8" ry="11" fill="#ffffff" />
+        <ellipse id="eyeR" cx="128" cy="88" rx="12" ry="22" fill="none" stroke="#00f6ff" stroke-width="3" />
+        <ellipse cx="128" cy="88" rx="4.8" ry="11" fill="#ffffff" />
       </g>
-      <g id="ghostEyes">
-        <ellipse id="eyeL" class="ghost-eye" cx="39" cy="46" rx="6" ry="9.5"/>
-        <ellipse id="eyeR" class="ghost-eye" cx="61" cy="46" rx="6" ry="9.5"/>
+
+      <g stroke="#00f6ff" stroke-width="2" stroke-linecap="round" filter="url(#neonGlow)">
+        <path class="hyper-stream" d="M40,186 L40,214" />
+        <path class="hyper-stream stream-2" d="M68,182 L68,230" />
+        <path class="hyper-stream" d="M100,186 L100,222" />
+        <path class="hyper-stream stream-2" d="M132,182 L132,232" />
+        <path class="hyper-stream" d="M160,186 L160,212" />
       </g>
+
+      <circle class="particle p-fast" cx="48" cy="208" r="4" fill="#00f6ff" />
+      <circle class="particle p-slow" cx="66" cy="226" r="5" fill="#ffffff" filter="url(#neonGlow)"/>
+      <circle class="particle p-delay" cx="84" cy="212" r="3" fill="#00f6ff" />
+      <circle class="particle p-fast" cx="100" cy="232" r="5.5" fill="#00f6ff" />
+      <circle class="particle p-delay" cx="118" cy="214" r="3.5" fill="#ffffff" />
+      <circle class="particle p-slow" cx="136" cy="228" r="4.5" fill="#00f6ff" filter="url(#neonGlow)"/>
+      <circle class="particle p-fast" cx="152" cy="206" r="3" fill="#00f6ff" />
+
+      <circle class="particle p-slow" cx="100" cy="22" r="2" fill="#00f6ff" />
+      <circle class="particle p-delay" cx="70" cy="26" r="2.5" fill="#ffffff" />
+      <circle class="particle p-fast" cx="130" cy="26" r="2" fill="#00f6ff" />
     </svg>
   </div>
-  <div class="ghost-shadow"></div>
 </div>
 
 <footer id="contact">
@@ -1865,7 +1900,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
           <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.921.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
         </svg>
-        <span> GitHub</span>
+        <span>GitHub</span>
       </a>
 
     </div>
@@ -2415,7 +2450,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
     function blinkOnce(){
       if(!eyeL || !eyeR) return;
       eyeL.setAttribute('ry','1.3'); eyeR.setAttribute('ry','1.3');
-      setTimeout(()=>{ eyeL.setAttribute('ry','9.5'); eyeR.setAttribute('ry','9.5'); }, 110);
+      setTimeout(()=>{ eyeL.setAttribute('ry','22'); eyeR.setAttribute('ry','22'); }, 110);
     }
     function scheduleBlink(){
       const delay = 2600 + Math.random()*3400;
@@ -2484,7 +2519,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
           io.unobserve(en.target);
         }
       });
-    }, {threshold:.12});
+    }, {threshold:0, rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('section, .dash').forEach(s => {
       s.style.opacity = '0';
       s.style.transform = 'perspective(1000px) rotateX(6deg) translateY(24px)';
