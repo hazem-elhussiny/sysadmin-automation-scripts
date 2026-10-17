@@ -949,10 +949,15 @@ section{scroll-margin-top:84px}
 @media(max-width:720px){footer{padding-bottom:150px}}
 </style>
 <style id="plexus-bg-css">
-/* الخلفية الجديدة: تدرج أزرق من المنتصف زي الصورة */
 #plexBg{
   position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
-  background:radial-gradient(ellipse 85% 75% at 50% 45%,#0d57b8 0%,#08387f 34%,#04204f 66%,#020e2b 100%);
+  background:#010a10;
+}
+/* الليلي: أسود مزرق عميق + توهج تركواز خفيف في الركن العلوي الأيمن زي الصورة */
+html[data-theme="night"] #plexBg{
+  background:
+    radial-gradient(ellipse 58% 46% at 100% 0%,rgba(0,86,100,.55) 0%,rgba(0,44,58,.26) 46%,transparent 78%),
+    linear-gradient(165deg,#02131c 0%,#010b11 46%,#00050a 100%);
 }
 #plexBg canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -961,13 +966,13 @@ html[data-theme="day"] #plexBg{
   background:radial-gradient(ellipse 85% 75% at 50% 45%,#ffffff 0%,#e3edfc 45%,#c4d8f5 100%);
 }
 
-/* توافق ألوان الكروت والهيدر مع الخلفية الزرقاء (وضع الليل) */
+/* توافق ألوان الكروت والهيدر مع الخلفية الداكنة (وضع الليل فقط) */
 html[data-theme="night"]{
-  --bg:#031633; --panel:#0a1f42; --panel-solid:#051229; --panel-2:#10294f;
-  --line:rgba(120,180,255,.12);
+  --bg:#020b11; --panel:rgba(6,19,28,.9); --panel-solid:#030d14; --panel-2:#0a1e2b;
+  --line:rgba(0,230,215,.10);
 }
 html[data-theme="night"] header.nav{
-  background:rgba(3,18,46,.78);
+  background:rgba(2,10,15,.84);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 }
 </style>
@@ -982,7 +987,7 @@ html.lite *,html.lite *::before,html.lite *::after{-webkit-backdrop-filter:none!
 html.lite main{perspective:none}
 html.lite .depth{transform:none!important;transform-style:flat;will-change:auto}
 html.lite header.nav{box-shadow:0 2px 8px var(--shadow-d)}
-html.lite[data-theme="night"] header.nav{background:rgba(3,18,46,.95)}
+html.lite[data-theme="night"] header.nav{background:rgba(2,10,15,.96)}
 html.lite .btn-primary,html.lite .nav-cta,html.lite .social-btn,html.lite .svc-status .d{animation:none!important}
 html.lite .social-btn::after{display:none}
 html.lite .feed-line{animation:none;opacity:1}
@@ -1013,62 +1018,6 @@ html.lite .nga .g-pkt{display:none}
 html.lite .nga .g-padc{animation:none;filter:none}
 html.lite .nga .g-eye{filter:none}
 html.lite .nga[data-state="scan"] .nga-float,html.lite .nga[data-state="alert"] .nga-float{animation:ngaFloat 4s ease-in-out infinite;filter:none}
-</style>
-<style id="night-harmony">
-/* =====================================================================
-   توافق ألوان الوضع الليلي مع الخلفية الزرقاء
-   كل القواعد هنا مقيّدة بـ data-theme="night" — الوضع النهاري ما اتلمسش
-====================================================================== */
-html[data-theme="night"]{
-  --bg:#031633;
-  --panel:rgba(8,29,64,.88);
-  --panel-solid:#061a3a;
-  --panel-2:#0f2c58;
-  --line:rgba(130,190,255,.16);
-  --text:#eaf3ff; --text-on-dark:#eaf3ff;
-  --muted:#93b2dc;
-  --accent:#56d4ff; --accent-dim:#175c85;
-  --amber:#ffc46b; --pink:#ff7fae; --cyan:#4cc2ff;
-  --purple:#a99bff; --rose:#ff7b93; --emerald:#3ddcb0; --orange:#ff9d5c;
-  --quantum:#8f9bff; --quantum-dim:#3a3fb8;
-  --shadow-l:rgba(120,180,255,.05); --shadow-d:rgba(0,8,28,.62);
-}
-
-/* حواف زجاجية خفيفة للكروت */
-html[data-theme="night"] .hud:not(:hover){border-color:rgba(130,190,255,.15)}
-html[data-theme="night"] .hud:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
-
-/* توهج الأزرار الرئيسية بلون السماء بدل الأخضر */
-@keyframes softPulseAccentN{
-  0%,100%{box-shadow:5px 5px 10px var(--shadow-d),-5px -5px 10px var(--shadow-l)}
-  50%{box-shadow:5px 5px 10px var(--shadow-d),-5px -5px 10px var(--shadow-l),0 0 16px rgba(86,212,255,.45)}
-}
-html[data-theme="night"] .btn-primary,html[data-theme="night"] .nav-cta{animation-name:softPulseAccentN}
-html[data-theme="night"] ::selection{background:var(--accent);color:#031633}
-
-/* خريطة الشبكة */
-html[data-theme="night"] #topology .tstage{background:radial-gradient(ellipse at 50% 35%,#0c2f61 0%,#05183a 72%);border-color:rgba(130,190,255,.2)}
-html[data-theme="night"] #topology .ip{fill:#8fb0dc}
-html[data-theme="night"] #topology .zone{fill:#6f93c4}
-html[data-theme="night"] #topology #tg2 path{stroke:#56d4ff}
-html[data-theme="night"] #topology #tz polygon{stroke:#56d4ff;fill:rgba(86,212,255,.035)}
-html[data-theme="night"] #topology .tsel{stroke:#56d4ff}
-html[data-theme="night"] #topology .dev:hover{filter:brightness(1.3) drop-shadow(0 0 10px rgba(86,212,255,.5))}
-
-/* قسم OSI: من البنفسجي الأسود إلى أزرق عميق */
-html[data-theme="night"] #osi .osx{
-  border-color:rgba(130,190,255,.22);
-  background:
-    radial-gradient(ellipse at 15% 0%,rgba(70,130,255,.2),transparent 55%),
-    radial-gradient(ellipse at 90% 100%,rgba(30,190,255,.16),transparent 55%),
-    linear-gradient(rgba(120,185,255,.05) 1px,transparent 1px) 0 0/28px 28px,
-    linear-gradient(90deg,rgba(120,185,255,.05) 1px,transparent 1px) 0 0/28px 28px,#061a3a;
-  box-shadow:0 20px 60px rgba(0,8,28,.5),inset 0 0 80px rgba(86,180,255,.05);
-}
-html.lite[data-theme="night"] #osi .osx{background:#061a3a;box-shadow:0 8px 24px rgba(0,8,28,.45)}
-html[data-theme="night"] #osi .xbtn{background:linear-gradient(120deg,#2f6bff,#4f46e5,#0891b2);box-shadow:0 10px 30px rgba(47,107,255,.4)}
-html[data-theme="night"] #osi .xmode{background:linear-gradient(120deg,#0891b2,#0284c7);box-shadow:0 10px 30px rgba(8,145,178,.35)}
-html[data-theme="night"] #osi .xwl{color:#8fb0dc}
 </style>
 </head>
 <body class="gated">
@@ -3275,19 +3224,16 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
 
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var root=document.documentElement;
-  var LITE=!!window.LITE,DEG=LITE?3:5;
+  var LITE=!!window.LITE;
   var W=0,H=0,DPR=1,nodes=[],links=[],pulses=[];
   var mouse={x:-9999,y:-9999,on:false};
   var raf=0,last=0,spawn=0,resizeT=0,sprites={};
 
-  var PAL={
-    night:{line:[125,205,255],core:[255,255,255],glow:[80,185,255],lineA:.6},
-    day:{line:[37,99,235],core:[37,99,235],glow:[59,130,246],lineA:.5}
-  };
+  var PAL={day:{line:[37,99,235],core:[37,99,235],glow:[59,130,246],lineA:.5}};
   function theme(){return root.getAttribute('data-theme')==='day'?'day':'night'}
   function rnd(a,b){return a+Math.random()*(b-a)}
 
-  /* نقطة مضيئة جاهزة (أسرع من shadowBlur) */
+  /* ================= النهاري: الشبكة الأصلية (ما اتغيرتش) ================= */
   function sprite(th){
     if(sprites[th]) return sprites[th];
     var p=PAL[th],c=document.createElement('canvas');
@@ -3301,7 +3247,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
     g.fillStyle=gr;g.fillRect(0,0,64,64);
     return (sprites[th]=c);
   }
-
   function mk(x,y){
     var big=Math.random()<.14;
     nodes.push({
@@ -3314,9 +3259,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
       x:x,y:y,ox:0,oy:0,deg:0
     });
   }
-
-  /* عناقيد من النقاط + نقاط متفرقة، والمنتصف أهدى */
-  function build(){
+  function buildDay(){
     nodes=[];pulses=[];
     var small=W<700,k=Math.max(.6,Math.min(1.3,W/1300)),nc=LITE?3:(small?4:6),i,j;
     for(i=0;i<nc;i++){
@@ -3332,23 +3275,9 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
     var loose=LITE?Math.round(Math.max(8,Math.min(18,W*H/40000))):Math.round(Math.max(14,Math.min(46,W*H/24000)));
     for(i=0;i<loose;i++) mk(rnd(0,W),rnd(0,H));
   }
-
-  function resize(){
-    var oldW=W;
-    W=window.innerWidth;H=window.innerHeight;
-    DPR=LITE?1:Math.min(window.devicePixelRatio||1,1.5);
-    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-    if(W!==oldW||!nodes.length) build();
-    if(reduce) draw(0,0);
-  }
-
-  function draw(t,dt){
-    var th=theme(),p=PAL[th],spr=sprite(th),n=nodes.length,i,j,a,b,dx,dy,d,d2,f;
-    var LINK=LITE?130:(W<700?150:210),L2=LINK*LINK,R=150,lc=p.line.join(',');
-    ctx.clearRect(0,0,W,H);
-
-    /* تحديث المواضع (حركة هادئة + انجذاب خفيف للمؤشر) */
+  function drawDay(t,dt){
+    var p=PAL.day,spr=sprite('day'),n=nodes.length,i,j,a,b,dx,dy,d,d2,f;
+    var LINK=LITE?130:(W<700?150:210),L2=LINK*LINK,R=150,lc=p.line.join(','),DEG=LITE?3:5;
     for(i=0;i<n;i++){
       a=nodes[i];
       var x=a.hx+a.ax*Math.sin(t*a.wx+a.px),y=a.hy+a.ay*Math.sin(t*a.wy+a.py),tx=0,ty=0;
@@ -3360,8 +3289,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
       a.ox+=(tx-a.ox)*s;a.oy+=(ty-a.oy)*s;
       a.x=x+a.ox;a.y=y+a.oy;a.deg=0;
     }
-
-    /* الخطوط بين النقاط القريبة */
     links.length=0;
     ctx.lineWidth=.8;ctx.lineCap='round';
     for(i=0;i<n;i++){
@@ -3377,8 +3304,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         a.deg++;b.deg++;links.push(i,j);
       }
     }
-
-    /* خطوط من المؤشر للنقاط القريبة */
     if(mouse.on){
       for(i=0;i<n;i++){
         a=nodes[i];dx=mouse.x-a.x;dy=mouse.y-a.y;d=Math.sqrt(dx*dx+dy*dy);
@@ -3388,8 +3313,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         }
       }
     }
-
-    /* نبضات بيانات صغيرة تمشي على الخطوط */
     if(!reduce&&!LITE){
       spawn-=dt;
       if(spawn<=0&&links.length&&pulses.length<14){
@@ -3405,8 +3328,6 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
         ctx.drawImage(spr,A.x+(B.x-A.x)*q.t-8,A.y+(B.y-A.y)*q.t-8,16,16);
       }
     }
-
-    /* النقاط المضيئة */
     for(i=0;i<n;i++){
       a=nodes[i];
       var sz=a.r*8;
@@ -3415,6 +3336,174 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
     }
     if(mouse.on){ctx.globalAlpha=1;ctx.drawImage(spr,mouse.x-14,mouse.y-14,28,28)}
     ctx.globalAlpha=1;
+  }
+
+  /* ================= الليلي: كرة نقاط ثلاثية الأبعاد ================= */
+  var G=null,mp={x:0,y:0};
+  var cY=1,sY=0,cT=1,sT=0,cP=1,sP=0,rx=0,ry=0,rz=0;
+
+  function nsprite(key,stops){
+    if(sprites[key]) return sprites[key];
+    var c=document.createElement('canvas');c.width=c.height=64;
+    var g=c.getContext('2d'),gr=g.createRadialGradient(32,32,0,32,32,32);
+    for(var i=0;i<stops.length;i++) gr.addColorStop(stops[i][0],stops[i][1]);
+    g.fillStyle=gr;g.fillRect(0,0,64,64);
+    return (sprites[key]=c);
+  }
+  function dotSpr(){return nsprite('dot',[[0,'rgba(200,255,250,1)'],[.17,'rgba(60,240,225,1)'],[.34,'rgba(0,215,205,.42)'],[1,'rgba(0,200,190,0)']])}
+  function glowSpr(){return nsprite('glow',[[0,'rgba(255,255,255,1)'],[.1,'rgba(255,255,255,1)'],[.2,'rgba(130,228,255,.75)'],[.5,'rgba(40,170,240,.2)'],[1,'rgba(30,150,235,0)']])}
+  function starSpr(){return nsprite('star',[[0,'rgba(255,255,255,1)'],[.25,'rgba(215,245,255,.95)'],[.55,'rgba(90,205,255,.28)'],[1,'rgba(60,180,255,0)']])}
+
+  /* تدوير نقطة: لف حوالين محور الكرة، ميل المحور، ثم زاوية النظر من فوق */
+  function rot(x,y,z){
+    var x1=x*cY+z*sY,z1=-x*sY+z*cY;
+    var x2=x1*cT-y*sT,y2=x1*sT+y*cT;
+    rx=x2;ry=y2*cP-z1*sP;rz=y2*sP+z1*cP;
+  }
+
+  function buildGlobe(){
+    var small=W<700,i,j,lat,lon,ph,c,s,th;
+    var g={pts:[],lines:[],gl:[],stars:[],rings:[]};
+    g.R=small?Math.min(W*.66,H*.3):Math.min(H*.53,W*.3);
+    g.cx=small?-W*.05:W*.085;
+    g.cy=small?H*.13:H*.44;
+    g.am=small?.72:1;
+    /* شبكة النقاط */
+    var step=LITE?8:4.8;
+    for(lat=-76;lat<=76;lat+=step){
+      ph=lat*Math.PI/180;c=Math.cos(ph);s=Math.sin(ph);
+      var nl=Math.max(10,Math.round(360/step*c)),off=(Math.round((lat+90)/step)&1)?.5:0;
+      for(j=0;j<nl;j++){th=(j+off)/nl*6.2832;g.pts.push(c*Math.cos(th),s,c*Math.sin(th))}
+    }
+    /* خطوط العرض والطول */
+    var gs=LITE?20:15,ss=LITE?9:5,pl;
+    for(lat=-75;lat<=75;lat+=gs){
+      ph=lat*Math.PI/180;c=Math.cos(ph);s=Math.sin(ph);pl=[];
+      for(lon=0;lon<=360;lon+=ss){th=lon*Math.PI/180;pl.push(c*Math.cos(th),s,c*Math.sin(th))}
+      g.lines.push(pl);
+    }
+    for(lon=0;lon<360;lon+=gs){
+      th=lon*Math.PI/180;pl=[];
+      for(lat=-90;lat<=90;lat+=ss){ph=lat*Math.PI/180;c=Math.cos(ph);pl.push(c*Math.cos(th),Math.sin(ph),c*Math.sin(th))}
+      g.lines.push(pl);
+    }
+    /* نقاط متوهجة على سطح الكرة */
+    var ng=LITE?7:13;
+    for(i=0;i<ng;i++){
+      ph=rnd(-60,65)*Math.PI/180;th=rnd(0,6.283);c=Math.cos(ph);
+      g.gl.push({x:c*Math.cos(th),y:Math.sin(ph),z:c*Math.sin(th),s:i<3?rnd(.1,.14):rnd(.035,.07),p:rnd(0,6.283),w:rnd(.5,1.1)});
+    }
+    /* حلقات مدارية رفيعة حوالين الكرة */
+    var rs=[[1.24,1.15,.35,.05],[1.52,.95,-.55,-.035],[1.92,1.35,.9,.025]],seg=LITE?64:110;
+    for(i=0;i<rs.length;i++) g.rings.push({k:rs[i][0],tx:rs[i][1],tz:rs[i][2],sp:rs[i][3],n:seg});
+    /* جسيمات طايرة: أغلبها على اليمين */
+    var nsm=LITE?28:64,nbig=LITE?7:14;
+    for(i=0;i<nsm+nbig;i++){
+      var right=Math.random()<.8;
+      g.stars.push({
+        x:right?rnd(.24,1.02)*W:rnd(0,W),y:rnd(0,H),d:rnd(.25,1),
+        big:i>=nsm,r:i>=nsm?rnd(12,24):rnd(3,7),
+        w:rnd(.4,1.3),p:rnd(0,6.283),vx:rnd(-3,3),vy:rnd(-5,2)
+      });
+    }
+    return g;
+  }
+
+  function drawNight(t,dt){
+    var g=G,R=g.R,i,j,pl,p,n,vis,pv,sx,sy,z,k;
+    var nx=mouse.on?(mouse.x/W-.5)*2:0,ny=mouse.on?(mouse.y/H-.5)*2:0;
+    k=Math.min(1,dt*3.2);mp.x+=(nx-mp.x)*k;mp.y+=(ny-mp.y)*k;
+    var cx=g.cx+mp.x*14,cy=g.cy+mp.y*10;
+    var yaw=t*.05+mp.x*.1,tilt=-.38,pitch=.5+mp.y*.06;
+    cY=Math.cos(yaw);sY=Math.sin(yaw);cT=Math.cos(tilt);sT=Math.sin(tilt);cP=Math.cos(pitch);sP=Math.sin(pitch);
+
+    /* الجسيمات الطايرة (خلف الكرة) */
+    var star=starSpr(),glow=glowSpr();
+    for(i=0;i<g.stars.length;i++){
+      var u=g.stars[i];
+      u.x+=u.vx*dt;u.y+=u.vy*dt;
+      if(u.x<-30)u.x=W+30;else if(u.x>W+30)u.x=-30;
+      if(u.y<-30)u.y=H+30;else if(u.y>H+30)u.y=-30;
+      var tw=.55+.45*Math.sin(t*u.w+u.p);
+      ctx.globalAlpha=(u.big?1:.85)*tw*(.55+.45*u.d);
+      var ss=u.r*(.7+.5*u.d);
+      ctx.drawImage(u.big?glow:star,u.x+mp.x*28*u.d-ss,u.y+mp.y*18*u.d-ss,ss*2,ss*2);
+    }
+
+    /* الحلقات المدارية */
+    ctx.lineWidth=.9;
+    for(i=0;i<g.rings.length;i++){
+      var rg=g.rings[i],sp=t*rg.sp,cs=Math.cos(sp),sn=Math.sin(sp),cx1=Math.cos(rg.tx),sx1=Math.sin(rg.tx),cz1=Math.cos(rg.tz),sz1=Math.sin(rg.tz);
+      var fx=[],fy=[],fz=[];
+      for(j=0;j<=rg.n;j++){
+        var a=j/rg.n*6.2832,px=Math.cos(a)*rg.k,pz=Math.sin(a)*rg.k,py=0;
+        var qx=px*cs+pz*sn,qz=-px*sn+pz*cs;               /* لف حوالين Y */
+        var qy=py*cx1-qz*sx1,q2=py*sx1+qz*cx1;            /* ميل X */
+        var wx=qx*cz1-qy*sz1,wy=qx*sz1+qy*cz1;           /* ميل Z */
+        fx.push(cx+wx*R*.98);fy.push(cy-(wy*cP-q2*sP)*R*.98);fz.push(wy*sP+q2*cP);
+      }
+      var passes=[[1,'rgba(0,225,215,.42)'],[0,'rgba(0,190,185,.10)']];
+      for(p=0;p<2;p++){
+        ctx.strokeStyle=passes[p][1];ctx.beginPath();pv=false;
+        for(j=0;j<=rg.n;j++){
+          vis=passes[p][0]?fz[j]>0:fz[j]<=0;
+          if(vis){if(pv)ctx.lineTo(fx[j],fy[j]);else ctx.moveTo(fx[j],fy[j])}
+          pv=vis;
+        }
+        ctx.stroke();
+      }
+    }
+
+    /* خطوط الطول والعرض (الوش الأمامي بس) */
+    ctx.globalAlpha=1;ctx.lineWidth=.8;ctx.strokeStyle='rgba(0,215,205,.34)';ctx.beginPath();
+    for(i=0;i<g.lines.length;i++){
+      pl=g.lines[i];pv=false;
+      for(j=0;j<pl.length;j+=3){
+        rot(pl[j],pl[j+1],pl[j+2]);
+        vis=rz>.03;
+        if(vis){sx=cx+rx*R;sy=cy-ry*R;if(pv)ctx.lineTo(sx,sy);else ctx.moveTo(sx,sy)}
+        pv=vis;
+      }
+    }
+    ctx.stroke();
+
+    /* نقاط الكرة */
+    var dot=dotSpr(),pts=g.pts,base=R*.021;
+    for(i=0;i<pts.length;i+=3){
+      rot(pts[i],pts[i+1],pts[i+2]);
+      z=rz;if(z<=.03) continue;
+      ctx.globalAlpha=(.22+.78*z)*g.am;
+      var d=base*(.5+.8*z);
+      ctx.drawImage(dot,cx+rx*R-d,cy-ry*R-d,d*2,d*2);
+    }
+
+    /* عقد متوهجة على الكرة */
+    for(i=0;i<g.gl.length;i++){
+      var q=g.gl[i];rot(q.x,q.y,q.z);
+      if(rz<=.08) continue;
+      ctx.globalAlpha=(.55+.45*Math.sin(t*q.w+q.p))*Math.min(1,rz*1.6);
+      var gsz=R*q.s;
+      ctx.drawImage(glow,cx+rx*R-gsz,cy-ry*R-gsz,gsz*2,gsz*2);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  function build(){buildDay();G=buildGlobe()}
+
+  function resize(){
+    var oldW=W;
+    W=window.innerWidth;H=window.innerHeight;
+    DPR=LITE?1:Math.min(window.devicePixelRatio||1,1.5);
+    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    if(W!==oldW||!nodes.length||!G) build();
+    if(reduce) draw(0,0);
+  }
+
+  function draw(t,dt){
+    ctx.clearRect(0,0,W,H);
+    ctx.globalAlpha=1;
+    if(theme()==='day') drawDay(t,dt); else drawNight(t,dt);
   }
 
   function frame(ts){
@@ -3443,6 +3532,12 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
   resize();
   if(!reduce) raf=requestAnimationFrame(frame);
 })();
+</script>
+<style id="perf-offscreen-css">.perf-off, .perf-off *{animation-play-state:paused!important}</style>
+<script id="perf-offscreen-js">
+(function(){if(!('IntersectionObserver' in window))return;
+var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('perf-off',!e.isIntersecting)})},{rootMargin:'120px 0px'});
+document.querySelectorAll('body section, body footer').forEach(function(el){io.observe(el)});})();
 </script>
 </body>
 </html>
