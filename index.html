@@ -3637,7 +3637,7 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
   function draw(t,dt){
     ctx.clearRect(0,0,W,H);
     ctx.globalAlpha=1;
-    if(theme()==='day') drawDay(t,dt); else if(!window.__cy) drawNight(t,dt);
+    if(theme()==='day'){if(!window.__cyOff)drawDay(t,dt)} else if(!window.__cy) drawNight(t,dt);
   }
 
   function frame(ts){
@@ -3801,8 +3801,11 @@ html[data-theme="night"].cy #cyBg{display:block}
 <style id="globe3d-css">
 html[data-theme="night"].gl3 #plexBg{background:radial-gradient(ellipse 62% 95% at 16% 50%,rgba(8,52,190,.5) 0%,rgba(4,26,110,.28) 48%,rgba(2,8,40,0) 80%),linear-gradient(90deg,#020b30 0%,#031244 28%,#020a2a 62%,#01040f 100%)}
 html[data-theme="night"].gl3 #plexBg canvas:not(#gl3Bg){display:none}
-#gl3Bg{position:absolute;inset:0;width:100%;height:100%;display:none}
-html[data-theme="night"].gl3 #gl3Bg{display:block}
+#gl3Bg{position:absolute;inset:0;width:100%;height:100%}
+#plexBg #gl3Bg,#plexBg #cyBg{display:none}
+html.gl3 #plexBg #gl3Bg{display:block}
+html[data-theme="night"].cy:not(.gl3) #plexBg #cyBg{display:block}
+html.gl3 #plexBg canvas:not(#gl3Bg){display:none}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script id="globe3d-js">
@@ -3818,7 +3821,7 @@ html[data-theme="night"].gl3 #gl3Bg{display:block}
   renderer.setClearColor(0x000000,0);
   var scene=new T.Scene(),cam=new T.OrthographicCamera(0,100,100,0,-6000,6000);cam.position.z=10;
   var BL={transparent:true,depthWrite:false,depthTest:false,blending:T.CustomBlending,blendEquation:T.AddEquation,blendSrc:T.OneFactor,blendDst:T.OneFactor,blendSrcAlpha:T.OneFactor,blendDstAlpha:T.OneFactor};
-  var U={uT:{value:0},uPR:{value:1},uR:{value:500},uC:{value:new T.Vector2(0,0)},uM:{value:new T.Vector2(-9999,-9999)},uAlpha:{value:1}};
+  var U={uDay:{value:0},uT:{value:0},uPR:{value:1},uR:{value:500},uC:{value:new T.Vector2(0,0)},uM:{value:new T.Vector2(-9999,-9999)},uAlpha:{value:1}};
   /* ---------- Shaders ---------- */
   var VG='attribute float aS;attribute float aA;attribute float aC;varying float vA;varying float vC;uniform float uT,uPR,uR,uAlpha;uniform vec2 uM;'+
    'void main(){vec4 wp=modelMatrix*vec4(position,1.);float f=wp.z/uR;float rim=pow(1.-min(abs(f),1.),2.5);'+
@@ -3826,25 +3829,29 @@ html[data-theme="night"].gl3 #gl3Bg{display:block}
    'float mb=smoothstep(190.,0.,distance(wp.xy,uM));'+
    'vA=aA*vis*tw*(1.+1.6*rim)*(1.+1.0*mb)*uAlpha*1.35;vC=aC+rim*.45+mb*.3;'+
    'gl_Position=projectionMatrix*viewMatrix*wp;gl_PointSize=max(1.,aS*uPR*(.75+.4*max(f,0.)+.5*rim)*(1.+.5*mb));}';
-  var FP='varying float vA;varying float vC;void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.)discard;'+
-   'float core=pow(1.-d,1.6),halo=pow(1.-d,3.);vec3 col=mix(vec3(.08,.36,1.),vec3(.3,.88,1.),clamp(vC,0.,1.));'+
-   'col=mix(col,vec3(1.),core*core*.65);vec3 o=col*(core*.85+halo*.6)*vA;gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
+  var FP='varying float vA;varying float vC;uniform float uDay;void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.)discard;'+
+   'float core=pow(1.-d,1.6),halo=pow(1.-d,3.);vec3 col=mix(mix(vec3(.08,.36,1.),vec3(.3,.88,1.),clamp(vC,0.,1.)),mix(vec3(.03,.2,.8),vec3(.08,.45,1.),clamp(vC,0.,1.)),uDay);'+
+   'col=mix(col,mix(vec3(1.),vec3(.1,.38,.95),uDay),core*core*.65);vec3 o=col*(core*.85+halo*.6)*vA*(1.+.6*uDay);gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
   var VL='attribute float aA;varying float vA;uniform float uR,uAlpha;void main(){vec4 wp=modelMatrix*vec4(position,1.);float f=wp.z/uR;'+
    'vA=aA*mix(.12,1.,smoothstep(-.25,.7,f))*(1.+1.2*pow(1.-min(abs(f),1.),2.5))*uAlpha;gl_Position=projectionMatrix*viewMatrix*wp;}';
-  var FL='varying float vA;void main(){vec3 o=vec3(.14,.45,1.)*vA;gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
+  var FL='varying float vA;uniform float uDay;void main(){vec3 o=mix(vec3(.14,.45,1.),vec3(.08,.3,.9),uDay)*vA*(1.+.6*uDay);gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
   var VR='attribute float aAng;attribute float aS;varying float vA;uniform float uT,uPR,uR,uSp,uAlpha,uLine;uniform vec2 uC;'+
    'void main(){vec4 wp=modelMatrix*vec4(position,1.);float behind=step(wp.z,0.)*step(length(wp.xy-uC),uR*.995);'+
    'float head=fract(aAng-uT*uSp);float tr=pow(1.-head,5.);vA=(.24+.9*tr)*(1.-.88*behind)*uAlpha*(uLine>.5?.28:1.);'+
    'gl_Position=projectionMatrix*viewMatrix*wp;gl_PointSize=max(1.,aS*uPR*(.7+1.7*tr));}';
-  var FR='varying float vA;void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.)discard;float core=pow(1.-d,1.5);'+
-   'vec3 o=mix(vec3(.1,.45,1.),vec3(.7,.95,1.),core*core)*(core+.4*(1.-d))*vA;gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
-  var FRL='varying float vA;void main(){vec3 o=vec3(.14,.5,1.)*vA;gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
+  var FR='varying float vA;uniform float uDay;void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.)discard;float core=pow(1.-d,1.5);'+
+   'vec3 o=mix(mix(vec3(.1,.45,1.),vec3(.7,.95,1.),core*core),mix(vec3(.05,.3,.9),vec3(.1,.4,1.),core*core),uDay)*(core+.4*(1.-d))*vA*(1.+.5*uDay);gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
+  var FRL='varying float vA;uniform float uDay;void main(){vec3 o=mix(vec3(.14,.5,1.),vec3(.08,.32,.9),uDay)*vA*(1.+.6*uDay);gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}';
+  var MATS=[];
   function mat(v,f,extra){var u={};for(var k in U)u[k]=U[k];for(k in extra)u[k]={value:extra[k]};
-    return new T.ShaderMaterial(Object.assign({uniforms:u,vertexShader:v,fragmentShader:f},BL))}
+    var m=new T.ShaderMaterial(Object.assign({uniforms:u,vertexShader:v,fragmentShader:f},BL));MATS.push(m);return m}
+  /* ليلي: دمج إضافي (توهج) — نهاري: دمج عادي بألوان زرقاء داكنة */
+  function applyTheme(){var day=root.getAttribute('data-theme')==='day';U.uDay.value=day?1:0;
+    MATS.forEach(function(m){m.blendDst=m.blendDstAlpha=day?T.OneMinusSrcAlphaFactor:T.OneFactor})}
   /* ---------- هالة الغلاف الجوي ---------- */
   var halo=new T.Mesh(new T.PlaneGeometry(1,1),mat('varying vec2 vP;uniform vec2 uC;void main(){vec4 wp=modelMatrix*vec4(position,1.);vP=wp.xy;gl_Position=projectionMatrix*viewMatrix*wp;}',
-   'varying vec2 vP;uniform vec2 uC;uniform float uR;void main(){float d=length(vP-uC)/uR;float e=exp(-pow((d-1.)/.14,2.))*.55+exp(-pow((d-1.)/.55,2.))*.2*step(1.,d)+(1.-smoothstep(0.,1.,d))*.07;'+
-   'vec3 o=vec3(.1,.42,1.)*e;gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}',{}));
+   'varying vec2 vP;uniform vec2 uC;uniform float uR,uDay;void main(){float d=length(vP-uC)/uR;float e=exp(-pow((d-1.)/.14,2.))*.55+exp(-pow((d-1.)/.55,2.))*.2*step(1.,d)+(1.-smoothstep(0.,1.,d))*.07;'+
+   'vec3 o=mix(vec3(.1,.42,1.),vec3(.2,.45,1.),uDay)*e*(1.-.35*uDay);gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}',{}));
   halo.renderOrder=0;scene.add(halo);
   /* ---------- الكرة ---------- */
   var tilt=new T.Group(),spin=new T.Group(),gRoot=new T.Group();gRoot.add(tilt);tilt.add(spin);scene.add(gRoot);
@@ -3919,7 +3926,7 @@ html[data-theme="night"].gl3 #gl3Bg{display:block}
     renderer.render(scene,cam)}
   function frame(ts){
     raf=requestAnimationFrame(frame);
-    if(document.body.classList.contains('gated')||root.getAttribute('data-theme')==='day')return;
+    if(document.body.classList.contains('gated'))return;
     if(LITE&&ts-last<32)return;
     var dt=Math.min(.05,(ts-last)/1000||.016);last=ts;render(ts/1000,dt)}
   function start(){if(running||reduce)return;running=true;last=0;raf=requestAnimationFrame(frame)}
@@ -3932,6 +3939,7 @@ html[data-theme="night"].gl3 #gl3Bg{display:block}
   window.addEventListener('resize',function(){clearTimeout(resizeT);resizeT=setTimeout(function(){layout();if(reduce)render(0,0)},150)});
   document.addEventListener('visibilitychange',function(){document.hidden?stop():start()});
   cv.addEventListener('webglcontextlost',function(e){e.preventDefault();stop();root.classList.remove('gl3');window.__cyOff=false});
+  applyTheme();new MutationObserver(function(){applyTheme();if(reduce)render(0,0)}).observe(root,{attributes:true,attributeFilter:['data-theme']});
   layout();window.__cyOff=true;root.classList.add('gl3');
   if(reduce)render(0,0);else start();
 })();
