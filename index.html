@@ -917,6 +917,8 @@ html[data-theme="day"] .gd-note{ background:#fff; border-color:rgba(60,70,130,.1
 /* الصفحة الحقيقية مخفية لحد ما الكود يتحول لها */
 body > main > section:not(.hero), body > main > .dash, body > footer{transition:opacity .6s ease}
 body.ci-prep > header.nav, body.ci-prep > main > *, body.ci-prep > footer{opacity:0!important}
+html.ci-measure .hero>*{transform:none!important;filter:none!important;transition:none!important}
+html.ci-fade body>main>*,html.ci-fade body>header.nav,html.ci-fade body>footer{transition:opacity .8s ease!important}
 #ciFab{position:fixed;left:14px;bottom:14px;z-index:60;opacity:.4;display:none;direction:ltr;font:500 11.5px 'JetBrains Mono',monospace;color:#8b949e;background:rgba(22,27,34,.8);border:1px solid #30363d;border-radius:8px;padding:6px 11px;cursor:pointer}
 #ciFab:hover,#ciFab:focus-visible{opacity:1}
 @media (max-width:760px){.ci-body{font-size:12.5px}.ci-gutter{flex-basis:40px}.ci-bar{padding:0 8px}#ciSound{display:none}}
@@ -3114,50 +3116,24 @@ html[data-theme="day"] .ghost-wrapper{ filter:drop-shadow(0 14px 12px rgba(60,70
   }
 
   /* ---------- التحول: كل سطر يطير ليصبح العنصر الحقيقي في الصفحة ---------- */
+  /* ---------- الانتقال الناعم: المحرر يتلاشى والصفحة الشخصية تظهر تحته ---------- */
   function materialize(fast){
     if(leaving) return; leaving = true; running = false; cancelAnimationFrame(raf);
     const k = fast ? .4 : 1;
     try{ sessionStorage.setItem('introSeen', '1'); }catch(e){}
-    document.documentElement.classList.remove('gl3pre','gl3intro');
-    document.body.classList.add('ci-prep');
+    const root = document.documentElement;
+    document.body.classList.add('ci-prep');        /* الصفحة مخفية في البداية */
     document.body.classList.remove('gated');
-    const lineEls = elCode.querySelectorAll('.ci-l'), ghosts = [];
-    let n = 0, end = 0;
-    CI.lines.forEach(function(ln, i){
-      const src = lineEls[i]; if(!src) return;
-      const el = ln.to ? document.querySelector(ln.to) : null;
-      if(!el){                       /* سطر ملوش عنصر: يتلاشى */
-        src.style.transition = 'opacity ' + (500*k) + 'ms, filter ' + (500*k) + 'ms';
-        src.style.opacity = '0'; src.style.filter = 'blur(4px)';
-        return;
-      }
-      const r = src.getBoundingClientRect(), t = el.getBoundingClientRect(), cs = getComputedStyle(el);
-      const g = document.createElement('div'); g.className = 'ci-ghost';
-      g.style.left = r.left + 'px'; g.style.top = r.top + 'px'; g.style.width = r.width + 'px'; g.style.height = r.height + 'px';
-      g.innerHTML = '<span class="gc"></span><span class="gt"></span>';
-      const gc = g.querySelector('.gc'), gt = g.querySelector('.gt');
-      gc.textContent = src.textContent.trim();
-      gt.textContent = el.textContent.replace(/\s+/g, ' ').trim();
-      gt.style.fontFamily = cs.fontFamily; gt.style.fontSize = cs.fontSize; gt.style.fontWeight = cs.fontWeight;
-      gt.style.color = cs.color; gt.style.lineHeight = cs.lineHeight; gt.style.textAlign = cs.textAlign;
-      ov.appendChild(g); ghosts.push(g);
-      const d = n * CI.stagger * k, dur = CI.morphMs * k;
-      g.animate([
-        {left:r.left+'px', top:r.top+'px', width:r.width+'px', height:r.height+'px'},
-        {left:t.left+'px', top:t.top+'px', width:t.width+'px', height:t.height+'px'}
-      ], {duration:dur, delay:d, easing:'cubic-bezier(.2,.75,.2,1)', fill:'forwards'});
-      gc.animate([{opacity:1},{opacity:0}], {duration:dur*.4, delay:d, easing:'linear', fill:'forwards'});
-      gt.animate([{opacity:0},{opacity:1}], {duration:dur*.6, delay:d+dur*.35, easing:'linear', fill:'forwards'});
-      end = Math.max(end, d + dur); n++;
-    });
-    ov.classList.add('out');                         /* الخلفية السوداء تتلاشى والصفحة تظهر تحت */
+    root.classList.add('ci-fade');                 /* الظهور بيكون بتدرّج */
+    void document.body.offsetWidth;                /* نثبّت الحالة المخفية قبل بدء الظهور */
+    document.body.classList.remove('ci-prep');     /* الصفحة تظهر والمحرر يتلاشى في نفس الوقت */
+    ov.classList.add('out');
     later(function(){
-      document.body.classList.remove('ci-prep');
-      ghosts.forEach(function(g){ g.remove(); });
       ov.style.display = 'none';
-      document.documentElement.style.overflow = '';
+      root.style.overflow = '';
       fab.style.display = 'block';
-    }, end);
+      root.classList.remove('ci-fade');
+    }, Math.round(900 * k));
   }
 
   function run(){
