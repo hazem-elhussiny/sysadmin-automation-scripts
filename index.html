@@ -3923,7 +3923,7 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
       reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,R=Math.random,TAU=Math.PI*2;
   var renderer;
   try{renderer=new T.WebGLRenderer({antialias:false,alpha:true,powerPreference:'low-power'})}catch(e){return}
-  var cv=renderer.domElement;cv.id='gl3Bg';cv.setAttribute('aria-hidden','true');host.appendChild(cv);var sf=document.createElement('div');sf.innerHTML='<div id="skillFloat" aria-hidden="true"><span style="left:62%;top:78%;--d:10s;--t:0.6s">Cisco</span><span style="left:80%;top:46%;--d:8s;--t:1.2s">CCTV</span><span style="left:70%;top:88%;--d:11s;--t:0.2s">Active Directory</span><span style="left:90%;top:70%;--d:9s;--t:1.8s">Windows Server</span><span style="left:55%;top:58%;--d:12s;--t:0.9s">Hikvision</span><span style="left:92%;top:90%;--d:8s;--t:0.4s">CCNA</span><span style="left:46%;top:84%;--d:10s;--t:1.5s">VLAN</span><span style="left:96%;top:32%;--d:9s;--t:0.1s">NVR</span></div>';host.appendChild(sf.firstChild);
+  var cv=renderer.domElement;cv.id='gl3Bg';cv.setAttribute('aria-hidden','true');host.appendChild(cv);
   renderer.setClearColor(0x000000,0);
   var scene=new T.Scene(),cam=new T.OrthographicCamera(0,100,100,0,-8000,8000);cam.position.z=10;
   var BL={transparent:true,depthWrite:false,depthTest:false,blending:T.CustomBlending,blendEquation:T.AddEquation,blendSrc:T.OneFactor,blendDst:T.OneFactor,blendSrcAlpha:T.OneFactor,blendDstAlpha:T.OneFactor};
@@ -3981,14 +3981,18 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
   var body=new T.Mesh(new T.SphereGeometry(1,LITE?40:72,LITE?30:54),new T.ShaderMaterial({
     uniforms:{uDay:U.uDay,uEA:U.uEA,uHov:U.uHov,uLand:{value:landTex}},
     vertexShader:'varying vec3 vN;varying vec3 vO;void main(){vN=normalize((modelMatrix*vec4(position,0.)).xyz);vO=position;gl_Position=projectionMatrix*viewMatrix*modelMatrix*vec4(position,1.);}',
-    fragmentShader:'varying vec3 vN;varying vec3 vO;uniform float uDay,uEA,uHov;uniform sampler2D uLand;'+
+  fragmentShader:'varying vec3 vN;varying vec3 vO;uniform float uDay,uEA,uHov;uniform sampler2D uLand;'+
      'void main(){float f=clamp(vN.z,0.,1.);float rim=pow(1.-f,2.2);float lon=atan(vO.x,vO.z),lat=asin(clamp(vO.y,-1.,1.));'+
      'float land=texture2D(uLand,vec2(lon/6.28318+.5,.5-lat/3.14159)).r;float lit=.55+.45*smoothstep(-.4,.8,vN.x*.5+vN.y*.5+vN.z*.6);'+
-     'vec3 nc=vec3(.004,.02,.04)+vec3(.015,.12,.2)*land*lit+vec3(.03,.42,.55)*rim*(.5+.5*uHov);'+
+     'vec3 nc=vec3(.006,.035,.07)+vec3(.055,.30,.52)*land*lit+vec3(.035,.50,.72)*rim*(.72+.28*uHov);'+
      'vec3 dc=vec3(.86,.93,1.)-vec3(.4,.2,.0)*land*.6+vec3(.1,.3,.55)*rim*.4;'+
      'gl_FragColor=vec4(mix(nc,dc,uDay)*uEA,uEA);}'}));
   body.material.depthWrite=false;body.material.depthTest=false;body.frustumCulled=false;body.renderOrder=0;
-  var tilt=new T.Group(),spin=new T.Group(),gRoot=new T.Group(),shell=new T.Group();gRoot.add(tilt);tilt.add(spin);tilt.add(shell);scene.add(gRoot);spin.add(body);
+  var tilt=new T.Group(),spin=new T.Group(),innerGlobeGroup=new T.Group();
+  innerGlobeGroup.add(tilt);tilt.add(spin);scene.add(innerGlobeGroup);spin.add(body);
+  /* مجموعتان مستقلتان عن دوران الأرض الداخلية */
+  var outerGlobeGroup=new T.Group();scene.add(outerGlobeGroup);
+  var orbitalRingsGroup=new T.Group();scene.add(orbitalRingsGroup);
   /* ---------- أدوات توزيع ---------- */
   function sph(n){var a=[],i,g=Math.PI*(3-Math.sqrt(5));for(i=0;i<n;i++){var y=1-2*(i+.5)/n,r=Math.sqrt(1-y*y),t=g*i;a.push([Math.cos(t)*r,y,Math.sin(t)*r])}return a}
   function jit(p,a){var v=new T.Vector3(p[0]+(R()-.5)*a,p[1]+(R()-.5)*a,p[2]+(R()-.5)*a).normalize();return[v.x,v.y,v.z]}
@@ -4009,7 +4013,7 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
   nodes.forEach(function(p){var big=R()<.08;addP(p,big?(LITE?20:28):(LITE?7:9)+R()*4,big?1.3:.85+.3*R(),big?.55:R()*.3)});
   var NP=LITE?4500:13000;
   sph(NP).forEach(function(b){var ll=lola(b),land=landAt(ll[0],ll[1]);
-    if(land)addP(b,(LITE?1.8:2.2)+R()*1.1,.45+.4*R(),.15+R()*.5);else if(R()<.04)addP(b,1.2,.12,.2)});
+    if(land)addP(b,(LITE?2.5:3.2)+R()*1.2,.78+.2*R(),.45+R()*.5);else if(R()<.04)addP(b,1.2,.12,.2)});
   var gpts=new T.Points(geo({position:[pos,3],aS:[S,1],aA:[A,1],aC:[C,1],aO:[O,1]}),mat(VG,FP,{}));gpts.frustumCulled=false;gpts.renderOrder=2;spin.add(gpts);
   /* شبكة المثلثات على سطح الأرض */
   var EE=knn(nodes,3,4,9,function(a,b){var x=a[0]-b[0],y=a[1]-b[1],z=a[2]-b[2];return x*x+y*y+z*z}),
@@ -4030,12 +4034,42 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
   arcs.forEach(function(r){addPulse(r.a,r.b,.07+R()*.05,r.lift,r.o);if(!LITE)addPulse(r.a,r.b,.05+R()*.05,r.lift,r.o)});
   var pulses=new T.Points(geo({position:[pp,3],aEnd:[pe,3],aSp:[ps,1],aPh:[pph,1],aLift:[plf,1],aO:[po,1]}),mat(VP,FP,{uNorm:1}));pulses.frustumCulled=false;pulses.renderOrder=3;spin.add(pulses);
   /* ---------- 2) غلاف شبكي حول الأرض (يدور باتجاه معاكس) ---------- */
-  var NS=LITE?36:100,sn=[];for(i=0;i<NS;i++){var d=jit(sph(1)[0],2),rr=1.1+R()*.4;sn.push([d[0]*rr,d[1]*rr,d[2]*rr])}
+  var NS=LITE?48:132,sn=[],shellDirs=sph(NS);for(i=0;i<NS;i++){var d=jit(shellDirs[i],.035),rr=.91+R()*.12;sn.push([d[0]*rr,d[1]*rr,d[2]*rr])}
   var sp=[],sS=[],sA=[],sC=[],sO=[];sn.forEach(function(p){sp.push(p[0],p[1],p[2]);sS.push(6+R()*8);sA.push(.5+.5*R());sC.push(.4+.4*R());sO.push(R()*.9)});
-  var spts=new T.Points(geo({position:[sp,3],aS:[sS,1],aA:[sA,1],aC:[sC,1],aO:[sO,1]}),mat(VG,FP,{}));spts.frustumCulled=false;spts.renderOrder=2;shell.add(spts);
+  var outerAura=new T.Mesh(new T.SphereGeometry(1.015,36,24),new T.MeshBasicMaterial({color:0x0877c8,transparent:true,opacity:.025,side:T.BackSide,blending:T.AdditiveBlending,depthWrite:false,depthTest:false}));
+  outerAura.renderOrder=-.8;outerGlobeGroup.add(outerAura);
+  var outerWire=new T.Mesh(new T.SphereGeometry(1,36,24),new T.MeshBasicMaterial({color:0x168fff,wireframe:true,transparent:true,opacity:.035,side:T.DoubleSide,blending:T.AdditiveBlending,depthWrite:false,depthTest:false}));
+  outerWire.renderOrder=-.7;outerGlobeGroup.add(outerWire);
+  var spts=new T.Points(geo({position:[sp,3],aS:[sS,1],aA:[sA,1],aC:[sC,1],aO:[sO,1]}),mat(VG,FP,{}));spts.frustumCulled=false;spts.renderOrder=-.6;outerGlobeGroup.add(spts);
   var SE=knn(sn,3,3,.5,function(a,b){var x=a[0]-b[0],y=a[1]-b[1],z=a[2]-b[2];return x*x+y*y+z*z}),SL=[],SLA=[],SLO=[];
   SE.forEach(function(e){var a=sn[e[0]],b=sn[e[1]],al=.25+.3*R(),o=R()*.9;SL.push(a[0],a[1],a[2],b[0],b[1],b[2]);SLA.push(al,al);SLO.push(o,o)});
-  var slines=new T.LineSegments(geo({position:[SL,3],aA:[SLA,1],aO:[SLO,1]}),mat(VL,FL,{}));slines.frustumCulled=false;slines.renderOrder=2;shell.add(slines);
+  var slines=new T.LineSegments(geo({position:[SL,3],aA:[SLA,1],aO:[SLO,1]}),mat(VL,FL,{}));slines.frustumCulled=false;slines.renderOrder=-.5;outerGlobeGroup.add(slines);
+  /* ---------- 3) مدارات مستقلة حول الكرتين ---------- */
+  var orbitSpecs=[
+    {x:2.55,y:.43,rx:-.10,ry:.16,rz:-.08,c:0x26baff,o:.66},
+    {x:2.28,y:.69,rx:.42,ry:-.12,rz:.10,c:0x16dfff,o:.58},
+    {x:2.88,y:.34,rx:-.34,ry:.08,rz:-.16,c:0x168cff,o:.50},
+    {x:2.02,y:.84,rx:.18,ry:.28,rz:.04,c:0x4bdcff,o:.42}
+  ];
+  var RING_SPEED=[.060,.045,.075,.030];
+  function orbitPoint(spec,a){return new T.Vector3(spec.x*Math.cos(a),spec.y*Math.sin(a),0).applyEuler(new T.Euler(spec.rx,spec.ry,spec.rz,'XYZ'))}
+  var ringAnim=[];
+  orbitSpecs.forEach(function(spec,ri){
+    var back=[],front=[],segments=240,prev=orbitPoint(spec,0);
+    for(var si=1;si<=segments;si++){var cur=orbitPoint(spec,si/segments*TAU),dst=(prev.z+cur.z)*.5>=0?front:back;dst.push(prev.x,prev.y,prev.z,cur.x,cur.y,cur.z);prev=cur}
+    var rg=new T.Group();orbitalRingsGroup.add(rg);
+    function addOrbitLine(coords,opacity,order){var geom=new T.BufferGeometry();geom.setAttribute('position',new T.Float32BufferAttribute(coords,3));var m=new T.LineBasicMaterial({color:spec.c,transparent:true,opacity:opacity,blending:T.AdditiveBlending,depthWrite:false,depthTest:false});var line=new T.LineSegments(geom,m);line.frustumCulled=false;line.renderOrder=order;rg.add(line)}
+    addOrbitLine(back,spec.o*.60,-1);addOrbitLine(front,spec.o,5);
+    ringAnim.push({g:rg,spec:spec,dir:ri%2?-1:1,sp:RING_SPEED[ri],ph:[.08,.31,.56,.79].map(function(f){return f+ri*.117})});
+  });
+  var orbitGlowCanvas=document.createElement('canvas');orbitGlowCanvas.width=orbitGlowCanvas.height=32;var orbitGlowCtx=orbitGlowCanvas.getContext('2d');
+  var orbitGlowGrad=orbitGlowCtx.createRadialGradient(16,16,0,16,16,16);orbitGlowGrad.addColorStop(0,'rgba(255,255,255,1)');orbitGlowGrad.addColorStop(.18,'rgba(205,250,255,.95)');orbitGlowGrad.addColorStop(.48,'rgba(75,195,255,.42)');orbitGlowGrad.addColorStop(1,'rgba(20,140,255,0)');orbitGlowCtx.fillStyle=orbitGlowGrad;orbitGlowCtx.fillRect(0,0,32,32);
+  var orbitGlowTex=new T.CanvasTexture(orbitGlowCanvas);
+  ringAnim.forEach(function(r){
+    var pd=new Float32Array(12);var pg=new T.BufferGeometry();pg.setAttribute('position',new T.BufferAttribute(pd,3));
+    var pp=new T.Points(pg,new T.PointsMaterial({color:0xb7f4ff,map:orbitGlowTex,alphaMap:orbitGlowTex,size:13,sizeAttenuation:false,transparent:true,opacity:.96,blending:T.AdditiveBlending,depthWrite:false,depthTest:false}));
+    pp.frustumCulled=false;pp.renderOrder=6;r.g.add(pp);r.pd=pd;r.pg=pg;
+  });
   /* ---------- 3) الشبكة العالمية (يمين وأسفل الشاشة) بعمق Parallax ---------- */
   var net=new T.Group();scene.add(net);
   var NG=LITE?60:170,gn=[];
@@ -4102,11 +4136,13 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
     renderer.setPixelRatio(pr);renderer.setSize(W,H,false);cv.style.width=W+'px';cv.style.height=H+'px';
     cam.left=0;cam.right=W;cam.top=H;cam.bottom=0;cam.updateProjectionMatrix();
     var r,cx,cy,al=1;   /* الأرض أعلى اليسار — المحتوى (RTL) على اليمين */
-    if(W>=1000){r=Math.min(W*.215,H*.36);cx=W*.24;cy=H*.45}
-    else if(W>=600){r=Math.min(W*.32,H*.3);cx=W*.3;cy=r+80;al=.8}
-    else{r=W*.4;cx=W*.5;cy=r+72;al=.5}
+    if(W>=1000){r=Math.min(W*.18,H*.29);cx=W*.16;cy=H*.48}
+    else if(W>=600){r=Math.min(W*.31,H*.28);cx=W*.30;cy=r+80;al=.82}
+    else{r=W*.37;cx=W*.5;cy=r+76;al=.58}
     U.uPR.value=pr;U.uR.value=r;U.uC.value.set(cx,H-cy);U.uAlpha.value=al;
-    gRoot.position.set(cx,H-cy,0);gRoot.scale.setScalar(r);
+    innerGlobeGroup.position.set(cx,H-cy,0);innerGlobeGroup.scale.setScalar(r);
+    outerGlobeGroup.position.set(cx,H-cy,0);outerGlobeGroup.scale.setScalar(r*1.46);
+    orbitalRingsGroup.position.set(cx,H-cy,0);orbitalRingsGroup.scale.setScalar(r);
     net.scale.set(W,H,250);
     halo.position.set(W/2,H/2,0);halo.scale.set(W,H,1);
     dust.material.uniforms.uW.value.set(W,H)}
@@ -4126,14 +4162,19 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
     U.uPar.value.set(-mx*26,my0*18);
     var dx=mouse.x-U.uC.value.x,dy=(H-mouse.y)-U.uC.value.y,near=mouse.on&&Math.sqrt(dx*dx+dy*dy)<U.uR.value*1.35?1:0;
     hov+=(near-hov)*Math.min(1,dt*3);U.uHov.value=hov;
-    yaw+=dt*TAU/110;                         /* دورة كاملة كل ~110 ثانية */
-    spin.rotation.y=yaw+mx*.28;shell.rotation.y=-yaw*.45+.6;shell.rotation.x=.2;
+    yaw+=dt*.08;                              /* innerGlobeGroup: قرابة 0.08 راديان/ث */
+    spin.rotation.y=yaw+mx*.28;
     tilt.rotation.x=.4+my0*.16;tilt.rotation.z=-.14;
-    gRoot.updateMatrixWorld(true);updateCursorLinks();
+    outerGlobeGroup.rotation.y-=dt*.025;outerGlobeGroup.rotation.x=.10;
+    ringAnim.forEach(function(r){
+      r.g.rotation.z+=dt*r.sp*r.dir;
+      for(var k=0;k<4;k++){var p=orbitPoint(r.spec,(r.ph[k]+t*.05*r.dir)*TAU);r.pd[k*3]=p.x;r.pd[k*3+1]=p.y;r.pd[k*3+2]=p.z}
+      r.pg.attributes.position.needsUpdate=true;
+    });
+    innerGlobeGroup.updateMatrixWorld(true);updateCursorLinks();
     renderer.render(scene,cam)}
   function frame(ts){
     raf=requestAnimationFrame(frame);
-    if(document.body.classList.contains('gated'))return;
     if(LITE&&ts-last<32)return;
     var dt=Math.min(.05,(ts-last)/1000||.016);last=ts;
     if(introOn&&!window.__earthIntroMarked){window.__earthIntroMarked=1;try{sessionStorage.setItem('earthIntro','1')}catch(e){}}
@@ -4159,5 +4200,6 @@ html.gl3intro .hero>:nth-child(4){transition-delay:.55s}html.gl3intro .hero>:nth
 var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('perf-off',!e.isIntersecting)})},{rootMargin:'120px 0px'});
 document.querySelectorAll('body section, body footer').forEach(function(el){io.observe(el)});})();
 </script>
+<style id="live-earth-css">html[data-theme="night"] #plexBg #gl3Bg{opacity:1}</style>
 </body>
 </html>
